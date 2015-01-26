@@ -1,0 +1,10 @@
+{
+  "name": "hundir_la_flota",
+  "description": "Juego de hundir la flota",
+  "author": "Mikel de Velasco <mdevelasco001@ikasle.ehu.eus>",
+  "dependencies": {
+    "socket.io": "*",
+    "express": "*"
+  },
+  "engine": "node 0.4.1"
+}
