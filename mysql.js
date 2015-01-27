@@ -2,36 +2,42 @@
 
 var mysql = require('mysql');
 var fs = require('fs');
-var user, password;
-fs.readFile('.params', function (err, data) {
+var user;
+var password;
+fs.readFile('./.params.txt', {encoding: 'utf8'}, function (err, data) {
   if (err) throw err;
-  data = data.split('\n');
-    console.log(data);
+    data = data.split('\n');
+    for(var each in data){
+        var l = data[each].split(":");
+        if (l[0] == "user") user =  l[1];
+        if (l[0] == "password") password =  l[1];
+    }
+    console.log(user, password);
 });
 
 var connection =  mysql.createConnection({
-  	host : “hostName”,
-  	user : “username”,
-  	password: “password”
-  });
+  	host : "localhost",
+  	user : user,
+  	password: password
+});
 
 connection.connect();
 
-connection.query(“use database1”);
-  var strQuery = “select * from table1”;	
-  
-  connection.query( strQuery, function(err, rows){
-  	if(err)	{
-  		throw err;
-  	}else{
-  		console.log( rows );
-  	}
-  });
-
-connection.end(function(err){
-// Do something after the connection is gracefully terminated.
-
-});
-
-
-connection.destroy( );
+//connection.query(“use database1”);
+//  var strQuery = “select * from table1”;	
+//  
+//  connection.query( strQuery, function(err, rows){
+//  	if(err)	{
+//  		throw err;
+//  	}else{
+//  		console.log( rows );
+//  	}
+//  });
+//
+//connection.end(function(err){
+//// Do something after the connection is gracefully terminated.
+//
+//});
+//
+//
+//connection.destroy( );
