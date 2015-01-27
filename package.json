@@ -4,7 +4,8 @@
   "author": "Mikel de Velasco <mdevelasco001@ikasle.ehu.eus>",
   "dependencies": {
     "socket.io": "*",
-    "express": "*"
+    "express": "*",
+    "mysql": "*"
   },
   "engine": "node 0.4.1"
 }
