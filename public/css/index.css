@@ -1,3 +1,7 @@
 body {
     background-image: url("../img/560676main_BarentsSea_2010243_full.jpg");
 }
+
+#noscript{
+    background-color: #fff;
+}
