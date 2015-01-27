@@ -10,3 +10,6 @@ $("#signin").on("click", function(ev){
 $("#comosejuega").on("click", function(ev){
     $('#instrucciones').modal('show');
 });
+$("#signup").on("click", function(ev){
+    $('#signupdiv').modal('show');
+});

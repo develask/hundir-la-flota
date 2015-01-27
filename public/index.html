@@ -39,7 +39,7 @@
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" id='signin'>Sign In</a></li>
-                <li><a href="#">Sign Up</a></li>
+                <li><a href="#" id='signup'>Sign Up</a></li>
               </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
@@ -103,7 +103,40 @@
             </div>
           </div>
         </div>
-
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id='signupdiv'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Registrarse:</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Usuario</label>
+                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon2">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Contraseña</label>
+                                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+                            </div>
+                             <div class="form-group">
+                                <label for="exampleInputEmail1">Repita La Contraseña</label>
+                                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary">Sign Up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <noscript>
             <h2>JAVASCRIT DESHABILITADO</h2>
             <p>La página que estás viendo requiere para su funcionamiento el uso de JavaScript. 
