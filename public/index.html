@@ -40,6 +40,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" id='signin'>Sign In</a></li>
                 <li><a href="#" id='signup'>Sign Up</a></li>
+                <li class="hidden"><a href="#" id='userName'></a></li>
               </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
@@ -63,10 +64,13 @@
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
                   </div>
                 </form>
+                <div class="alert alert-danger hidden" role="alert" id='errSignIn'>
+                    <p>Usuario o contraseña erroneas.</p>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Sign In</button>
+                <button type="button" class="btn btn-primary" id='signInC'>Sign In</button>
               </div>
             </div>
           </div>
@@ -127,11 +131,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Contraseña</label>
-                                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+                                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id='SignUpContraseña'>
                             </div>
                              <div class="form-group">
                                 <label for="exampleInputEmail1">Repita La Contraseña</label>
-                                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+                                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id='SignUpContraseña2'>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

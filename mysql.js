@@ -37,11 +37,24 @@ fs.readFile('./.params.txt', {encoding: 'utf8'}, function (err, data) {
     function newUsuario(nombre, contraseña, email){
         var shasum = crypto.createHash('sha1');
         shasum.update(contraseña+nombre);
-        connection.query("INSERT INTO users (`nombre`,`contraseña_hash`,`email`) values ('"+nombre+"','"+shasum.digest('hex')+"','"+email+"')", function(err, rows){
+        connection.query("INSERT INTO hundirlaflota.users (`nombre`,`contraseña_hash`,`email`) values ('"+nombre+"','"+shasum.digest('hex')+"','"+email+"')", function(err, rows){
             if(err) throw err;
-            console.log(rows);
+        });
+    }
+    
+    function signIn(user, password, callback){
+        var shasum = crypto.createHash('sha1');
+        shasum.update(password+user);
+        connection.query("SELECT * FROM hundirlaflota.users WHERE nombre='"+user+"' AND contraseña_hash='"+shasum.digest('hex')+"'", function(err, rows){
+            if(err) throw err;
+            if (rows.length == 1){
+                callback(true);
+            }else{
+                callback(false);
+            }
         });
     }
     
     module.exports.newUsuario = newUsuario;
+    module.exports.signIn = signIn;
 });

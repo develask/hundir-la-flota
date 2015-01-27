@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var mysql = require("mysql.js");
+var mysql = require("./mysql.js");
 
 var server = app.listen(8080, function () {
 
@@ -11,7 +11,7 @@ var server = app.listen(8080, function () {
 });
 
 app.use(express.static(__dirname + '/public'));
-var users = {};
+
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
@@ -19,16 +19,12 @@ io.sockets.on('connection', function (socket) {
     socket.on("nuevoUsuario", function(data){
         mysql.newUsuario(data.nombre, data.contraseña, data.email);
     });
-    socket.on('user_name', function (izena) {
-        socket['izena'] = izena;
-        users[izena] = socket;
-    });
-    socket.on("kontrakoa_aukeratua", function(name){
-        socket['kontrakoa'] = users[name];
-        delete users[socket[name]];
-        users[name].emit("kont");
+    socket.on("signIN", function(data){
+        mysql.signIn(data.nombre, data.contraseña, function(bool){
+            socket.emit("signed", bool);
+        });
     });
     socket.on("disconnect", function () {
-        delete users[socket['izena']];
+        //delete users[socket['izena']];
     });
 });
