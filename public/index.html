@@ -22,7 +22,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li><a href="#">Jugar</a></li>
+                <li><a href="#" id='jugar'>Jugar</a></li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estadisticas <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
@@ -72,6 +72,11 @@
           </div>
         </div>
         
+        <div id="micanvas" >
+            <canvas  id="micanvas1">Su navegador no soporta en elemento CANVAS</canvas>
+            <canvas  id="micanvas2">Su navegador no soporta en elemento CANVAS</canvas>
+        </div>
+        
         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id='instrucciones'>
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -81,7 +86,7 @@
               </div>
               <div class="modal-body">
                 <h4>Tableros</h4>
-                  <p>Cada jugador maneja dos tableros divididos en casillas.1 Cada tablero representa una zona diferente del mar abierto: la propia y la contraria. En uno de los tableros, el jugador coloca sus barcos y registra los «tiros» del oponente; en el otro, se registran los tiros propios, al tiempo que se deduce la posición de los barcos del contrincante.</p>
+                  <p>En uno de los tableros, el jugador coloca sus barcos y registra los «tiros» del oponente; en el otro, se registran los tiros propios, al tiempo que se deduce la posición de los barcos del contrincante.</p>
                   <h4>Naves</h4>
                   <p>Al comenzar, cada jugador posiciona sus barcos en el primer tablero, de forma secreta, invisible al oponente.</p>
                   <p>Cada quien ocupa, según sus preferencias, una misma cantidad de casillas, horizontal y/o verticalmente, las que representan sus naves. Ambos participantes deben ubicar igual el número de naves, por lo que es habitual, antes de comenzar, estipular de común acuerdo la cantidad y el tamaño de las naves que se posicionarán en el tablero. Así, por ejemplo, cinco casillas consecutivas conforman un portaaviones; tres, un buque, y una casilla aislada, una lancha, y los participantes podrían convenir, también a modo de ejemplo, en colocar, cada uno, dos portaaviones, tres buques y cinco lanchas.</p>

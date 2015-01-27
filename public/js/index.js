@@ -13,3 +13,11 @@ $("#comosejuega").on("click", function(ev){
 $("#signup").on("click", function(ev){
     $('#signupdiv').modal('show');
 });
+
+$("#signup").on("click", function(ev){
+    $('#signupdiv').modal('show');
+});
+
+$("#jugar").on("click", function(ev){
+   document.getElementById("micanvas").style.display="block";
+});
