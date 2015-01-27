@@ -10,17 +10,21 @@ var server = app.listen(8080, function () {
 });
 
 app.use(express.static(__dirname + '/public'));
-
+var users = {};
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('message', { message: 'welcome to the chat' });
-    socket.on('send', function (data) {
-//        io.sockets.emit('message', data);
-        console.log(data);
+//    socket.emit('message', { message: 'welcome to the chat!' });
+    socket.on('user_name', function (izena) {
+        socket['izena'] = izena;
+        users[izena] = socket;
+    });
+    socket.on("kontrakoa_aukeratua", function(name){
+        socket['kontrakoa'] = users[name];
+        delete users[socket[name]];
+        users[name].emit("kont");
     });
     socket.on("disconnect", function () {
-//        io.sockets.emit("user disconnected");
-        console.log("user disconnect");
+        delete users[socket['izena']];
     });
 });
