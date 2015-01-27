@@ -2,6 +2,8 @@
 
 var mysql = require('mysql');
 var fs = require('fs');
+var crypto = require('crypto');
+
 var user;
 var password;
 fs.readFile('./.params.txt', {encoding: 'utf8'}, function (err, data) {
@@ -13,31 +15,33 @@ fs.readFile('./.params.txt', {encoding: 'utf8'}, function (err, data) {
         if (l[0] == "password") password =  l[1];
     }
     console.log(user, password);
+    
+    var connection =  mysql.createConnection({
+        host : "127.0.0.1",
+        user : user,
+        password: password
+    });
+
+    connection.connect();
+
+    connection.query("use hundirlaflota");
+    //  var strQuery = “select * from table1”;	
+    //  
+    //  connection.query( strQuery, function(err, rows){
+    //  	if(err)	{
+    //  		throw err;
+    //  	}else{
+    //  		console.log( rows );
+    //  	}
+    //  });
+    function newUsuario(nombre, contraseña, email){
+        var shasum = crypto.createHash('sha1');
+        shasum.update(contraseña+nombre);
+        connection.query("INSERT INTO users (`nombre`,`contraseña_hash`,`email`) values ('"+nombre+"','"+shasum.digest('hex')+"','"+email+"')", function(err, rows){
+            if(err) throw err;
+            console.log(rows);
+        });
+    }
+    
+    module.exports.newUsuario = newUsuario;
 });
-
-var connection =  mysql.createConnection({
-  	host : "localhost",
-  	user : user,
-  	password: password
-});
-
-connection.connect();
-
-//connection.query(“use database1”);
-//  var strQuery = “select * from table1”;	
-//  
-//  connection.query( strQuery, function(err, rows){
-//  	if(err)	{
-//  		throw err;
-//  	}else{
-//  		console.log( rows );
-//  	}
-//  });
-//
-//connection.end(function(err){
-//// Do something after the connection is gracefully terminated.
-//
-//});
-//
-//
-//connection.destroy( );

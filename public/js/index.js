@@ -21,3 +21,8 @@ $("#signup").on("click", function(ev){
 $("#jugar").on("click", function(ev){
    document.getElementById("micanvas").style.display="block";
 });
+
+$("#signUpC").on("click", function(ev){
+    var nombre = $("#SignUpUser").val();
+    var email = $("#SignUpEmail").val();
+});

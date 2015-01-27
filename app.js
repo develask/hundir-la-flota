@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var mysql = require("mysql.js");
 
 var server = app.listen(8080, function () {
 
@@ -15,6 +16,9 @@ var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
 //    socket.emit('message', { message: 'welcome to the chat!' });
+    socket.on("nuevoUsuario", function(data){
+        mysql.newUsuario(data.nombre, data.contraseña, data.email);
+    });
     socket.on('user_name', function (izena) {
         socket['izena'] = izena;
         users[izena] = socket;
