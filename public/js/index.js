@@ -19,7 +19,27 @@ $("#signup").on("click", function(ev){
 
 $("#jugar").on("click", function(ev){
    document.getElementById("micanvas").style.display="block";
-var canvas1 = document.getElementById("micanvas1");
+    //function draw() {
+      var canvas = document.getElementById("canvas1");
+      if (canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+
+        for(var x=0;x<10;x++){
+                 for(var y=0;y<10;y++){
+                        if((x+y)%2==0){
+                                ctx.fillStyle = "rgb(200,0,0)";
+                                ctx.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                        }
+                        else{
+                                ctx.fillStyle = "rgb(255, 255, 255)";
+                                ctx.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                        }
+                }
+        }
+    //}
+}
+
+    /*var canvas1 = document.getElementById("micanvas1");
 var ctx1 = canvas1.getContext("2d");
 for (var i=40;i<400;i=i+40){
 ctx1.moveTo(i,0);
@@ -31,7 +51,7 @@ ctx.lineTo(0,i);
 }
 
 ctx1.strokeStyle = "#f00";                                                                    
-ctx1.stroke(); 
+ctx1.stroke();*/ 
 });
 
 $(canvas1).on("click", function(ev){
