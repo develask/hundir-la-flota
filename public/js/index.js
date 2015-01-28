@@ -19,6 +19,25 @@ $("#signup").on("click", function(ev){
 
 $("#jugar").on("click", function(ev){
    document.getElementById("micanvas").style.display="block";
+var canvas1 = document.getElementById("micanvas1");
+var ctx1 = canvas1.getContext("2d");
+for (var i=40;i<400;i=i+40){
+ctx1.moveTo(i,0);
+ctx.lineTo(i,400);
+}
+for (var i=40;i<400;i=i+40){
+ctx1.moveTo(0,i);
+ctx.lineTo(0,i);
+}
+
+ctx1.strokeStyle = "#f00";                                                                    
+ctx1.stroke(); 
+});
+
+$(canvas1).on("click", function(ev){
+    var x = parseInt((ev.clientX-canvas.offsetLeft)/40)
+    var y = parseInt((ev.clientY-canvas.offsetTop)/40)
+    
 });
 
 $("#signUpC").on("click", function(ev){
