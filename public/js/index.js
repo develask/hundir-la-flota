@@ -60,11 +60,18 @@ ctx1.strokeStyle = "#f00";
 ctx1.stroke();*/ 
 });
 
-$(canvas1).on("click", function(ev){
-    var x = parseInt((ev.clientX-canvas.offsetLeft)/40)
-    var y = parseInt((ev.clientY-canvas.offsetTop)/40)
-    
+$("#micanvas1").on("click", function(ev){
+    var x1 = parseInt((ev.clientX-canvas.offsetLeft)/40);
+    var y1 = parseInt((ev.clientY-canvas.offsetTop)/40);
+    alert(x1.toString + "  " + y1.toString);
 });
+
+$("#micanvas2").on("click", function(ev){
+    var x2 = parseInt((ev.clientX-canvas.offsetLeft)/40);
+    var y2 = parseInt((ev.clientY-canvas.offsetTop)/40);
+    alert(x2.toString + "  " + y2.toString);
+});
+
 
 $("#signUpC").on("click", function(ev){
     var nombre = $("#SignUpUser").val();
