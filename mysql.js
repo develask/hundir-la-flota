@@ -2,6 +2,7 @@
 
 var mysql = require('mysql');
 var crypto = require('crypto');
+var mail = require('./mail.js');
     
 var connection =  mysql.createConnection({
     host : "176.84.103.209",
@@ -21,6 +22,29 @@ function newUsuario(nombre, contraseña, email){
     });
 }
 
+function toVerification(name, pass, email, callback){
+    var shasum = crypto.createHash('sha1');
+    shasum.update(name+pass+email);
+    var shasum2 = crypto.createHash('sha1');
+    shasum2.update(pass+name);
+    connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre='"+name+"' UNION SELECT name FROM hundirlaflota.verification WHERE name='"+name+"'", function(err, rows){
+        if (rows && rows.length == 0){
+            connection.query("INSERT INTO hundirlaflota.verification (`name`,`pass`,`email`) values ('"+name+"','"+shasum2.digest('hex')+"','"+email+"')", function(err, rows){
+                if(err) throw err;
+                mail.sendMail(email, shasum.digest('hex'), function (err, data){
+                    if (!err){
+                        callback(true);
+                    }else{
+                        callback(false);
+                    }
+                });
+            });
+        }else{
+            callback(false);
+        }
+    });
+}
+
 function signIn(user, password, callback){
     var shasum = crypto.createHash('sha1');
     shasum.update(password+user);
@@ -36,3 +60,4 @@ function signIn(user, password, callback){
 
 module.exports.newUsuario = newUsuario;
 module.exports.signIn = signIn;
+module.exports.toVerification = toVerification;

@@ -5,7 +5,8 @@
   "dependencies": {
     "socket.io": "*",
     "express": "*",
-    "mysql": "*"
+    "mysql": "*",
+    "nodemailer": "*"
   },
   "engine": "node 0.4.1"
 }
