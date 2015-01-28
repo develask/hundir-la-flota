@@ -61,15 +61,17 @@ ctx1.stroke();*/
 });
 
 $("#micanvas1").on("click", function(ev){
-    var x1 = parseInt((ev.clientX-canvas.offsetLeft)/40);
-    var y1 = parseInt((ev.clientY-canvas.offsetTop)/40);
-    alert(x1.toString + "  " + y1.toString);
+    var canvas1 = document.getElementById("micanvas1");
+    var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
+    var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
+    alert(x1 + "  " + y1);
 });
 
 $("#micanvas2").on("click", function(ev){
-    var x2 = parseInt((ev.clientX-canvas.offsetLeft)/40);
-    var y2 = parseInt((ev.clientY-canvas.offsetTop)/40);
-    alert(x2.toString + "  " + y2.toString);
+    var canvas2 = document.getElementById("micanvas2");
+    var x2 = parseInt((ev.clientX-canvas2.offsetLeft)/40);
+    var y2 = parseInt((ev.clientY-canvas2.offsetTop)/40);
+    alert(x2 + "  " + y2);
 });
 
 
