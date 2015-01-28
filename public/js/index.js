@@ -20,19 +20,25 @@ $("#signup").on("click", function(ev){
 $("#jugar").on("click", function(ev){
    document.getElementById("micanvas").style.display="block";
     //function draw() {
-      var canvas = document.getElementById("canvas1");
-      if (canvas.getContext) {
-        var ctx = canvas.getContext("2d");
+      var canvas1 = document.getElementById("micanvas1");
+      var canvas2 = document.getElementById("micanvas2");
+      if (canvas1.getContext && canvas1.getContext) {
+        var ctx1 = canvas1.getContext("2d");
+        var ctx2 = canvas2.getContext("2d");
 
         for(var x=0;x<10;x++){
                  for(var y=0;y<10;y++){
                         if((x+y)%2==0){
-                                ctx.fillStyle = "rgb(200,0,0)";
-                                ctx.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                                ctx1.fillStyle = "rgb(200,0,0)";
+                                ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                                ctx2.fillStyle = "rgb(200,0,0)";
+                                ctx2.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
                         }
                         else{
-                                ctx.fillStyle = "rgb(255, 255, 255)";
-                                ctx.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                                ctx1.fillStyle = "rgb(255, 255, 255)";
+                                ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                                ctx2.fillStyle = "rgb(255, 255, 255)";
+                                ctx2.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
                         }
                 }
         }
