@@ -16,7 +16,7 @@ $("#signup").on("click", function(ev){
 $("#signup").on("click", function(ev){
     $('#signupdiv').modal('show');
 });
-
+/*
 $("#hundir").on("click", function(ev){
     document.getElementById("micanvas").style.display="block";
     var canvas1 = document.getElementById("micanvas1");
@@ -33,11 +33,11 @@ $("#hundir").on("click", function(ev){
     ctx1.strokeStyle = "#f00";                                                                    
     ctx1.stroke(); 
 });
-
+*/
 $(canvas1).on("click", function(ev){
     var x = parseInt((ev.clientX-canvas.offsetLeft)/40);
     var y = parseInt((ev.clientY-canvas.offsetTop)/40);
-/*=======
+
 $("#jugar").on("click", function(ev){
    document.getElementById("micanvas").style.display="block";
     //function draw() {
@@ -86,7 +86,7 @@ $("#micanvas1").on("click", function(ev){
     var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
     var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
     alert(x1 + "  " + y1);
->>>>>>> 6ffe6bae8ee0eaa4a991901e554b4a19fac4812e*/
+    
 });
 
 $("#micanvas2").on("click", function(ev){
