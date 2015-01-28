@@ -17,7 +17,6 @@ $("#signup").on("click", function(ev){
     $('#signupdiv').modal('show');
 });
 
-<<<<<<< HEAD
 $("#hundir").on("click", function(ev){
     document.getElementById("micanvas").style.display="block";
     var canvas1 = document.getElementById("micanvas1");
