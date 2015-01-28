@@ -38,7 +38,7 @@ $(canvas1).on("click", function(ev){
     var x = parseInt((ev.clientX-canvas.offsetLeft)/40);
     var y = parseInt((ev.clientY-canvas.offsetTop)/40);
 
-$("#jugar").on("click", function(ev){
+$("#hundir").on("click", function(ev){
    document.getElementById("micanvas").style.display="block";
     //function draw() {
       var canvas1 = document.getElementById("micanvas1");
@@ -96,6 +96,7 @@ $("#micanvas2").on("click", function(ev){
     alert(x2 + "  " + y2);
 });
 
+});
 
 $("#signUpC").on("click", function(ev){
     var nombre = $("#SignUpUser").val();
