@@ -4,7 +4,9 @@ function User(){
     this.isSigned = function(){
         return nombre !="";
     }
-    
+    this.getName = function(){
+        return nombre;
+    }
     this.signIn = function (name, pass, callback){
         $.ajax({
             url: "/login?user="+name+"&pass="+pass

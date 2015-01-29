@@ -65,7 +65,7 @@ app.get('/top',function(req, res){
     });
 
 app.get('/reglas',function(req, res){
-      if(req.query.juego=="Jugar"){
+      if(req.query.juego==""){
           res.send("<p>No ha elegido un juego, por favor seleccione uno al que jugar</p>");
       }else{
           mysql.getRules(req.query.juego, function(reglas){
@@ -92,13 +92,8 @@ var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
 //    socket.emit('message', { message: 'welcome to the chat!' });
-    socket.on("nuevoUsuario", function(data){
-        mysql.newUsuario(data.nombre, data.contraseña, data.email);
-    });
-    socket.on("signIN", function(data){
-        mysql.signIn(data.nombre, data.contraseña, function(bool){
-            socket.emit("signed", bool);
-        });
+    socket.on("cambioJuego", function(data){
+        console.log(data.jugador +" ha cabiado al juego: "+data.juego);
     });
     socket.on("disconnect", function () {
         //delete users[socket['izena']];
