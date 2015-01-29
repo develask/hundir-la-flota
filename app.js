@@ -27,12 +27,24 @@ app.get('/signup', function(req, res){
             if (bool){
                 mysql.newUsuario(req.query.email, function(bool){
                     if (bool){
-                        res.send("Usuario creado");
+                        res.send("<h2>GAME - UPV mail verification</h2>\
+        <p>Tu usuario ya ha sido creado.</p>\
+        <p>Ya puede volver a nuestro servicio y acceder con tus credenciales.</p>\
+        <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
+        <a href='http://localhost:8080/'>ENLACE</a>");
                     }else{
-                        res.send("Ha ocurrido un error 2");
+                        res.send("<h2>GAME - UPV mail verification</h2>\
+        <p>Ha ocurrido un error.</p>\
+        <p>Es posible que ya estes dado de alta.</p>\
+        <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
+        <a href='http://localhost:8080/'>ENLACE</a>");
                     }
                 });
-            }else{res.send("Ha ocurrido un error 1");}
+            }else{res.send("<h2>GAME - UPV mail verification</h2>\
+        <p>Lo sentimos, pero no encontramos tus datos.</p>\
+        <p>Para aacceder a nuestros servicios tendrá que darse de alta de nuevo.</p>\
+        <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
+        <a href='http://localhost:8080/'>ENLACE</a>");}
         });
     }else{
         mysql.toVerification(req.query.user, req.query.pass, req.query.email, function(bool){
