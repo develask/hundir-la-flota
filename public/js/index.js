@@ -9,14 +9,16 @@ $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });
 
-$("#comosejuega").on("click", function(ev){
+$("#comosejuega").on("click", function(ev){ 
+    var juego= document.getElementById("juegoActual").text
     $.ajax({
-            url: "/reglas?juego="+nombrejuego
+            url: "/reglas?juego="+juego
         }).done(function( data ) {
             $("#contenidoIntrucciones").html(data);
             $('#instrucciones').modal('show');
         });
 });
+
 $("#signup").on("click", function(ev){
     $('#signupdiv').modal('show');
 });
@@ -69,15 +71,16 @@ $("#hundir").on("click", function(ev){
     var ctx1 = canvas1.getContext("2d");
     for (var i=40;i<400;i=i+40){
         ctx1.moveTo(i,0);
-        ctx.lineTo(i,400);
+        ctx2.lineTo(i,400);
     }
     for (var i=40;i<400;i=i+40){
         ctx1.moveTo(0,i);
-        ctx.lineTo(0,i);
+        ctx2.lineTo(0,i);
     }
     ctx1.strokeStyle = "#f00";                                                                    
     ctx1.stroke();
-});
+   document.getElementById("juegoActual").text="Hundir La Mesa";
+    });
 
 $("#micanvas1").on("click", function(ev){
     var canvas1 = document.getElementById("micanvas1");

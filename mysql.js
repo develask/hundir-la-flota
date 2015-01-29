@@ -93,6 +93,24 @@ connection.query("SELECT FROM hundirlaflota.users WHERE",function(err,rows){
     });   
 }
 
+function getRules(juego,callback){
+    var help = "";
+    switch (juego) {
+    case juego=="Hundir La Mesa":
+        help="hundirlaflota";
+        break;
+    }
+    connection.query("SELECT reglas FROM hundirlaflota.juego WHERE nombre ='"+help+"' ",function(err,rows){
+        if(err){ 
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });   
+}
+
+
+module.exports.getRules = getRules;
 module.exports.newUsuario = newUsuario;
 module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;

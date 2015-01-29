@@ -65,10 +65,18 @@ app.get('/top',function(req, res){
     });
 
 app.get('/reglas',function(req, res){
-        /*mysql.conseguirPrimerosX(req.query.num , req.query.juego ,function(){
-            res.send(
-        });*/
-    res.send("<p>Estas son las reglas del juego: "+req.query.juego +"</p>");
+      if(req.query.juego=="Jugar"){
+          res.send("<p>No ha elegido un juego, por favor seleccione uno al que jugar</p>");
+      }else{
+          mysql.getRules(req.query.juego, function(bool){
+            if(bool){
+                res.send(bool);
+                console.log(bool!=null);
+            }else{
+                res.send("error");
+            }
+          });
+        }
     });
 
 var io = require('socket.io').listen(server);
