@@ -11,7 +11,7 @@ $("#signin").on("click", function(ev){
 
 $("#comosejuega").on("click", function(ev){
     $.ajax({
-            url: "/top?juego="+nombrejuego
+            url: "/reglas?juego="+nombrejuego
         }).done(function( data ) {
             $("#contenidoIntrucciones").html(data);
             $('#instrucciones').modal('show');

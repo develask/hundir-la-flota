@@ -52,6 +52,13 @@ app.get('/top',function(req, res){
     res.send("<p> hola! </p>");
     });
 
+app.get('/reglas',function(req, res){
+        /*mysql.conseguirPrimerosX(req.query.num , req.query.juego ,function(){
+            res.send(
+        });*/
+    res.send("<p>Estas son las reglas del juego: "+req.query.juego +"</p>");
+    });
+
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
