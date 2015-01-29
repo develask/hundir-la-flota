@@ -5,6 +5,20 @@ var socket = io('http://localhost:8080');
 //});
 var nombre;
 var nombrejuego;
+
+function Juego(){
+    this.juegoSeleccionado = function(nombre){
+        $.ajax({
+            url: "/juego?nombre="+nombre
+        }).done(function(data) {
+            var data2=JSON.parse(data);
+             $("#juego").html(data2.codigohtml);
+            eval(data2.codigojavascript);
+            });
+    }
+}
+var juego = new Juego();
+
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });
@@ -44,8 +58,11 @@ $("#hundir").on("click", function(ev){
     var x = parseInt((ev.clientX-canvas.offsetLeft)/40);
     var y = parseInt((ev.clientY-canvas.offsetTop)/40);
 });*/
-$("#hundir").on("click", function(ev){
-    document.getElementById("micanvas").style.display="block";
+$("#ulJuegos > li").on("click", function(ev){
+    if(user.isSigned()){
+        juego.juegoSeleccionado($(this).text());
+        $("#juego").css("display","block");
+    /*
     var canvas1 = document.getElementById("micanvas1");
     var canvas2 = document.getElementById("micanvas2");
     if (canvas1.getContext && canvas1.getContext) {
@@ -80,22 +97,26 @@ $("#hundir").on("click", function(ev){
     ctx1.strokeStyle = "#f00";                                                                    
     ctx1.stroke();
    document.getElementById("juegoActual").text="Hundir La Mesa";
+    */}else{
+        $("#signin").trigger('click');
+    }
+    
     });
 
-$("#micanvas1").on("click", function(ev){
-    var canvas1 = document.getElementById("micanvas1");
-    var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
-    var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
-    alert(x1 + "  " + y1);
-    
-});
-
-$("#micanvas2").on("click", function(ev){
-    var canvas2 = document.getElementById("micanvas2");
-    var x2 = parseInt((ev.clientX-canvas2.offsetLeft)/40);
-    var y2 = parseInt((ev.clientY-canvas2.offsetTop)/40);
-    alert(x2 + "  " + y2);
-});
+//$("#micanvas1").on("click", function(ev){
+//    var canvas1 = document.getElementById("micanvas1");
+//    var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
+//    var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
+//    alert(x1 + "  " + y1);
+//    
+//});
+//
+//$("#micanvas2").on("click", function(ev){
+//    var canvas2 = document.getElementById("micanvas2");
+//    var x2 = parseInt((ev.clientX-canvas2.offsetLeft)/40);
+//    var y2 = parseInt((ev.clientY-canvas2.offsetTop)/40);
+//    alert(x2 + "  " + y2);
+//});
 
 
 $("#signUpC").on("click", function(ev){
@@ -152,3 +173,21 @@ $("#top100").on("click",function(ev){
             $("#listatop").modal('show');
         });
 });
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

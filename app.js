@@ -68,16 +68,25 @@ app.get('/reglas',function(req, res){
       if(req.query.juego=="Jugar"){
           res.send("<p>No ha elegido un juego, por favor seleccione uno al que jugar</p>");
       }else{
-          mysql.getRules(req.query.juego, function(bool){
-            if(bool){
-                res.send(bool);
-                console.log(bool!=null);
+          mysql.getRules(req.query.juego, function(reglas){
+            if(reglas){
+                res.send(reglas);
             }else{
                 res.send("error");
             }
           });
         }
     });
+
+app.get('/juego',function(req, res){
+    mysql.getJuego(req.query.nombre, function(data){
+        if(data && data[0]){
+            res.send(JSON.stringify(data[0]));
+        }else{
+            res.send("error");
+        }
+      });
+});
 
 var io = require('socket.io').listen(server);
 
