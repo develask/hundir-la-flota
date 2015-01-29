@@ -101,17 +101,34 @@ $("#signUpC").on("click", function(ev){
     var con1 = $("#SignUpContraseña").val();
     var con2 = $("#SignUpContraseña2").val();
     if (nombre != "" && email != "" && con1 != "" && con1 == con2){
-        socket.emit("nuevoUsuario", {nombre: nombre, contraseña: con1, email: email});
-        $('#signupdiv').modal('hide');
+        user.newUser(nombre, con1, email, function(bool){
+            if (bool){
+                $('#signupdiv').modal('hide');
+                alert("Se ha enviado un correo de verificacion");
+            }else{
+                alert("Ha ocurrido un error");
+            }
+        });
     }else{
-        alert("Algo va mal");
+        alert("Introduce todos los campos correctamente");
     }
 });
 
 $("#signInC").on("click", function(ev){
     nombre = $("#exampleInputEmail1").val();
     var contraseña = $("#exampleInputPassword1").val();
-    socket.emit("signIN", {nombre: nombre, contraseña: contraseña});
+    user.signIn(nombre, contraseña, function(bool){
+        if (bool){
+            $("#userName").text(nombre);
+            $('#signindiv').modal('hide');
+            $($("#signin").parent()).addClass("hidden");
+            $($("#signup").parent()).addClass("hidden");
+            $($("#userName").parent()).removeClass("hidden");
+            $("#errSignIn").addClass("hidden");
+        }else{
+            $("#errSignIn").removeClass("hidden");
+        }
+    });
 });
 $("#top10").on("click",function(ev){
     $.ajax({
@@ -131,16 +148,4 @@ $("#top100").on("click",function(ev){
             $("#contenidolistatop").html(data);
             $("#listatop").modal('show');
         });
-});
-socket.on("signed", function(bool){
-    if (bool){
-        $("#userName").text(nombre);
-        $('#signindiv').modal('hide');
-        $($("#signin").parent()).addClass("hidden");
-        $($("#signup").parent()).addClass("hidden");
-        $($("#userName").parent()).removeClass("hidden");
-        $("#errSignIn").addClass("hidden");
-    }else{
-        $("#errSignIn").removeClass("hidden");
-    }
 });
