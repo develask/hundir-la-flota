@@ -5,18 +5,34 @@ var socket = io('http://localhost:8080');
 //});
 var nombre;
 var nombrejuego;
+
+function Juego(){
+    this.juegoSeleccionado = function(nombre){
+        $.ajax({
+            url: "/juego?nombre="+nombre
+        }).done(function(data) {
+            var data2=JSON.parse(data);
+             $("#juego").html(data2.codigohtml);
+            eval(data2.codigojavascript);
+            });
+    }
+}
+var juego = new Juego();
+
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });
 
-$("#comosejuega").on("click", function(ev){
+$("#comosejuega").on("click", function(ev){ 
+    var juego= document.getElementById("juegoActual").text
     $.ajax({
-            url: "/reglas?juego="+nombrejuego
+            url: "/reglas?juego="+juego
         }).done(function( data ) {
             $("#contenidoIntrucciones").html(data);
             $('#instrucciones').modal('show');
         });
 });
+
 $("#signup").on("click", function(ev){
     $('#signupdiv').modal('show');
 });
@@ -42,13 +58,13 @@ $("#hundir").on("click", function(ev){
     var x = parseInt((ev.clientX-canvas.offsetLeft)/40);
     var y = parseInt((ev.clientY-canvas.offsetTop)/40);
 });*/
-$("#hundir").on("click", function(ev){
-    
-    $("#estadisticas").removeClass("hidden");
-    $("#estadisticas").addClass("dropdown");
-    $("#comosejuega").removeClass("hidden");
-    
-    document.getElementById("micanvas").style.display="block";
+
+$("#ulJuegos > li").on("click", function(ev){
+    if(user.isSigned()){
+        juego.juegoSeleccionado($(this).text());
+        $("#juego").css("display","block");
+    /*
+>>>>>>> f62b5658ec6a962e424e21715446075506ce399c
     var canvas1 = document.getElementById("micanvas1");
     var canvas2 = document.getElementById("micanvas2");
     if (canvas1.getContext && canvas1.getContext) {
@@ -74,14 +90,15 @@ $("#hundir").on("click", function(ev){
     var ctx1 = canvas1.getContext("2d");
     for (var i=40;i<400;i=i+40){
         ctx1.moveTo(i,0);
-        ctx.lineTo(i,400);
+        ctx2.lineTo(i,400);
     }
     for (var i=40;i<400;i=i+40){
         ctx1.moveTo(0,i);
-        ctx.lineTo(0,i);
+        ctx2.lineTo(0,i);
     }
     ctx1.strokeStyle = "#f00";                                                                    
     ctx1.stroke();
+<<<<<<< HEAD
     
 });
 
@@ -94,15 +111,28 @@ $("#micanvas1").on("click", function(ev){
     var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
     var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
     alert(x1 + "  " + y1);
+=======
+   document.getElementById("juegoActual").text="Hundir La Mesa";
+    */}else{
+        $("#signin").trigger('click');
+    }
     
-});
+    });
 
-$("#micanvas2").on("click", function(ev){
-    var canvas2 = document.getElementById("micanvas2");
-    var x2 = parseInt((ev.clientX-canvas2.offsetLeft)/40);
-    var y2 = parseInt((ev.clientY-canvas2.offsetTop)/40);
-    alert(x2 + "  " + y2);
-});
+//$("#micanvas1").on("click", function(ev){
+//    var canvas1 = document.getElementById("micanvas1");
+//    var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
+//    var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
+//    alert(x1 + "  " + y1);
+//    
+//});
+//
+//$("#micanvas2").on("click", function(ev){
+//    var canvas2 = document.getElementById("micanvas2");
+//    var x2 = parseInt((ev.clientX-canvas2.offsetLeft)/40);
+//    var y2 = parseInt((ev.clientY-canvas2.offsetTop)/40);
+//    alert(x2 + "  " + y2);
+//});
 
 
 $("#signUpC").on("click", function(ev){
@@ -111,17 +141,34 @@ $("#signUpC").on("click", function(ev){
     var con1 = $("#SignUpContraseña").val();
     var con2 = $("#SignUpContraseña2").val();
     if (nombre != "" && email != "" && con1 != "" && con1 == con2){
-        socket.emit("nuevoUsuario", {nombre: nombre, contraseña: con1, email: email});
-        $('#signupdiv').modal('hide');
+        user.newUser(nombre, con1, email, function(bool){
+            if (bool){
+                $('#signupdiv').modal('hide');
+                alert("Se ha enviado un correo de verificacion");
+            }else{
+                alert("Ha ocurrido un error");
+            }
+        });
     }else{
-        alert("Algo va mal");
+        alert("Introduce todos los campos correctamente");
     }
 });
 
 $("#signInC").on("click", function(ev){
     nombre = $("#exampleInputEmail1").val();
     var contraseña = $("#exampleInputPassword1").val();
-    socket.emit("signIN", {nombre: nombre, contraseña: contraseña});
+    user.signIn(nombre, contraseña, function(bool){
+        if (bool){
+            $("#userName").text(nombre);
+            $('#signindiv').modal('hide');
+            $($("#signin").parent()).addClass("hidden");
+            $($("#signup").parent()).addClass("hidden");
+            $($("#userName").parent()).removeClass("hidden");
+            $("#errSignIn").addClass("hidden");
+        }else{
+            $("#errSignIn").removeClass("hidden");
+        }
+    });
 });
 $("#top10").on("click",function(ev){
     $.ajax({
@@ -142,15 +189,21 @@ $("#top100").on("click",function(ev){
             $("#listatop").modal('show');
         });
 });
-socket.on("signed", function(bool){
-    if (bool){
-        $("#userName").text(nombre);
-        $('#signindiv').modal('hide');
-        $($("#signin").parent()).addClass("hidden");
-        $($("#signup").parent()).addClass("hidden");
-        $($("#userName").parent()).removeClass("hidden");
-        $("#errSignIn").addClass("hidden");
-    }else{
-        $("#errSignIn").removeClass("hidden");
-    }
-});
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

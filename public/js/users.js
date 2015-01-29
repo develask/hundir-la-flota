@@ -1,9 +1,16 @@
 function User(){
+    var nombre="";
+    
+    this.isSigned = function(){
+        return nombre !="";
+    }
+    
     this.signIn = function (name, pass, callback){
         $.ajax({
             url: "/login?user="+name+"&pass="+pass
         }).done(function( data ) {
             callback(data == "loged");
+            if(data =="loged") nombre=name;
         });
     }
     this.newUser = function (name, pass, email, callback){

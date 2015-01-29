@@ -93,6 +93,28 @@ connection.query("SELECT FROM hundirlaflota.users WHERE",function(err,rows){
     });   
 }
 
+function getJuego(nombre, callback){
+connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
+        if(err){ 
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });   
+}
+
+function getRules(juego,callback){
+    connection.query("SELECT reglas FROM hundirlaflota.juego WHERE nombre ='"+juego+"' ",function(err,rows){
+        if(err){ 
+            throw err;
+        }else{
+            callback(rows[0].reglas);
+        }
+    });   
+}
+
+module.exports.getJuego = getJuego;
+module.exports.getRules = getRules;
 module.exports.newUsuario = newUsuario;
 module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;
