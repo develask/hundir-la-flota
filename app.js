@@ -35,6 +35,13 @@ app.get('/signup', function(req, res){
     }
 });
 
+app.get('/top',function(req, res){
+        /*mysql.conseguirPrimerosX(req.query.num , req.query.juego ,function(){
+            res.send(
+        });*/
+    res.send("<p> hola! </p>");
+    });
+
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {

@@ -57,6 +57,15 @@ function signIn(user, password, callback){
         }
     });
 }
+function conseguirPrimerosX(numero, juego, callback){
+    connection.query("SELECT FROM hundirlaflota.users WHERE",function(err,rows){
+        if(err){ 
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });   
+}
 
 module.exports.newUsuario = newUsuario;
 module.exports.signIn = signIn;

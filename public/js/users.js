@@ -16,3 +16,4 @@ function User(){
 }
 
 var user = new User();
+

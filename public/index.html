@@ -26,23 +26,18 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >Jugar<span class="caret"></span></a>
                    <ul class="dropdown-menu" role="menu">
                     <li><a href="#" id="hundir">Hundir La Mesa</a></li>
+                    <li class="divider"></li>
                     <li><a href="#" id="cuatro">Cuatro En Ropa</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
                   </ul>
                 </li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Estadisticas <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Top 10</a></li>
-                    <li><a href="#">Top 100</a></li>
-                    <li><a href="#">Otras Estadisticas</a></li>
+                    <li><a href="#" id="top10">Top 10</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#" id="top100">Top 100</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
                   </ul>
                 </li>
                 <li><a href="#" id='comosejuega'>Como se Juega</a></li>
@@ -152,6 +147,22 @@
                                 <button type="button" class="btn btn-primary" id='signUpC'>Sign Up</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id='listatop'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Top <span id="topnumber"></span></h4>
+                    </div>
+                    <div class="modal-body" id="contenidolistatop">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
