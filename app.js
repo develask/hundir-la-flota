@@ -23,7 +23,17 @@ app.get('/login', function(req, res){
 });
 app.get('/signup', function(req, res){
     if (req.query.hash){
-        
+        mysql.confirm(req.query.email, req.query.hash, function(bool){
+            if (bool){
+                mysql.newUsuario(req.query.email, function(bool){
+                    if (bool){
+                        res.send("Usuario creado");
+                    }else{
+                        res.send("Ha ocurrido un error 2");
+                    }
+                });
+            }else{res.send("Ha ocurrido un error 1");}
+        });
     }else{
         mysql.toVerification(req.query.user, req.query.pass, req.query.email, function(bool){
             if (bool){

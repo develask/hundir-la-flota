@@ -10,7 +10,7 @@ function mail(to, hash, callback){
     });
     transporter.sendMail({
         subject: "GAME - UPV mail verification",
-        html: "<a href='localhost:8080/signup?hash="+hash+"'>"+hash+"</a>",
+        html: "<a href='localhost:8080/signup?hash="+hash+"&email="+to+"'>localhost:8080/signup?hash="+hash+"&email="+to+"</a>",
         from: 'gameupv@yahoo.es',
         to: to
     }, callback);
