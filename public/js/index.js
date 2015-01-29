@@ -43,6 +43,11 @@ $("#hundir").on("click", function(ev){
     var y = parseInt((ev.clientY-canvas.offsetTop)/40);
 });*/
 $("#hundir").on("click", function(ev){
+    
+    $("#estadisticas").removeClass("hidden");
+    $("#estadisticas").addClass("dropdown");
+    $("#comosejuega").removeClass("hidden");
+    
     document.getElementById("micanvas").style.display="block";
     var canvas1 = document.getElementById("micanvas1");
     var canvas2 = document.getElementById("micanvas2");
@@ -77,6 +82,11 @@ $("#hundir").on("click", function(ev){
     }
     ctx1.strokeStyle = "#f00";                                                                    
     ctx1.stroke();
+    
+});
+
+$("#hundir").on("click", function(ev){
+    
 });
 
 $("#micanvas1").on("click", function(ev){
