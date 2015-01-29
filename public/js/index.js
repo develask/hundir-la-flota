@@ -8,11 +8,14 @@ var nombrejuego;
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });
+
 $("#comosejuega").on("click", function(ev){
-    $('#instrucciones').modal('show');
-});
-$("#signup").on("click", function(ev){
-    $('#signupdiv').modal('show');
+    $.ajax({
+            url: "/top?juego="+nombrejuego
+        }).done(function( data ) {
+            $("#contenidoIntrucciones").html(data);
+            $('#instrucciones').modal('show');
+        });
 });
 $("#signup").on("click", function(ev){
     $('#signupdiv').modal('show');
@@ -119,6 +122,7 @@ $("#top10").on("click",function(ev){
             $("#listatop").modal('show');
         });
 });
+            
 $("#top100").on("click",function(ev){
     $.ajax({
             url: "/top?num=100&juego="+nombrejuego
