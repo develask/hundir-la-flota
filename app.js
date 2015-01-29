@@ -31,7 +31,7 @@ app.get('/signup', function(req, res){
             }else{
                 res.send("not made");
             }
-        })
+        }) 
     }
 });
 
