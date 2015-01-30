@@ -89,6 +89,7 @@ $("#ulJuegos > li").on("click", function(ev){
         $("#estadisticas").removeClass("hidden");
         $("#estadisticas").addClass("dropdown");
         $("#comosejuega").removeClass("hidden");
+        $("#usuarioregistrado").addClass("dropdown");    
     }else{
         $("#signin").trigger('click');
     }
@@ -124,6 +125,7 @@ $("#signInC").on("click", function(ev){
             $($("#signin").parent()).addClass("hidden");
             $($("#signup").parent()).addClass("hidden");
             $($("#userName").parent()).removeClass("hidden");
+            $($("#username").parent()).addClass("dropdown");
             $("#errSignIn").addClass("hidden");
         }else{
             $("#errSignIn").removeClass("hidden");
@@ -132,7 +134,7 @@ $("#signInC").on("click", function(ev){
 });
 $("#top10").on("click",function(ev){
     $.ajax({
-        url: "/top?num=10&juego="+juego.getJuego()
+        url: "/top?num=10"
     }).done(function( data ) {
         $("#topnumber").html("10");
         $("#contenidolistatop").html(data);
@@ -146,9 +148,11 @@ $("#top100").on("click",function(ev){
     }).done(function( data ) {
         $("#topnumber").html("100");
         $("#contenidolistatop").html(data);
-        $("#listatop").modal('show');
+        $("#listatop").modal('show');    
     });
 });
+
+
 
     
     

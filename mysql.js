@@ -83,13 +83,13 @@ function signIn(user, password, callback){
         }
     });
 }
-function conseguirPrimerosX(numero, juego, callback){
-connection.query("SELECT FROM hundirlaflota.users WHERE",function(err,rows){
-        if(err){ 
-            throw err;
-        }else{
-            callback(rows);
-        }
+function conseguirPrimerosX(numero, callback){
+    connection.query("SELECT TOP("+numero+") nombrejugador, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC",function(err,rows){
+    if(err){ 
+        throw err;
+    }else{
+        callback(rows);
+    }
     });   
 }
 
@@ -119,3 +119,4 @@ module.exports.newUsuario = newUsuario;
 module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;
 module.exports.confirm = confirm;
+module.exports.conseguirPrimerosX = conseguirPrimerosX;

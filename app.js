@@ -58,10 +58,11 @@ app.get('/signup', function(req, res){
 });
 
 app.get('/top',function(req, res){
-        /*mysql.conseguirPrimerosX(req.query.num , req.query.juego ,function(){
-            res.send(
-        });*/
-    res.send("<p> hola! </p>");
+        mysql.conseguirPrimerosX(req.query.num,function(data){
+        if(data.length>0)
+            res.send("<p>"+data[0]+"</p>");
+        });
+    //res.send("<p> hola! </p>");
     });
 
 app.get('/reglas',function(req, res){
