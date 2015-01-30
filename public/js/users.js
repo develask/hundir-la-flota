@@ -11,6 +11,7 @@ function User(){
         $.ajax({
             url: "/login?user="+name+"&pass="+pass
         }).done(function( data ) {
+            socket.emit("newloged", name);
             callback(data == "loged");
             if(data =="loged") nombre=name;
         });

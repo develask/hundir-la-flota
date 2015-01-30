@@ -89,13 +89,29 @@ app.get('/juego',function(req, res){
 });
 
 var io = require('socket.io').listen(server);
-
+var jugadores = {};
 io.sockets.on('connection', function (socket) {
-//    socket.emit('message', { message: 'welcome to the chat!' });
+    socket.on("newloged", function(data){
+        socket.izena = data;
+    });
     socket.on("cambioJuego", function(data){
+        jugadores[data.jugador] = {juego: data.juego, socket: socket};
         console.log(data.jugador +" ha cabiado al juego: "+data.juego);
     });
+    socket.on("msgTo", function(datos){
+        for(var el in datos.quienes){
+            jugadores[datos.quienes[el]].socket.emit("evJuego", datos.msg);
+        }
+    });
+    socket.on("jugadorCheked", function(d){
+        if (jugadores[d.nombre].juego == d.juego){
+            socket.emit("jugadorCheked", d.nombre);
+        }else{
+            socket.emit("jugadorCheked", "");
+        }
+    });
     socket.on("disconnect", function () {
-        //delete users[socket['izena']];
+        io.sockets.emit("disconnect", socket['izena']);
+        delete jugadores[socket['izena']];
     });
 });

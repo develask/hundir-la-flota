@@ -3,9 +3,8 @@ var socket = io('http://localhost:8080');
 function Juego(){
     var juego = "";
     this.juegoSeleccionado = function(nombre){
-        if (juego != "" && juego != nombre){
-            socket.emit("cambioJuego", {juego: nombre, jugador: user.getName()});
-        }
+        socket.emit("cambioJuego", {juego: nombre, jugador: user.getName()});
+        this.restartEvents();
         $.ajax({
             url: "/juego?nombre="+nombre
         }).done(function(data) {
@@ -18,6 +17,51 @@ function Juego(){
     this.getJuego = function(){
         return juego;
     }
+    this.emit = function(data){
+        socket.emit("accion", {juego: juego, data: data});
+    }
+    var evsJuego = {}; // Aqui van las funciones de los juegos;
+    socket.on("evJuego", function(dat){
+        var echo = false;
+        for (var nombreEv in evsJuego){
+            if (nombreEv == dat.evento){
+                evsJuego[nombreEv](dat.datos);
+                echo = true;
+                break;
+            }
+        }
+        if (!echo) console.log("Evento recogido sin funcion correspondiente: '"+dat.evento+"'\n\tDatos:\n\t\t"+dat.datos);
+    });
+    this.restartEvents = function (){
+        evsJuego = {};
+    }
+    this.on = function(string, funct){
+        evsJuego[string] = funct;
+    }
+    this.sendMsgToSmbdy = function (quien_s, que, msg){
+        socket.emit("msgTo", {quienes: (typeof quien_s == "string")?[quien_s]:quien_s, msg: {evento: que, datos: msg}});
+    }
+    var jugadores = [];
+    socket.on("jugadorCheked", function(d){
+        if (d!=""){
+            jugadores.push(d);
+        }
+    });
+    this.addJugador = function(nombre){
+        socket.emit("jugadorCheked", {nombre: nombre, juego: this.getJuego()});
+    }
+    this.restartJugadores = function(){
+        jugadores = [];
+    }
+    this.removeJugador =function(jugador){
+        var idx = jugadores.indexOf(jugador);
+        if (idx !== -1) {
+            jugadores.splice(jugador, 1);
+        }
+    }
+    socket.on("disconnect", function(nombre){
+        this.removeJugador(nombre);
+    });
 }
 var juego = new Juego();
 
@@ -88,22 +132,22 @@ $("#signInC").on("click", function(ev){
 });
 $("#top10").on("click",function(ev){
     $.ajax({
-            url: "/top?num=10&juego="+juego.getJuego()
-        }).done(function( data ) {
-            $("#topnumber").html("10");
-            $("#contenidolistatop").html(data);
-            $("#listatop").modal('show');
-        });
+        url: "/top?num=10&juego="+juego.getJuego()
+    }).done(function( data ) {
+        $("#topnumber").html("10");
+        $("#contenidolistatop").html(data);
+        $("#listatop").modal('show');
+    });
 });
             
 $("#top100").on("click",function(ev){
     $.ajax({
-            url: "/top?num=100&juego="+juego.getJuego()
-        }).done(function( data ) {
-            $("#topnumber").html("100");
-            $("#contenidolistatop").html(data);
-            $("#listatop").modal('show');
-        });
+        url: "/top?num=100&juego="+juego.getJuego()
+    }).done(function( data ) {
+        $("#topnumber").html("100");
+        $("#contenidolistatop").html(data);
+        $("#listatop").modal('show');
+    });
 });
 
     
