@@ -1,10 +1,34 @@
-//var socket = io('https://localhost:4433');
-var web = 'https://localhost:4433';
+var socket;
+var web = 'https://localhost:4433/';
 
 function Juego(){
     var juego = "";
     this.juegoSeleccionado = function(nombre){
-  //      socket.emit("cambioJuego", {juego: nombre, jugador: user.getName()});
+        try {
+            socket.disconnect();
+        }catch(e){
+        }
+        socket = io(web+nombre);
+        socket.on("peticionJugar", function(datos){
+            if (datos.clase == "peticion"){
+                if (confirm(datos.nombre + " quiere jugar contigo.")){
+                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Si", nombre: datos.nombre});
+                    socket.on("msgJuego", function (data){
+                        alert(data.quien + ": " +data.datos);
+                    });
+                }else{
+                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "No", nombre: datos.nombre});
+                }
+            }else if (datos.clase == "respuesta"){
+                if (datos.respuesta == "Si"){
+                    socket.on("msgJuego", function (data){
+                        alert(data.quien + ": " +data.datos);
+                    });
+                }
+                alert(datos.nombre?datos.nombre+": "+datos.respuesta:datos.respuesta);
+            }
+        });
+        socket.emit("name", user.getName());
         this.restartEvents();
         $.ajax({
             url: "/juego?nombre="+nombre
@@ -14,6 +38,9 @@ function Juego(){
             eval(data2.codigojavascript);
             juego = nombre;
         });
+    }
+    this.peticionJugar = function(nombre){
+        socket.emit("peticionJugar", {clase: "peticion", nombre: nombre});
     }
     this.getJuego = function(){
         return juego;
@@ -39,8 +66,8 @@ function Juego(){
     this.on = function(string, funct){
         evsJuego[string] = funct;
     }
-    this.sendMsgToSmbdy = function (quien_s, que, msg){
-      //      socket.emit("msgTo", {quienes: (typeof quien_s == "string")?[quien_s]:quien_s, msg: {evento: que, datos: msg}});
+    this.sendMsg = function (msg){
+        socket.emit("msgJuego", msg);
     }
    /* socket.on("disconnect", function(nombre){
         console.log("El jugador "+nombre + " se ha salido.");

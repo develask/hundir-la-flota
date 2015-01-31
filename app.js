@@ -148,31 +148,61 @@ app.get('/juego',function(req, res){
 
 var io = require('socket.io').listen(httpsServer);
 var hundirlamesa = io.of('/Hundir La Mesa');
+var jugadores_hundirlamesa = {};
 hundirlamesa.on('connection', function(socket){
-  console.log('Hundirlamesa');
-    socket.on("disconnect", function () {
-        console.log("Desconectado");
+    socket.on("name", function(name){
+        jugadores_hundirlamesa[name] = socket;
+        socket.nombre = name;
     });
-});
-
-
-var jugadores = {};
-io.sockets.on('connection', function (socket) {
-    socket.on("newloged", function(data){
-        socket.izena = data;
-    });
-    socket.on("cambioJuego", function(data){
-        jugadores[data.jugador] = {juego: data.juego, socket: socket};
-        console.log(data.jugador +" ha cabiado al juego: "+data.juego);
-    });
-    socket.on("msgTo", function(datos){
-        for(var el in datos.quienes){
-            jugadores[datos.quienes[el]].socket.emit("evJuego", datos.msg);
+    socket.on("peticionJugar", function(datos){
+        if (datos.clase == "peticion"){
+            try {
+                jugadores_hundirlamesa[datos.nombre].emit("peticionJugar", {clase: "peticion", nombre: socket.nombre});
+            }catch(e){
+                socket.emit("peticionJugar", {clase: "respuesta", respuesta: "No esta en este Juego"});
+            }
+        }else if (datos.clase == "respuesta"){
+            try {
+                jugadores_hundirlamesa[datos.nombre].emit("peticionJugar", {clase: "respuesta", nombre: socket.nombre, respuesta: datos.respuesta});
+                if (datos.respuesta == "Si"){
+                    socket.join(socket.nombre);
+                    jugadores_hundirlamesa[datos.nombre].join(socket.nombre);
+                     var s2 = jugadores_hundirlamesa[datos.nombre];
+                    socket.on("msgJuego", function(data){
+                        socket.broadcast.emit("msgJuego", {quien: socket.nombre, datos: data});
+                    });
+                    s2.on("msgJuego", function(data){
+                        s2.broadcast.emit("msgJuego", {quien: s2.nombre, datos: data});
+                    });
+                }
+            }catch(e){
+                socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Ese usuario se ha salido del juego"});
+            }
         }
     });
     socket.on("disconnect", function () {
-        //io.sockets.emit("disconnect", socket['izena']);
-        delete jugadores[socket['izena']];
+        delete jugadores_hundirlamesa[socket.nombre];
     });
-    
 });
+
+
+//var jugadores = {};
+//io.sockets.on('connection', function (socket) {
+//    socket.on("newloged", function(data){
+//        socket.izena = data;
+//    });
+//    socket.on("cambioJuego", function(data){
+//        jugadores[data.jugador] = {juego: data.juego, socket: socket};
+//        console.log(data.jugador +" ha cabiado al juego: "+data.juego);
+//    });
+//    socket.on("msgTo", function(datos){
+//        for(var el in datos.quienes){
+//            jugadores[datos.quienes[el]].socket.emit("evJuego", datos.msg);
+//        }
+//    });
+//    socket.on("disconnect", function () {
+//        //io.sockets.emit("disconnect", socket['izena']);
+//        delete jugadores[socket['izena']];
+//    });
+//    
+//});
