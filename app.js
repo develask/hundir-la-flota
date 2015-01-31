@@ -10,7 +10,7 @@ var options = {
 
 //var express = require('express');
 //var app = express();
-var mysql = require("./mysql.js");
+
 /*
 var server = app.listen(8080, function () {
 
@@ -27,6 +27,7 @@ var certificate = fs.readFileSync('cert.pem', 'utf8');
 
 var credentials = {key: privateKey, cert: certificate};
 var express = require('express');
+var mysql = require("./mysql.js");
 var app = express();
 
 // your express configuration here
@@ -80,7 +81,7 @@ app.get('/signup', function(req, res){
         <p>Lo sentimos, pero no encontramos tus datos.</p>\
         <p>Para aacceder a nuestros servicios tendrá que darse de alta de nuevo.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='http://localhost:8080/'>ENLACE</a>");}
+        <a href='http://localhost:4433/'>ENLACE</a>");}
         });
     }else{
         mysql.toVerification(req.query.user, req.query.pass, req.query.email, function(bool){
