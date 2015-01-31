@@ -42,7 +42,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" id='signin'>Sign In</a></li>
                 <li><a href="#" id='signup'>Sign Up</a></li>
-                <li class="hidden" id="usuarioregistrado" >
+                <li class="hidden dropdown" id="usuarioregistrado" >
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="userName"><span class="caret"></span></a>
                    <ul class="dropdown-menu" role="menu" aria-labelledby="juegoActual" id="ulJugador">
                     <li><a href="#" id="añadiramigos">Añadir Amigos</a></li>
@@ -153,7 +153,7 @@
             </div>
         </div>
         
-        <div class="hidden" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id='añadiramigosdiv'>
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id='añadiramigosdiv'>
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -162,23 +162,19 @@
               </div>
               <div class="modal-body">
                 <form>
-                    <div class="col-lg-6">
+                    <div>
                         <div class="input-group">
                           <input type="text" class="form-control" placeholder="Search for..."><span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Go!</button>
+                            <button class="btn btn-default" type="button">Buscar</button>
                           </span>
-                        </div><!-- /input-group -->
-                      </div><!-- /.col-lg-6 -->
-                    </div><!-- /.row -->
-                    <div class="list-group" id="listapersonas">
-                        <<!--a href="#" class="list-group-item disabled">
-                            Cras justo odio
-                        </a>
-                        <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                        <a href="#" class="list-group-item">Morbi leo risus</a>
-                        <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                        <a href="#" class="list-group-item">Vestibulum at eros</a>-->
-                    </div>
+                        </div>
+                      </div>
+                    </form>
+                    <br>
+                    <div id="listapersonas" style="max-height:200px ; overflow-y:scroll" >
+                        
+                    </div>    
+                </div><!-- /.row -->   
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" id='signInC'>Añadir</button>

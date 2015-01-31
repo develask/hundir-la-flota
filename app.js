@@ -5,13 +5,13 @@ var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
+*/
 
 
-
-var express = require('express');
-var app = express();
+//var express = require('express');
+//var app = express();
 var mysql = require("./mysql.js");
-
+/*
 var server = app.listen(8080, function () {
 
   
@@ -95,9 +95,13 @@ app.get('/signup', function(req, res){
 
 app.get('/top',function(req, res){
         mysql.conseguirPrimerosX(req.query.num,function(data){
-        if(data && data[0]){
-            res.send(JSON.stringify(data[0]));
-        }
+        if(data.length>0)
+            var html = "<ol>";
+            for (var ind in data){
+                html += "<li>"+data[ind].puntuacion+ " - "+data[ind].nombre+"</li>";
+            }
+            html += "</ol>"; 
+            res.send(html);
         });
     //res.send("<p> hola! </p>");
     });
@@ -116,10 +120,16 @@ app.get('/reglas',function(req, res){
         }
     });
 
-app.get('/añadiramigos',function(req, res){
-    mysql.getUsuarios(function(listaamigos){
-        if(listaamigos){
-            res.send(listaamigos);
+app.get('/anadiramigos',function(req, res){
+    mysql.getUsuarios(function(data){
+        console.log(data);
+        if(data.length>0){
+            var html = "<ol>";
+            for (var ind in data){
+                html += "<li> "+data[ind].nombre+" </li>";
+            }
+            html += "</ol>"; 
+            res.send(html);
         }else{
             res.send("error");
         }
@@ -137,6 +147,15 @@ app.get('/juego',function(req, res){
 });
 
 var io = require('socket.io').listen(httpsServer);
+var hundirlamesa = io.of('/Hundir La Mesa');
+hundirlamesa.on('connection', function(socket){
+  console.log('Hundirlamesa');
+    socket.on("disconnect", function () {
+        console.log("Desconectado");
+    });
+});
+
+
 var jugadores = {};
 io.sockets.on('connection', function (socket) {
     socket.on("newloged", function(data){
@@ -151,15 +170,9 @@ io.sockets.on('connection', function (socket) {
             jugadores[datos.quienes[el]].socket.emit("evJuego", datos.msg);
         }
     });
-    socket.on("jugadorCheked", function(d){
-        if (jugadores[d.nombre].juego == d.juego){
-            socket.emit("jugadorCheked", d.nombre);
-        }else{
-            socket.emit("jugadorCheked", "");
-        }
-    });
     socket.on("disconnect", function () {
-        io.sockets.emit("disconnect", socket['izena']);
+        //io.sockets.emit("disconnect", socket['izena']);
         delete jugadores[socket['izena']];
     });
+    
 });

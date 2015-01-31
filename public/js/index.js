@@ -1,4 +1,5 @@
-var socket = io('http://localhost:8080');
+var socket = io('https://localhost:4433');
+var web = 'https://localhost:4433';
 
 function Juego(){
     var juego = "";
@@ -41,32 +42,21 @@ function Juego(){
     this.sendMsgToSmbdy = function (quien_s, que, msg){
         socket.emit("msgTo", {quienes: (typeof quien_s == "string")?[quien_s]:quien_s, msg: {evento: que, datos: msg}});
     }
-    var jugadores = [];
-    socket.on("jugadorCheked", function(d){
-        if (d!=""){
-            jugadores.push(d);
-        }
-    });
-    this.addJugador = function(nombre){
-        socket.emit("jugadorCheked", {nombre: nombre, juego: this.getJuego()});
-    }
-    this.restartJugadores = function(){
-        jugadores = [];
-    }
-    this.removeJugador =function(jugador){
-        var idx = jugadores.indexOf(jugador);
-        if (idx !== -1) {
-            jugadores.splice(jugador, 1);
-        }
-    }
-    socket.on("disconnect", function(nombre){
-        this.removeJugador(nombre);
-    });
+   /* socket.on("disconnect", function(nombre){
+        console.log("El jugador "+nombre + " se ha salido.");
+    });*/
 }
 var juego = new Juego();
 
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
+});
+
+$("#logout").on("click", function(ev){
+    $($("#signin").parent()).removeClass("hidden");
+    $($("#signup").parent()).removeClass("hidden");
+    $($("#userName").parent()).addClass("hidden");
+    user.logout();
 });
 
 $("#comosejuega").on("click", function(ev){ 
@@ -93,8 +83,7 @@ $("#ulJuegos > li").on("click", function(ev){
     }else{
         $("#signin").trigger('click');
     }
-    
-    });
+});
 
 $("#signUpC").on("click", function(ev){
     var nombre = $("#SignUpUser").val();
@@ -106,6 +95,10 @@ $("#signUpC").on("click", function(ev){
             if (bool){
                 $('#signupdiv').modal('hide');
                 alert("Se ha enviado un correo de verificacion");
+                $("#SignUpUser").val("");
+                $("#SignUpEmail").val("");
+                $("#SignUpContraseña").val("");
+                $("#SignUpContraseña2").val("");
             }else{
                 alert("Ha ocurrido un error");
             }
@@ -125,8 +118,9 @@ $("#signInC").on("click", function(ev){
             $($("#signin").parent()).addClass("hidden");
             $($("#signup").parent()).addClass("hidden");
             $($("#userName").parent()).removeClass("hidden");
-            $($("#username").parent()).addClass("dropdown");
             $("#errSignIn").addClass("hidden");
+            $("#exampleInputEmail1").val("");
+            $("#exampleInputPassword1").val("");
         }else{
             $("#errSignIn").removeClass("hidden");
         }
@@ -154,12 +148,12 @@ $("#top100").on("click",function(ev){
 
 $("#añadiramigos").on("click",function(ev){
      $.ajax({
-            url: "/añadiramigos"
+            url: "/anadiramigos"
         }).done(function( data ) {
-            $("#añadiramigosdiv").addClass("modal fade");
+            $("#añadiramigosdiv").modal('show');
             $("#listapersonas").html(data);
         });
-}
+});
 
     
     

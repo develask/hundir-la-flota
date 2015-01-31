@@ -5,7 +5,7 @@ var crypto = require('crypto');
 var mail = require('./mail.js');
     
 var connection =  mysql.createConnection({
-    host : "176.84.103.209",
+    host : "176.84.93.251",
     user : "hundir",
     password: "laflota"
 });
@@ -84,17 +84,17 @@ function signIn(user, password, callback){
     });
 }
 function conseguirPrimerosX(numero, callback){
-    connection.query("SELECT TOP("+numero+") nombrejugador, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC",function(err,rows){
-        if(err){ 
-            throw err;
-        }else{
-            callback(rows);
-        }
+    connection.query("SELECT nombre, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC LIMIT "+numero,function(err,rows){
+    if(err){ 
+        throw err;
+    }else{
+        callback(rows);
+    }
     });   
 }
 
 function getUsuarios(callback){
-    connection.query("SELECT nombrejugador FROM hundirlaflota.users ",function(err, rows){
+    connection.query("SELECT nombre FROM hundirlaflota.users ",function(err, rows){
         if(err){
             throw err;
         }else{
@@ -123,6 +123,16 @@ function getRules(juego,callback){
     });   
 }
 
+function getJuegosNames(callback){
+    connection.query("SELECT nombre FROM juego", function (err, data){
+        if(err){ 
+            throw err;
+        }else{
+            callback(data);
+        }
+    });
+}
+
 module.exports.getJuego = getJuego;
 module.exports.getRules = getRules;
 module.exports.newUsuario = newUsuario;
@@ -131,3 +141,4 @@ module.exports.toVerification = toVerification;
 module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
 module.exports.getUsuarios = getUsuarios;
+module.exports.getJuegosNames = getJuegosNames;

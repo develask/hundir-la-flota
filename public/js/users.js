@@ -16,6 +16,9 @@ function User(){
             if(data =="loged") nombre=name;
         });
     }
+    this.logout = function (){
+        nombre="";
+    }
     this.newUser = function (name, pass, email, callback){
         $.ajax({
             url: "/signup?user="+name+"&pass="+pass+"&email="+email
@@ -23,6 +26,7 @@ function User(){
             callback(data == "made");
         });
     }
+    
 }
 
 var user = new User();
