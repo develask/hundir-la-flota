@@ -1,10 +1,10 @@
-var socket = io('https://localhost:4433');
+//var socket = io('https://localhost:4433');
 var web = 'https://localhost:4433';
 
 function Juego(){
     var juego = "";
     this.juegoSeleccionado = function(nombre){
-        socket.emit("cambioJuego", {juego: nombre, jugador: user.getName()});
+  //      socket.emit("cambioJuego", {juego: nombre, jugador: user.getName()});
         this.restartEvents();
         $.ajax({
             url: "/juego?nombre="+nombre
@@ -19,10 +19,10 @@ function Juego(){
         return juego;
     }
     this.emit = function(data){
-        socket.emit("accion", {juego: juego, data: data});
+    //    socket.emit("accion", {juego: juego, data: data});
     }
     var evsJuego = {}; // Aqui van las funciones de los juegos;
-    socket.on("evJuego", function(dat){
+   /* socket.on("evJuego", function(dat){
         var echo = false;
         for (var nombreEv in evsJuego){
             if (nombreEv == dat.evento){
@@ -32,7 +32,7 @@ function Juego(){
             }
         }
         if (!echo) console.log("Evento recogido sin funcion correspondiente: '"+dat.evento+"'\n\tDatos:\n\t\t"+dat.datos);
-    });
+    });*/
     this.restartEvents = function (){
         evsJuego = {};
     }
@@ -40,7 +40,7 @@ function Juego(){
         evsJuego[string] = funct;
     }
     this.sendMsgToSmbdy = function (quien_s, que, msg){
-        socket.emit("msgTo", {quienes: (typeof quien_s == "string")?[quien_s]:quien_s, msg: {evento: que, datos: msg}});
+      //      socket.emit("msgTo", {quienes: (typeof quien_s == "string")?[quien_s]:quien_s, msg: {evento: que, datos: msg}});
     }
    /* socket.on("disconnect", function(nombre){
         console.log("El jugador "+nombre + " se ha salido.");
