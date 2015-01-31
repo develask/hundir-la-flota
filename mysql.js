@@ -84,7 +84,7 @@ function signIn(user, password, callback){
     });
 }
 function conseguirPrimerosX(numero, callback){
-    connection.query("SELECT TOP("+numero+") nombrejugador, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC",function(err,rows){
+    connection.query("SELECT nombre, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC LIMIT "+numero,function(err,rows){
     if(err){ 
         throw err;
     }else{
