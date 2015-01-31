@@ -174,17 +174,29 @@ $("#top100").on("click",function(ev){
 });
 
 $("#añadiramigos").on("click",function(ev){
-     $.ajax({
-            url: "/anadiramigos"
-        }).done(function( data ) {
-            $("#añadiramigosdiv").modal('show');
-            $("#listapersonas").html(data);
-        });
+    $.ajax({
+        url: "/anadiramigos"
+    }).done(function( data ) {
+        $("#añadiramigosdiv").modal('show');
+        $("#listapersonas").html(data);
+    });
 });
 
+$("#anadiramigosinput").on("change", function(ev){
+    $.ajax({
+        url: "/conseguirpersonasporvalor?nombre="+$("#inputamigos").val()
+    }).done(function( data ){
+        $("#anadiramigosinput").html(data);
+    });
+});  
     
-    
-    
+$("#bandejadeentrada").on("click",function(){
+    $.ajax({
+        url: "/bandejadeentrada?nombre="+user.getName()
+    }).done(function( data ){
+        $("#anadiramigosinput").html(data);
+    });
+});
     
     
     

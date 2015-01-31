@@ -46,6 +46,7 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="userName"><span class="caret"></span></a>
                    <ul class="dropdown-menu" role="menu" aria-labelledby="juegoActual" id="ulJugador">
                     <li><a href="#" id="añadiramigos">Añadir Amigos</a></li>
+                    <li><a href="#" id="bandejadeentrada">Bandeja De Entrada</a></li>
                     <li><a href="#" id="logout">Log Out</a></li>
                   </ul>
                 </li>
@@ -164,9 +165,12 @@
                 <form>
                     <div>
                         <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Search for..."><span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Buscar</button>
+                            <input id="inputamigos" type="text" class="form-control" placeholder="Search for..." list="anadiramigosinput"><span class="input-group-btn">
+                                <button class="btn btn-default" type="button">Buscar</button>
                           </span>
+                            <datalist id="anadiramigosinput">
+                                
+                            </datalist>
                         </div>
                       </div>
                     </form>

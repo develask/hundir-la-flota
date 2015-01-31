@@ -120,7 +120,19 @@ app.get('/reglas',function(req, res){
           });
         }
     });
-
+app.get('/conseguirpersonasporvalor',function(req,res){
+    mysql.getNombrePorValor(req.query.nombre,function(data){
+        if(data.length>0){
+            var html;
+            for (var ind in data){
+                html += "<option value='"+data[ind].nombre+"'/>";
+            }
+            res.send(html);
+        }else{
+            res.sen("error");
+        }
+    });
+});
 app.get('/anadiramigos',function(req, res){
     mysql.getUsuarios(function(data){
         console.log(data);
