@@ -1,14 +1,50 @@
+/*var https = require('https');
+var fs = require('fs');
+
+var options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+
+
+
 var express = require('express');
 var app = express();
 var mysql = require("./mysql.js");
 
 var server = app.listen(8080, function () {
 
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Example app listening at http://%s:%s', host, port);
+  
 });
+
+var a = https.createServer(options, server);*/
+
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('key.pem', 'utf8');
+var certificate = fs.readFileSync('cert.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+var express = require('express');
+var app = express();
+
+// your express configuration here
+
+var httpServer = http.createServer(function(req,res){
+    res.writeHead(302,{Location: "https://localhost:4433"});
+    res.end();
+});
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(8080, function(){
+    var host = httpServer.address().address;
+    var port = httpServer.address().port;
+    console.log('SERVER HTTP listening at http://%s:%s', host, port);});
+httpsServer.listen(4433, function(){
+     var host = httpsServer.address().address;
+    var port = httpsServer.address().port;
+    console.log('SERVER HTTPS listening at httpS://%s:%s', host, port);});
 
 app.use(express.static(__dirname + '/public'));
 
@@ -100,7 +136,7 @@ app.get('/juego',function(req, res){
       });
 });
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(httpsServer);
 var jugadores = {};
 io.sockets.on('connection', function (socket) {
     socket.on("newloged", function(data){
