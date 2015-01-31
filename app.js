@@ -96,7 +96,12 @@ app.get('/signup', function(req, res){
 app.get('/top',function(req, res){
         mysql.conseguirPrimerosX(req.query.num,function(data){
         if(data.length>0)
-            res.send("<p>"+data[0]+"</p>");
+            var html = "<ol>";
+            for (var ind in data){
+                html += "<li>"+data[ind].puntuacion+ " - "+data[ind].nombre+"</li>";
+            }
+            html += "</ol>"; 
+            res.send(html);
         });
     //res.send("<p> hola! </p>");
     });
@@ -126,6 +131,15 @@ app.get('/juego',function(req, res){
 });
 
 var io = require('socket.io').listen(httpsServer);
+var hundirlamesa = io.of('/Hundir La Mesa');
+hundirlamesa.on('connection', function(socket){
+  console.log('Hundirlamesa');
+    socket.on("disconnect", function () {
+        console.log("Desconectado");
+    });
+});
+
+
 var jugadores = {};
 io.sockets.on('connection', function (socket) {
     socket.on("newloged", function(data){
@@ -138,13 +152,6 @@ io.sockets.on('connection', function (socket) {
     socket.on("msgTo", function(datos){
         for(var el in datos.quienes){
             jugadores[datos.quienes[el]].socket.emit("evJuego", datos.msg);
-        }
-    });
-    socket.on("jugadorCheked", function(d){
-        if (jugadores[d.nombre].juego == d.juego){
-            socket.emit("jugadorCheked", d.nombre);
-        }else{
-            socket.emit("jugadorCheked", "");
         }
     });
     socket.on("disconnect", function () {

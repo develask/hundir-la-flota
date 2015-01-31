@@ -5,7 +5,7 @@ var crypto = require('crypto');
 var mail = require('./mail.js');
     
 var connection =  mysql.createConnection({
-    host : "176.84.103.209",
+    host : "176.84.93.251",
     user : "hundir",
     password: "laflota"
 });
@@ -113,6 +113,16 @@ function getRules(juego,callback){
     });   
 }
 
+function getJuegosNames(callback){
+    connection.query("SELECT nombre FROM juego", function (err, data){
+        if(err){ 
+            throw err;
+        }else{
+            callback(data);
+        }
+    });
+}
+
 module.exports.getJuego = getJuego;
 module.exports.getRules = getRules;
 module.exports.newUsuario = newUsuario;
@@ -120,3 +130,4 @@ module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;
 module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
+module.exports.getJuegosNames = getJuegosNames;
