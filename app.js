@@ -5,13 +5,13 @@ var options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
-
+*/
 
 
 var express = require('express');
 var app = express();
 var mysql = require("./mysql.js");
-
+/*
 var server = app.listen(8080, function () {
 
   
