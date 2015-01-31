@@ -59,8 +59,9 @@ app.get('/signup', function(req, res){
 
 app.get('/top',function(req, res){
         mysql.conseguirPrimerosX(req.query.num,function(data){
-        if(data.length>0)
-            res.send("<p>"+data[0]+"</p>");
+        if(data && data[0]){
+            res.send(JSON.stringify(data[0]));
+        }
         });
     //res.send("<p> hola! </p>");
     });
@@ -78,6 +79,16 @@ app.get('/reglas',function(req, res){
           });
         }
     });
+
+app.get('/añadiramigos',function(req, res){
+    mysql.getUsuarios(function(listaamigos){
+        if(listaamigos){
+            res.send(listaamigos);
+        }else{
+            res.send("error");
+        }
+    });
+});
 
 app.get('/juego',function(req, res){
     mysql.getJuego(req.query.nombre, function(data){

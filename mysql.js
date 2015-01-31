@@ -85,16 +85,26 @@ function signIn(user, password, callback){
 }
 function conseguirPrimerosX(numero, callback){
     connection.query("SELECT TOP("+numero+") nombrejugador, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC",function(err,rows){
-    if(err){ 
-        throw err;
-    }else{
-        callback(rows);
-    }
+        if(err){ 
+            throw err;
+        }else{
+            callback(rows);
+        }
     });   
 }
 
+function getUsuarios(callback){
+    connection.query("SELECT nombrejugador FROM hundirlaflota.users ",function(err, rows){
+        if(err){
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });
+}
+
 function getJuego(nombre, callback){
-connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
+    connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
         if(err){ 
             throw err;
         }else{
@@ -120,3 +130,4 @@ module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;
 module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
+module.exports.getUsuarios = getUsuarios;

@@ -152,7 +152,14 @@ $("#top100").on("click",function(ev){
     });
 });
 
-
+$("#añadiramigos").on("click",function(ev){
+     $.ajax({
+            url: "/añadiramigos"
+        }).done(function( data ) {
+            $("#añadiramigosdiv").addClass("modal fade");
+            $("#listapersonas").html(data);
+        });
+}
 
     
     
