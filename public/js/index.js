@@ -1,4 +1,4 @@
-var socket = io('http://localhost:8080');
+var socket = io('https://localhost:4433');
 
 function Juego(){
     var juego = "";
