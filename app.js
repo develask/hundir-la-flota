@@ -195,14 +195,14 @@ hundirlamesa.on('connection', function(socket){
                         socket.emit("room", {clase: "error", error: "No hay abitaciones abiertas"});
                     }
                 }
-                socket.broadcast.emit("room", {clase: "joined", nombre: socket.nombre});
+                socket.to(socket.room).emit("room", {clase: "joined", nombre: socket.nombre});
             break;
             case "rechazar":
                 jugadores_hundirlamesa[datos.nombre].emit("room", {clase: "rechazar", nombre: socket.nombre});
             break;
             case "cerrar":
                 rooms.slice(rooms.indexOf(socket.room), 1);
-                socket.broadcast.emit("room", {clase: "cerrada"});
+                socket.to(socket.room).emit("room", {clase: "cerrada"});
             break;
             case "echar":
                 try  {
@@ -210,12 +210,13 @@ hundirlamesa.on('connection', function(socket){
                     jugadores_hundirlamesa[datos.nombre].emit("room", {nombre: socket.nombre, clase: "echar"});
                     jugadores_hundirlamesa[datos.nombre].room = undefined;
                 }catch(e){}
+            break;
             default:
                 socket.emit("room", {clase: "error", error: "Clase mal definida"});
         }
     });
     socket.on("msg", function(data){
-        socket.broadcast.emit("msg", data);
+        socket.to(socket.room).emit("msg", data);
     });
     socket.on("disconnect", function () {
         delete jugadores_hundirlamesa[socket.nombre];
