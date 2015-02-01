@@ -104,8 +104,8 @@ function Juego(){
     this.getJuego = function(){
         return juego;
     }
-    this.joinToRoom = function(){
-        if (!grupoCreado) socket.emit()
+    this.joinToRandomRoom = function(){
+        if (!grupoCreado) socket.emit("room", {clase: "join"})
     }
     this.roomEvent = {
         joined: function(funct){roomEv["joined"]=funct;},
