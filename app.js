@@ -138,7 +138,14 @@ app.get('/anadiramigos',function(req, res){
 });
 
 app.get('/bandejadeentrada',function(req, res){
-    mysql
+    res.send("sin hacer");
+    /*mysql.getMensajesJugador(req.query.nombre,function(data){
+        if(data.length>0){
+            res.send("Aun sin hacer");
+        }else{
+            res.send("error");
+        }
+    });*/
 });
 
 app.get('/juego',function(req, res){

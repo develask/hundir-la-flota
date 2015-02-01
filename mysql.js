@@ -104,7 +104,7 @@ function getUsuarios(callback){
 }
 
 function getMensajesJugador(nombre,callback){
-    connection.query("SELECT mensaje FROM hundirlaflota.mensaje WHERE receptor="+nombre+" AND emisor="+nombre+"",function(){
+    connection.query("SELECT mensaje, leido FROM hundirlaflota.mensaje WHERE receptor="+nombre+" OR emisor="+nombre+"",function(){
         if(err){
             throw err;
         }else{
@@ -152,3 +152,4 @@ module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
 module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
+module.exports.getMensajesJugador = getMensajesJugador;

@@ -196,7 +196,7 @@ $("#bandejadeentrada").on("click",function(ev){
     $.ajax({
         url: "/bandejadeentrada?nombre="+user.getName()
     }).done(function( data ){
-        $("#anadiramigosinput").html(data);
+        $("#bandejadeentradadiv").modal('show');
     });
 });
     
