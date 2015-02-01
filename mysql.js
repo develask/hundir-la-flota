@@ -92,17 +92,19 @@ function conseguirPrimerosX(numero, callback){
         }
     });   
 }
-function getNombrePorValor(nombre,callback){
-    connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre LIKE '%"+nombre+"%'",function(err,rows){
-        if(err){ 
+
+function getUsuarios(callback){
+    connection.query("SELECT nombre FROM hundirlaflota.users ",function(err, rows){
+        if(err){
             throw err;
         }else{
             callback(rows);
         }
     });
 }
-function getUsuarios(callback){
-    connection.query("SELECT nombre FROM hundirlaflota.users ",function(err, rows){
+
+function getMensajesJugador(nombre,callback){
+    connection.query("SELECT mensaje FROM hundirlaflota.mensaje WHERE receptor="+nombre+" AND emisor="+nombre+"",function(){
         if(err){
             throw err;
         }else{
@@ -150,4 +152,3 @@ module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
 module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
-//module.exports.getNombrePorValor = getNombrePorValor;

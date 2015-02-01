@@ -183,14 +183,18 @@ $("#añadiramigos").on("click",function(ev){
 });
 
 $("#anadiramigosinput").on("change", function(ev){
-    $.ajax({
-        url: "/conseguirpersonasporvalor?nombre="+$("#inputamigos").val()
-    }).done(function( data ){
-        $("#anadiramigosinput").html(data);
+    $("#listapersonas li").each(function(data){
+        console.log(data);
+        if($(data).text().indexOf($("#anadiramigosinput").val())>=0){
+            
+            $(data).removeClass("hidden");
+        }else{
+            $(data).addClass("hidden");
+        }
     });
 });  
     
-$("#bandejadeentrada").on("click",function(){
+$("#bandejadeentrada").on("click",function(ev){
     $.ajax({
         url: "/bandejadeentrada?nombre="+user.getName()
     }).done(function( data ){
