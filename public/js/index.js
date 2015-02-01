@@ -182,11 +182,9 @@ $("#añadiramigos").on("click",function(ev){
     });
 });
 
-$("#anadiramigosinput").on("change", function(ev){
-    $("#listapersonas li").each(function(data){
-        console.log(data);
-        if($(data).text().indexOf($("#anadiramigosinput").val())>=0){
-            
+$("#inputamigos").keyup(function(ev){
+    $("#listapersonas li").each(function(ind, data){
+        if($(data).text().indexOf($("#inputamigos").val())>=0){
             $(data).removeClass("hidden");
         }else{
             $(data).addClass("hidden");
