@@ -179,18 +179,14 @@ hundirlamesa.on('connection', function(socket){
                 if (datos.respuesta == "Si"){
                     socket.join(socket.nombre);
                     jugadores_hundirlamesa[datos.nombre].join(socket.nombre);
-                     var s2 = jugadores_hundirlamesa[datos.nombre];
-                    socket.on("msgJuego", function(data){
-                        socket.broadcast.emit("msgJuego", {quien: socket.nombre, datos: data});
-                    });
-                    s2.on("msgJuego", function(data){
-                        s2.broadcast.emit("msgJuego", {quien: s2.nombre, datos: data});
-                    });
                 }
             }catch(e){
                 socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Ese usuario se ha salido del juego"});
             }
         }
+    });
+    socket.on("msg", function(data){
+        socket.broadcast.emit("msg", data);
     });
     socket.on("disconnect", function () {
         delete jugadores_hundirlamesa[socket.nombre];

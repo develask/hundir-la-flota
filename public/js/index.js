@@ -3,33 +3,16 @@ var web = 'https://localhost:4433/';
 
 function Juego(){
     var juego = "";
+    var eventos = {};
+    var grupoCreado = false;
     this.juegoSeleccionado = function(nombre){
         try {
             socket.disconnect();
         }catch(e){
         }
         socket = io(web+nombre);
-        socket.on("peticionJugar", function(datos){
-            if (datos.clase == "peticion"){
-                if (confirm(datos.nombre + " quiere jugar contigo.")){
-                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Si", nombre: datos.nombre});
-                    socket.on("msgJuego", function (data){
-                        alert(data.quien + ": " +data.datos);
-                    });
-                }else{
-                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "No", nombre: datos.nombre});
-                }
-            }else if (datos.clase == "respuesta"){
-                if (datos.respuesta == "Si"){
-                    socket.on("msgJuego", function (data){
-                        alert(data.quien + ": " +data.datos);
-                    });
-                }
-                alert(datos.nombre?datos.nombre+": "+datos.respuesta:datos.respuesta);
-            }
-        });
-        socket.emit("name", user.getName());
-        this.restartEvents();
+        eventos = {};
+        grupoCreado = false;
         $.ajax({
             url: "/juego?nombre="+nombre
         }).done(function(data) {
@@ -38,6 +21,32 @@ function Juego(){
             eval(data2.codigojavascript);
             juego = nombre;
         });
+        socket.on("peticionJugar", function(datos){
+            if (datos.clase == "peticion"){
+                if (confirm(datos.nombre + " quiere jugar contigo.")){
+                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Si", nombre: datos.nombre});
+                }else{
+                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "No", nombre: datos.nombre});
+                }
+            }else if (datos.clase == "respuesta"){
+                if (datos.respuesta == "Si"){
+                    grupoCreado = true;
+                }
+                alert(datos.nombre?datos.nombre+": "+datos.respuesta:datos.respuesta);
+            }
+        });
+        socket.on("msg", function(datos){
+            var echo = false;
+            for (var nombreEv in eventos){
+                if (datos.evento == nombreEv){
+                    echo = true;
+                    eventos[nombreEv](datos.data);
+                    break;
+                }
+            }
+            if (!echo) console.log(datos);
+        });
+        socket.emit("name", user.getName());
     }
     this.peticionJugar = function(nombre){
         socket.emit("peticionJugar", {clase: "peticion", nombre: nombre});
@@ -45,36 +54,19 @@ function Juego(){
     this.getJuego = function(){
         return juego;
     }
-    this.emit = function(data){
-    //    socket.emit("accion", {juego: juego, data: data});
-    }
-    var evsJuego = {}; // Aqui van las funciones de los juegos;
-   /* socket.on("evJuego", function(dat){
-        var echo = false;
-        for (var nombreEv in evsJuego){
-            if (nombreEv == dat.evento){
-                evsJuego[nombreEv](dat.datos);
-                echo = true;
-                break;
-            }
+    this.emit = function (ev, msg){
+        if (grupoCreado){
+            socket.emit("msg", {evento: ev, data: msg});
+        }else{
+            alert("Es necesario estar en un grupo para mandar mensajes a los demás!")
         }
-        if (!echo) console.log("Evento recogido sin funcion correspondiente: '"+dat.evento+"'\n\tDatos:\n\t\t"+dat.datos);
-    });*/
-    this.restartEvents = function (){
-        evsJuego = {};
     }
-    this.on = function(string, funct){
-        evsJuego[string] = funct;
+    this.on = function(nombreEv, funct){
+        eventos[nombreEv] = funct;
+        if (!grupoCreado) console.log("'"+nombreEv+ "' evento creado, pero todavia no se ha entrado a un grupo");
     }
-    this.sendMsg = function (msg){
-        socket.emit("msgJuego", msg);
-    }
-   /* socket.on("disconnect", function(nombre){
-        console.log("El jugador "+nombre + " se ha salido.");
-    });*/
 }
 var juego = new Juego();
-
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });
