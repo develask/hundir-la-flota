@@ -21,18 +21,35 @@ function Juego(){
             eval(data2.codigojavascript);
             juego = nombre;
         });
-        socket.on("peticionJugar", function(datos){
-            if (datos.clase == "peticion"){
-                if (confirm(datos.nombre + " quiere jugar contigo.")){
-                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Si", nombre: datos.nombre});
-                }else{
-                    socket.emit("peticionJugar", {clase: "respuesta", respuesta: "No", nombre: datos.nombre});
-                }
-            }else if (datos.clase == "respuesta"){
-                if (datos.respuesta == "Si"){
-                    grupoCreado = true;
-                }
-                alert(datos.nombre?datos.nombre+": "+datos.respuesta:datos.respuesta);
+        socket.on("room", function(datos){
+            switch (datos.clase){
+                case "peticion":
+                    if (confirm(datos.nombre + " quiere que te unas a " + datos.room + " con " + datos.cantidad+" usuarios.")){
+                        socket.emit("room", {clase: "join", room: datos.room});
+                        grupoCreado = true;
+                    }else{
+                        socket.emit("room", {clase: "rechazar", nombre: datos.nombre});
+                        grupoCreado=false;
+                    }
+                break;
+                case "joined":
+                    alert(datos.nombre + " se ha unido a la partida.");
+                break;
+                case "rechazar":
+                    alert(datos.nombre + " ha rechazado la partida.");
+                break;
+                case "cerrada":
+                    alert("La partida se ha cerrado.");
+                break;
+                case "echar":
+                    alert("Usted ha sido expulsado por "+datos.nombre+".");
+                    grupoCreado = false;
+                break;
+                case "error":
+                    alert(datos.error);
+                break;
+                default:
+                    console.log(datos);
             }
         });
         socket.on("msg", function(datos){
@@ -48,8 +65,9 @@ function Juego(){
         });
         socket.emit("name", user.getName());
     }
-    this.peticionJugar = function(nombre){
-        socket.emit("peticionJugar", {clase: "peticion", nombre: nombre});
+    this.crearRoom = function(nombreRoom, quienes){
+        socket.emit("room", {clase: "new", room: nombreRoom, nombres: quienes});
+        grupoCreado = true;
     }
     this.getJuego = function(){
         return juego;
@@ -70,7 +88,6 @@ var juego = new Juego();
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });
-
 $("#logout").on("click", function(ev){
     $($("#signin").parent()).removeClass("hidden");
     $($("#signup").parent()).removeClass("hidden");

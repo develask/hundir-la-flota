@@ -161,28 +161,57 @@ app.get('/juego',function(req, res){
 var io = require('socket.io').listen(httpsServer);
 var hundirlamesa = io.of('/Hundir La Mesa');
 var jugadores_hundirlamesa = {};
+var rooms = [];
 hundirlamesa.on('connection', function(socket){
     socket.on("name", function(name){
         jugadores_hundirlamesa[name] = socket;
         socket.nombre = name;
     });
-    socket.on("peticionJugar", function(datos){
-        if (datos.clase == "peticion"){
-            try {
-                jugadores_hundirlamesa[datos.nombre].emit("peticionJugar", {clase: "peticion", nombre: socket.nombre});
-            }catch(e){
-                socket.emit("peticionJugar", {clase: "respuesta", respuesta: "No esta en este Juego"});
-            }
-        }else if (datos.clase == "respuesta"){
-            try {
-                jugadores_hundirlamesa[datos.nombre].emit("peticionJugar", {clase: "respuesta", nombre: socket.nombre, respuesta: datos.respuesta});
-                if (datos.respuesta == "Si"){
-                    socket.join(socket.nombre);
-                    jugadores_hundirlamesa[datos.nombre].join(socket.nombre);
+    socket.on("room", function(datos){
+        switch (datos.clase){
+            case "new":
+                rooms.push(datos.room);
+                socket.join(datos.room);
+                socket.room = datos.room;
+                for (var ind in datos.nombres){
+                    try  {
+                        jugadores_hundirlamesa[datos.nombres[ind]].emit("room", {nombre: socket.nombre, clase: "peticion", cantidad: datos.nombres.length, room: datos.room});
+                    }catch(e){
+                        socket.emit("room", {clase: "error", error: datos.nombres[ind]+" no esta jugando."});
+                    }
                 }
-            }catch(e){
-                socket.emit("peticionJugar", {clase: "respuesta", respuesta: "Ese usuario se ha salido del juego"});
-            }
+            break;
+            case "join":
+                if (datos.room){
+                    socket.room = datos.room;
+                    socket.join(datos.room);
+                }else{
+                    var num = Math.random() * (rooms.length-1);
+                    if (num >= 0){
+                        var r = rooms[num];
+                        socket.join(r);
+                        socket.room = r;
+                    }else {
+                        socket.emit("room", {clase: "error", error: "No hay abitaciones abiertas"});
+                    }
+                }
+                socket.broadcast.emit("room", {clase: "joined", nombre: socket.nombre});
+            break;
+            case "rechazar":
+                jugadores_hundirlamesa[datos.nombre].emit("room", {clase: "rechazar", nombre: socket.nombre});
+            break;
+            case "cerrar":
+                rooms.slice(rooms.indexOf(socket.room), 1);
+                socket.broadcast.emit("room", {clase: "cerrada"});
+            break;
+            case "echar":
+                try  {
+                    jugadores_hundirlamesa[datos.nombre].leave(socket.room);
+                    jugadores_hundirlamesa[datos.nombre].emit("room", {nombre: socket.nombre, clase: "echar"});
+                    jugadores_hundirlamesa[datos.nombre].room = undefined;
+                }catch(e){}
+            default:
+                socket.emit("room", {clase: "error", error: "Clase mal definida"});
         }
     });
     socket.on("msg", function(data){
