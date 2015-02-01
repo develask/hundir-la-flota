@@ -5,6 +5,7 @@ function Juego(){
     var juego = "";
     var eventos = {};
     var grupoCreado = false;
+    var roomEv = {}
     this.juegoSeleccionado = function(nombre){
         try {
             socket.disconnect();
@@ -12,6 +13,7 @@ function Juego(){
         }
         socket = io(web+nombre);
         eventos = {};
+        roomEv = {};
         grupoCreado = false;
         $.ajax({
             url: "/juego?nombre="+nombre
@@ -33,20 +35,40 @@ function Juego(){
                     }
                 break;
                 case "joined":
-                    alert(datos.nombre + " se ha unido a la partida.");
+                    if (roomEv["joined"]){
+                        roomEv["joined"](datos);
+                    }else{
+                        alert(datos.nombre + " se ha unido a la partida.");
+                    }
                 break;
                 case "rechazar":
-                    alert(datos.nombre + " ha rechazado la partida.");
+                    if (roomEv["rechazar"]){
+                        roomEv["rechazar"](datos);
+                    }else{
+                        alert(datos.nombre + " ha rechazado la partida.");
+                    }
                 break;
                 case "cerrada":
-                    alert("La partida se ha cerrado.");
+                    if (roomEv["cerrada"]){
+                        roomEv["cerrada"](datos);
+                    }else{
+                        alert("La partida se ha cerrado.");
+                    }
                 break;
                 case "echar":
-                    alert("Usted ha sido expulsado por "+datos.nombre+".");
+                    if (roomEv["cerrada"]){
+                        roomEv["cerrada"](datos);
+                    }else{
+                        alert("Usted ha sido expulsado por "+datos.nombre+".");
+                    }
                     grupoCreado = false;
                 break;
                 case "error":
-                    alert(datos.error);
+                    if (roomEv["error"]){
+                        roomEv["error"](datos);
+                    }else{
+                        alert("Error: "+datos.error);
+                    }
                 break;
                 default:
                     console.log(datos);
@@ -69,8 +91,28 @@ function Juego(){
         socket.emit("room", {clase: "new", room: nombreRoom, nombres: quienes});
         grupoCreado = true;
     }
+    this.leaveRoom = function(){
+        socket.emit("room", {clase: "echar", nombre: user.getName()});
+        grupoCreado = false;
+    }
+    this.cerrarRoom = function(){
+        socket.emit("room", {clase: "cerrar"});
+    }
+    this.roomEchar = function(nombre){
+        socket.emit("room", {clase: "echar", nombre: nombre});
+    }
     this.getJuego = function(){
         return juego;
+    }
+    this.joinToRoom = function(){
+        if (!grupoCreado) socket.emit()
+    }
+    this.roomEvent = {
+        joined: function(funct){roomEv["joined"]=funct;},
+        rechazar: function(funct){roomEv["rechazar"]=funct;},
+        cerrada: function(funct){roomEv["cerrada"]=funct;},
+        echar: function(funct){roomEv["echar"]=funct;},
+        error: function(funct){roomEv["error"]=funct;}
     }
     this.emit = function (ev, msg){
         if (grupoCreado){
@@ -211,9 +253,7 @@ $("#bandejadeentrada").on("click",function(ev){
     
     
     
-    
-    
-    
+
     
     
     
