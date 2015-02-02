@@ -121,16 +121,29 @@ app.get('/reglas',function(req, res){
         }
     });
 
-app.get('/anadiramigos',function(req, res){
-    mysql.getUsuarios(function(data){
+app.get('/mostrarUsuarios',function(req, res){
+    mysql.getUsuarios(undefined, function(data){
         console.log(data);
         if(data.length>0){
-            var html = "<ol>";
+            var amigos = [];
             for (var ind in data){
-                html += "<li> "+data[ind].nombre+" </li>";
-            }
-            html += "</ol>"; 
-            res.send(html);
+                amigos.push(data[ind].nombre);
+            } 
+            res.send(JSON.stringify(amigos));
+        }else{
+            res.send("error");
+        }
+    });
+});
+app.get('/amigos',function(req, res){
+    mysql.getUsuarios(req.query.user,function(data){
+        console.log(data);
+        if(data.length>0){
+            var amigos = [];
+            for (var ind in data){
+                amigos.push(data[ind].nombre);
+            } 
+            res.send(JSON.stringify(amigos));
         }else{
             res.send("error");
         }

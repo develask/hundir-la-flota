@@ -225,9 +225,7 @@ $("#top100").on("click",function(ev){
 });
 
 $("#añadiramigos").on("click",function(ev){
-    $.ajax({
-        url: "/anadiramigos"
-    }).done(function( data ) {
+    user.getFriends(function( data ) {
         $("#añadiramigosdiv").modal('show');
         $("#listapersonas").html(data);
     });
@@ -244,9 +242,7 @@ $("#inputamigos").keyup(function(ev){
 });  
     
 $("#bandejadeentrada").on("click",function(ev){
-    $.ajax({
-        url: "/bandejadeentrada?nombre="+user.getName()
-    }).done(function( data ){
+    user.getUserMsg(function( data ){
         $("#bandejadeentradadiv").modal('show');
     });
 });

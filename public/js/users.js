@@ -26,7 +26,27 @@ function User(){
             callback(data == "made");
         });
     }
-    
+    this.getUsers = function(callback){
+        $.ajax({
+            url: "/mostrarUsuarios"
+        }).done(function( data ) {
+            callback(JSON.parse(data));
+        });
+    }
+    this.getFriends = function(callback){
+        $.ajax({
+            url: "/amigos?user="+this.getName()
+        }).done(function( data ) {
+            callback(JSON.parse(data));
+        });
+    }
+    this.getUserMsg = function(callback){
+        $.ajax({
+            url: "/bandejadeentrada?nombre="+this.getName()
+        }).done(function( data ){
+            callback(data);
+        });
+    }
 }
 
 var user = new User();

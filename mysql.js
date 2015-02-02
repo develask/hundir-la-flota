@@ -93,8 +93,8 @@ function conseguirPrimerosX(numero, callback){
     });   
 }
 
-function getUsuarios(callback){
-    connection.query("SELECT nombre FROM hundirlaflota.users ",function(err, rows){
+function getUsuarios(user, callback){
+    connection.query("SELECT nombre FROM hundirlaflota.users "+user?" WHERE nombre='"+user+"'":"",function(err, rows){
         if(err){
             throw err;
         }else{
