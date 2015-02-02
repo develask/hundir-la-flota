@@ -1,5 +1,5 @@
 var socket;
-var web = 'https://localhost:4433/';
+var web = 'https://176.84.104.76:4433';
 
 function Juego(){
     var juego = "";
