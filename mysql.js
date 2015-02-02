@@ -104,7 +104,7 @@ function getUsuarios(user, callback){
 }
 
 function getMensajesJugador(nombre,callback){
-    connection.query("SELECT mensaje, leido FROM hundirlaflota.mensaje WHERE receptor="+nombre+" OR emisor="+nombre+"",function(){
+    connection.query("SELECT id, leido, emisor, cabecera FROM hundirlaflota.mensaje WHERE receptor="+nombre+"",function(){
         if(err){
             throw err;
         }else{

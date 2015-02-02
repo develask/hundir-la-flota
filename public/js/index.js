@@ -243,6 +243,7 @@ $("#inputamigos").keyup(function(ev){
     
 $("#bandejadeentrada").on("click",function(ev){
     user.getUserMsg(function( data ){
+        $("#bandmensajesdiv").html(data);
         $("#bandejadeentradadiv").modal('show');
     });
 });
