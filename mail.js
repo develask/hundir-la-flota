@@ -14,7 +14,7 @@ function mail(to, hash, callback){
         <p>Este correo ha sido enviado para la verificación de un nuevo usuario.</p>\
         <p>Si usted no ha querido registrarse en nuestros servicios, borre el mensaje.</p>\
         <p>En caso de que usted haya solicitado crear la cuenta, entre en el siguiente enlace:</p>\
-        <a href='http://localhost:8080/signup?hash="+hash+"&email="+to+"'>ENLACE</a>",
+        <a href='https://localhost:4433/signup?hash="+hash+"&email="+to+"'>ENLACE</a>",
         from: 'gameupv@gmail.com',
         to: to
     }, callback);

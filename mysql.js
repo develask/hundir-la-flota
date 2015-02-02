@@ -94,7 +94,7 @@ function conseguirPrimerosX(numero, callback){
 }
 
 function getUsuarios(user, callback){
-    connection.query("SELECT nombre FROM hundirlaflota.users "+user?" WHERE nombre='"+user+"'":"",function(err, rows){
+    connection.query("SELECT nombre FROM hundirlaflota.users "+(user?" WHERE nombre='"+user+"'":""),function(err, rows){
         if(err){
             throw err;
         }else{
@@ -104,7 +104,7 @@ function getUsuarios(user, callback){
 }
 
 function getMensajesJugador(nombre,callback){
-    connection.query("SELECT id, leido, emisor, cabecera FROM hundirlaflota.mensaje WHERE receptor="+nombre+"",function(){
+    connection.query("SELECT id, leido, emisor, cabecera FROM hundirlaflota.mensajes WHERE receptor='"+nombre+"'",function(err, rows){
         if(err){
             throw err;
         }else{

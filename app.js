@@ -152,15 +152,16 @@ app.get('/amigos',function(req, res){
 
 app.get('/bandejadeentrada',function(req, res){ 
     mysql.getMensajesJugador(req.query.nombre,function(data){
-        if(data.length>0){
-            var html = "<ol>";
-            for (var ind in data){
-                html += "<li id="+data[ind].id+"> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id="+boton+data[ind].id+">Ver</button>";
-            }
-            html += "</ol>"; 
-        }else{
-            res.send("no hay mensajes");
+        var ob = [];
+        for (var ind in data){
+            ob.push({
+                id: data[ind].id,
+                emisor: data[ind].emisor,
+                leido: data[ind].leido,
+                cabecera: data[ind].cabecera
+            });
         }
+        res.send(JSON.stringify(ob));
     });
 });
 

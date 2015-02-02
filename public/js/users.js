@@ -44,7 +44,7 @@ function User(){
         $.ajax({
             url: "/bandejadeentrada?nombre="+this.getName()
         }).done(function( data ){
-            callback(data);
+            callback(JSON.parse(data));
         });
     }
 }

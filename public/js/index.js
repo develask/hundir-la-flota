@@ -243,7 +243,16 @@ $("#inputamigos").keyup(function(ev){
     
 $("#bandejadeentrada").on("click",function(ev){
     user.getUserMsg(function( data ){
-        $("#bandmensajesdiv").html(data);
+        if(data.length>0){
+            var html = "<ol>";
+            for (var ind in data){
+                html += "<li id="+data[ind].id+"> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id="+boton+data[ind].id+">Ver</button>";
+            }
+            html += "</ol>"; 
+        }else{
+            var html = "no hay mensajes";
+        }
+        $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
     });
 });
