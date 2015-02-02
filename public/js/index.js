@@ -178,7 +178,7 @@ $("#signUpC").on("click", function(ev){
                 $("#SignUpContraseña").val("");
                 $("#SignUpContraseña2").val("");
             }else{
-                alert("Ha ocurrido un error");
+                alert("Email o nombre repetidos");
             }
         });
     }else{
