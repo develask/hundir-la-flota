@@ -60,11 +60,12 @@ app.get('/login', function(req, res){
 });
 app.get('/signup', function(req, res){
     if (req.query.hash){
-        mysql.confirm(req.query.email, req.query.hash, function(bool){
-            if (bool){
-                mysql.newUsuario(req.query.email, function(bool){
-                    if (bool){
-                        res.send("<h2>GAME - UPV mail verification</h2>\
+        try{
+            mysql.confirm(req.query.email, req.query.hash,      function(bool){
+                if (bool){
+                    mysql.newUsuario(req.query.email, function(bool){
+                        if (bool){
+                            res.send("<h2>GAME - UPV mail verification</h2>\
         <p>Tu usuario ya ha sido creado.</p>\
         <p>Ya puede volver a nuestro servicio y acceder con tus credenciales.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
@@ -83,6 +84,9 @@ app.get('/signup', function(req, res){
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
         <a href='https://localhost:4433/'>ENLACE</a>");}
         });
+        }catch(e){
+            res.send(e.message);
+        }
     }else{
         mysql.toVerification(req.query.user, req.query.pass, req.query.email, function(bool){
             if (bool){
