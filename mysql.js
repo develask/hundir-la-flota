@@ -53,7 +53,7 @@ function toVerification(name, pass, email, callback){
     shasum2.update(pass+name);
     var has = shasum2.digest('hex');
     shasum.update(name+has+email);
-    connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre='"+name+"' UNION SELECT name FROM hundirlaflota.verification WHERE name='"+name+"'", function(err, rows){
+    connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre='"+name+"' OR email='"+email+"' UNION SELECT name FROM hundirlaflota.verification WHERE name='"+name+"' OR email='"+email+"', function(err, rows){
         if (rows && rows.length == 0){
             connection.query("INSERT INTO hundirlaflota.verification (`name`,`pass`,`email`) values ('"+name+"','"+has+"','"+email+"')", function(err, rows){
                 if(err) throw err;
