@@ -239,10 +239,27 @@ $("#inputamigos").keyup(function(ev){
             $(data).addClass("hidden");
         }
     });
-});  
+}); 
+
+$("#bandejadesalida").on("click",function(ev){
+    user.getUserOutboxMsg(function(data){
+        if(data.length>0){
+            var html = "<ol>";
+            for (var ind in data){
+                html += "<li id="+data[ind].id+"> Para:"+data[ind].receptor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id="+boton+data[ind].id+">Ver</button>";
+            }
+            html += "</ol>"; 
+        }else{
+            var html = "no hay mensajes";
+        }
+        $("#bandmensajesdiv").html("");
+        $("#bandmensajesdiv").html(html);
+        $("#bandejadeentradadiv").modal('show');
+    });
+});
     
 $("#bandejadeentrada").on("click",function(ev){
-    user.getUserMsg(function( data ){
+    user.getUserInboxMsg(function( data ){
         if(data.length>0){
             var html = "<ol>";
             for (var ind in data){
@@ -252,8 +269,17 @@ $("#bandejadeentrada").on("click",function(ev){
         }else{
             var html = "no hay mensajes";
         }
+        $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
+    });
+});
+
+$("#anadir").on("click",function(ev){
+    $.ajax({
+        url: "/anadir?username="+$("#inputamigos").text()
+    }).done(function(data){
+        
     });
 });
     

@@ -103,7 +103,17 @@ function getUsuarios(user, callback){
     });
 }
 
-function getMensajesJugador(nombre,callback){
+function getMensajesSalidaJugador(nombre,callback){
+    connection.query("SELECT id, leido, receptor, cabecera FROM hundirlaflota.mensajes WHERE emisor='"+nombre+"'",function(err, rows){
+        if(err){
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });
+}
+
+function getMensajesEntradaJugador(nombre,callback){
     connection.query("SELECT id, leido, emisor, cabecera FROM hundirlaflota.mensajes WHERE receptor='"+nombre+"'",function(err, rows){
         if(err){
             throw err;
@@ -152,4 +162,5 @@ module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
 module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
-module.exports.getMensajesJugador = getMensajesJugador;
+module.exports.getMensajesEntradaJugador = getMensajesEntradaJugador;
+module.exports.getMensajesSalidaJugador = getMensajesSalidaJugador;

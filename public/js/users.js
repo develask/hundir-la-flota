@@ -23,7 +23,7 @@ function User(){
         $.ajax({
             url: "/signup?user="+name+"&pass="+pass+"&email="+email
         }).done(function( data ) {
-            callback(data == "made");
+                callback(data == "made");
         });
     }
     this.getUsers = function(callback){
@@ -40,7 +40,14 @@ function User(){
             callback(JSON.parse(data));
         });
     }
-    this.getUserMsg = function(callback){
+    this.getUserOutboxMsg = function(callback){
+        $.ajax({
+            url: "/bandejadesalida?nombre="+this.getName()
+        }).done(function(data){
+            callback(JSON.parse(data));
+        });
+    }
+    this.getUserInboxMsg = function(callback){
         $.ajax({
             url: "/bandejadeentrada?nombre="+this.getName()
         }).done(function( data ){

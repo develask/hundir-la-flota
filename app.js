@@ -150,8 +150,23 @@ app.get('/amigos',function(req, res){
     });
 });
 
+app.get('/bandejadesalida',function(req, res){
+    mysql.getMensajesSalidaJugador(req.query.nombre,function(data){
+         var ob = [];
+        for (var ind in data){
+            ob.push({
+                id: data[ind].id,
+                receptor: data[ind].receptor,
+                leido: data[ind].leido,
+                cabecera: data[ind].cabecera
+            });
+        }
+        res.send(JSON.stringify(ob));
+    })
+});
+
 app.get('/bandejadeentrada',function(req, res){ 
-    mysql.getMensajesJugador(req.query.nombre,function(data){
+    mysql.getMensajesEntradaJugador(req.query.nombre,function(data){
         var ob = [];
         for (var ind in data){
             ob.push({
@@ -173,6 +188,10 @@ app.get('/juego',function(req, res){
             res.send("error");
         }
       });
+});
+
+app.get('/anadir',function(req,res){
+    
 });
 
 var io = require('socket.io').listen(httpsServer);
