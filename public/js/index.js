@@ -237,7 +237,12 @@ $("#top100").on("click",function(ev){
 $("#añadiramigos").on("click",function(ev){
     user.getFriends(function( data ) {
         $("#añadiramigosdiv").modal('show');
-        $("#listapersonas").html(JSON.stringify(data));
+        var htmlAmigos = "<ol>";
+        for (var ind in data){
+            htmlAmigos += "<li>"+data[ind].nombreamigo+"</li>";
+        }
+        htmlAmigos += "</ol>";
+        $("#listapersonas").html(htmlAmigos);
     });
 });
 
