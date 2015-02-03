@@ -103,6 +103,16 @@ function getUsuarios(user, callback){
     });
 }
 
+function getAmigos(user, callback){
+    connection.query("SELECT nombreamigo FROM hundirlaflota.Amigos "+(user?" WHERE nombre='"+user+"'":""),function(err, rows){
+        if(err){
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });
+}
+
 function getMensajesSalidaJugador(nombre,callback){
     connection.query("SELECT id, leido, receptor, cabecera FROM hundirlaflota.mensajes WHERE emisor='"+nombre+"'",function(err, rows){
         if(err){
@@ -164,3 +174,4 @@ module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
 module.exports.getMensajesEntradaJugador = getMensajesEntradaJugador;
 module.exports.getMensajesSalidaJugador = getMensajesSalidaJugador;
+module.exports.getAmigos = getAmigos;

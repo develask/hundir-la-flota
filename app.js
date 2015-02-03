@@ -140,7 +140,8 @@ app.get('/mostrarUsuarios',function(req, res){
     });
 });
 app.get('/amigos',function(req, res){
-    mysql.getUsuarios(req.query.user,function(data){
+    //mysql.getUsuarios(req.query.user,function(data){
+    mysql.getAmigos(req.query.user,function(data){
         console.log(data);
         if(data.length>0){
             var amigos = [];
