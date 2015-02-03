@@ -97,18 +97,22 @@ app.get('/signup', function(req, res){
         }) 
     }
 });
-
+app.get('/forgotenPass', function(res, req){
+    if ((req.query.user || req.query.email) && !req.query.hash){
+    }else if (req.query.email && req.query.hash){
+    }else{
+    }
+});
+app.get('/newPass', function(){
+//    if (req.query.pass){
+//    }else{
+//    }
+    res.send("Not implemented yet");
+})
 app.get('/top',function(req, res){
         mysql.conseguirPrimerosX(req.query.num,function(data){
-        if(data.length>0)
-            var html = "<ol>";
-            for (var ind in data){
-                html += "<li>"+data[ind].puntuacion+ " - "+data[ind].nombre+"</li>";
-            }
-            html += "</ol>"; 
-            res.send(html);
+            res.send(JSON.stringify(data));
         });
-    //res.send("<p> hola! </p>");
     });
 
 app.get('/reglas',function(req, res){
@@ -127,60 +131,24 @@ app.get('/reglas',function(req, res){
 
 app.get('/mostrarUsuarios',function(req, res){
     mysql.getUsuarios(undefined, function(data){
-        console.log(data);
-        if(data.length>0){
-            var amigos = [];
-            for (var ind in data){
-                amigos.push(data[ind].nombre);
-            } 
-            res.send(JSON.stringify(amigos));
-        }else{
-            res.send("error");
-        }
+        res.send(JSON.stringify(data));
     });
 });
 app.get('/amigos',function(req, res){
     mysql.getUsuarios(req.query.user,function(data){
-        console.log(data);
-        if(data.length>0){
-            var amigos = [];
-            for (var ind in data){
-                amigos.push(data[ind].nombre);
-            } 
-            res.send(JSON.stringify(amigos));
-        }else{
-            res.send("error");
-        }
+        res.send(JSON.stringify(data));
     });
 });
 
 app.get('/bandejadesalida',function(req, res){
     mysql.getMensajesSalidaJugador(req.query.nombre,function(data){
-         var ob = [];
-        for (var ind in data){
-            ob.push({
-                id: data[ind].id,
-                receptor: data[ind].receptor,
-                leido: data[ind].leido,
-                cabecera: data[ind].cabecera
-            });
-        }
-        res.send(JSON.stringify(ob));
-    })
+        res.send(JSON.stringify(data));
+    });
 });
 
 app.get('/bandejadeentrada',function(req, res){ 
     mysql.getMensajesEntradaJugador(req.query.nombre,function(data){
-        var ob = [];
-        for (var ind in data){
-            ob.push({
-                id: data[ind].id,
-                emisor: data[ind].emisor,
-                leido: data[ind].leido,
-                cabecera: data[ind].cabecera
-            });
-        }
-        res.send(JSON.stringify(ob));
+        res.send(JSON.stringify(data));
     });
 });
 
@@ -195,7 +163,7 @@ app.get('/juego',function(req, res){
 });
 
 app.get('/anadir',function(req,res){
-    
+    res.send("Not implemented yet");
 });
 
 var io = require('socket.io').listen(httpsServer);

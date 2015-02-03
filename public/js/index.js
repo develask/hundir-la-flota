@@ -209,7 +209,12 @@ $("#top10").on("click",function(ev){
         url: "/top?num=10"
     }).done(function( data ) {
         $("#topnumber").html("10");
-        $("#contenidolistatop").html(data);
+        var html = "<ol>";
+        for (var ind in data){
+            html += "<li>"+data[ind].puntuacion+ " - "+data[ind].nombre+"</li>";
+        }
+        html += "</ol>"; 
+        $("#contenidolistatop").html(html);
         $("#listatop").modal('show');
     });
 });
@@ -219,7 +224,12 @@ $("#top100").on("click",function(ev){
         url: "/top?num=100&juego="+juego.getJuego()
     }).done(function( data ) {
         $("#topnumber").html("100");
-        $("#contenidolistatop").html(data);
+        var html = "<ol>";
+        for (var ind in data){
+            html += "<li>"+data[ind].puntuacion+ " - "+data[ind].nombre+"</li>";
+        }
+        html += "</ol>"; 
+        $("#contenidolistatop").html(html);
         $("#listatop").modal('show');    
     });
 });
@@ -227,7 +237,7 @@ $("#top100").on("click",function(ev){
 $("#añadiramigos").on("click",function(ev){
     user.getFriends(function( data ) {
         $("#añadiramigosdiv").modal('show');
-        $("#listapersonas").html(data);
+        $("#listapersonas").html(JSON.stringify(data));
     });
 });
 

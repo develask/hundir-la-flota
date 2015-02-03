@@ -57,7 +57,7 @@ function toVerification(name, pass, email, callback){
         if (rows && rows.length == 0){
             connection.query("INSERT INTO hundirlaflota.verification (`name`,`pass`,`email`) values ('"+name+"','"+has+"','"+email+"')", function(err, rows){
                 if(err) throw err;
-                mail.sendMail(email, shasum.digest('hex'), function (err, data){
+                mail.verificationMail(email, shasum.digest('hex'), function (err, data){
                     if (!err){
                         callback(true);
                     }else{
