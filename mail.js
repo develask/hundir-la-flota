@@ -1,6 +1,5 @@
 var nodemailer = require('nodemailer');
-function mail(to, hash, callback){
-    var transporter = nodemailer.createTransport({
+var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
             user: 'gameupv@gmail.com',
@@ -8,6 +7,7 @@ function mail(to, hash, callback){
         },
         debug: true
     });
+function mail(to, hash, callback){
     transporter.sendMail({
         subject: "GAME - UPV mail verification",
         html: "<h2>GAME - UPV mail verification</h2>\
@@ -19,4 +19,16 @@ function mail(to, hash, callback){
         to: to
     }, callback);
 }
+
+function friendMail(to, callback){
+    transporter.sendMail({
+        subject: "GAME - UPV petición de amistad",
+        html: "<h2>GAME - UPV peticion de amistad</h2>\
+        <p>aqui va el email que queramos mandar</p>",
+        from: 'gameupv@gmail.com',
+        to: to
+    }, callback);
+}
+
 module.exports.sendMail = mail;
+module.exports.friendMail =friendMail;
