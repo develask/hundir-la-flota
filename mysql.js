@@ -252,10 +252,7 @@ module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
 module.exports.getMensajesEntradaJugador = getMensajesEntradaJugador;
 module.exports.getMensajesSalidaJugador = getMensajesSalidaJugador;
-<<<<<<< HEAD
 module.exports.getAmigos = getAmigos;
-=======
 module.exports.añadirAmigo = añadirAmigo;
 module.exports.usuarioExists = usuarioExists;
 module.exports.enviarMensaje = enviarMensaje;
->>>>>>> c06f737d7af774372490f3cdd55cb591e5769aa6
