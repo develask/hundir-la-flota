@@ -277,7 +277,7 @@ $("#bandejadeentrada").on("click",function(ev){
 
 $("#anadir").on("click",function(ev){
     $.ajax({
-        url: "/anadir?username="+$("#inputamigos").text()
+        url: "/anadir?peticion=peticion&nombre="+$("#inputamigos").val()
     }).done(function(data){
         
     });
