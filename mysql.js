@@ -122,6 +122,13 @@ function añadirAmigo(user, nombre,callback){
                 callback(true);
             }
          });
+        connection.query("INSERT INTO hundirlaflota.amigos (nombre, nombreamigo) VAlUES ('"+nombre+"', '"+user+"') ",function(err, data){
+            if(err){
+                throw err;
+            }else{
+                callback(true);
+            }
+         });
     }catch(e){
         callback(false);
     }
