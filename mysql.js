@@ -147,7 +147,7 @@ function añadirAmigo(user, nombre,callback){
 
 function enviarMensaje(from, to, email, message, subject, callback){
     if(message=="peticion"){
-        try{
+//        try{
 //            connection.query("",function(err, rows){
 //                if(err){
 //                    throw err;
