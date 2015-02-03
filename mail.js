@@ -27,3 +27,4 @@ function passRecover(to, hash, callback){
     }, callback);
 }
 module.exports.verificationMail = verificationMail;
+module.exports.passRecover = passRecover;

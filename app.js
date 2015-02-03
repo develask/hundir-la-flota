@@ -135,7 +135,7 @@ app.get('/mostrarUsuarios',function(req, res){
     });
 });
 app.get('/amigos',function(req, res){
-    mysql.getUsuarios(req.query.user,function(data){
+    mysql.getAmigos(req.query.user,function(data){
         res.send(JSON.stringify(data));
     });
 });
@@ -164,6 +164,26 @@ app.get('/juego',function(req, res){
 
 app.get('/anadir',function(req,res){
     res.send("Not implemented yet");
+//    if(req.query.peticion){
+//       mysql.usuarioExists(req.query.nombre,function(bool){
+//            if(bool){
+//                var mensaje="peticion";
+//                mysql.enviarMensaje(req.query.nombre, user.getName(), mensaje,function(){
+//                    
+//                });
+//            }else{
+//                res.send("El Usuario seleccionado no existe");
+//            }
+//        });
+//    }else if(req.query.aceptacion){
+//        mysql.añadirAmigo(user.getName(),req.query.nombre,function(bool){
+//        if(bool){
+//            res.send("El jugador ha sido añadido a tu lista de amigos");
+//        }else{
+//            res.send("El jugador seleccionado ya esta dentro de la lista de amigos");
+//        }
+//        });
+//    }
 });
 
 var io = require('socket.io').listen(httpsServer);
