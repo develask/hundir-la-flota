@@ -309,7 +309,13 @@ $("#botonenviar").on("click",function(ev){
     var para = $("#paraquien").val();
     var asunto = $("#asunto").val();
     var mensaje = $("#mensajeid").val();
-    
+    user.enviarMensaje(para,asunto,mensaje,function(bool){
+        if(bool){
+            $("#enviarmensajediv").modal('hide');
+        }else{
+            alert("No se ha podido enviar el mensaje");
+        }
+    });
 });
 
     
