@@ -292,14 +292,26 @@ $("#bandejadeentrada").on("click",function(ev){
 
 $("#anadir").on("click",function(ev){
     $.ajax({
-        url: "/anadir?peticion=peticion&nombre="+$("#inputamigos").val()
+        url: "/anadir?peticion=peticion&username="+user.getName()+"&nombre="+$("#inputamigos").val()
     }).done(function(data){
         
     });
 });
     
-    
-    
+$("#enviarmensaje").on("click",function(ev){
+    $("#enviarmensajediv").modal('show');
+});    
+
+$("#botonenviar").on("click",function(ev){
+    var para = $("#paraquien").val();
+    var asunto = $("#asunto").val();
+    var mensaje = $("#mensajeid").val();
+    $.ajax({
+        url: "/enviarmensaje?from="+user.getName()+"&to="+para+"&subject="+asunto+"&message="+mensaje
+    }).done(function(data){
+        
+    });
+});
 
     
     
