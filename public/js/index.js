@@ -291,10 +291,13 @@ $("#bandejadeentrada").on("click",function(ev){
 });
 
 $("#anadir").on("click",function(ev){
-    $.ajax({
-        url: "/anadir?peticion=peticion&username="+user.getName()+"&nombre="+$("#inputamigos").val()
-    }).done(function(data){
-        
+    var quien = $("#inputamigos").val();
+    user.enviarMensajeAmistad(quien,function(bool){
+        if(bool){
+            $("#añadiramigosdiv").modal('hide');
+        }else{
+            alert("No se ha podido enviar el mensaje");
+        }
     });
 });
     
@@ -306,11 +309,7 @@ $("#botonenviar").on("click",function(ev){
     var para = $("#paraquien").val();
     var asunto = $("#asunto").val();
     var mensaje = $("#mensajeid").val();
-    $.ajax({
-        url: "/enviarmensaje?from="+user.getName()+"&to="+para+"&subject="+asunto+"&message="+mensaje
-    }).done(function(data){
-        
-    });
+    
 });
 
     

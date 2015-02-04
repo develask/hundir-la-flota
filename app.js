@@ -142,7 +142,7 @@ app.get('/amigos',function(req, res){
 
 app.get('/enviarmensaje',function(req, res){
     mysql.enviarMensaje(req.query.nombre, req.query.username, req.query.mensaje, req.query.asunto,function(err,bool){
-                    console.log("envia el mensaje");
+        res.send(err?"error":"hecho");
     });
 });
 
@@ -173,8 +173,8 @@ app.get('/anadir',function(req,res){
        mysql.usuarioExists(req.query.nombre,function(bool){
             if(bool){
                 var mensaje="peticion";
-                mysql.enviarMensaje(req.query.nombre, req.query.username, mensaje,function(err,bool){
-                    console.log("envia el mensaje");
+mysql.enviarMensaje(req.query.username,req.query.nombre, mensaje,"peticion",function(err,bool){
+                    res.send();
                 });
             }else{
                 res.send("El Usuario seleccionado no existe");
@@ -188,6 +188,8 @@ app.get('/anadir',function(req,res){
             res.send("El jugador seleccionado ya esta dentro de la lista de amigos");
         }
         });
+    }else{
+        res.send("vaya mierda");
     }
 });
 

@@ -104,7 +104,7 @@ function getUsuarios(user, callback){
 }
 
 function getAmigos(user, callback){
-    connection.query("SELECT nombreamigo FROM hundirlaflota.Amigos WHERE nombre='"+user+"'",function(err, rows){
+    connection.query("SELECT nombreamigo FROM hundirlaflota.amigos WHERE nombre='"+user+"'",function(err, rows){
         if(err){
             throw err;
         }else{
@@ -145,28 +145,23 @@ function añadirAmigo(user, nombre,callback){
    
 }
 
-function enviarMensaje(from, to, email, message, subject, callback){
+function enviarMensaje(from, to, message, subject, callback){
     if(message=="peticion"){
         try{
-            connection.query("SELECT FROM hundirlaflota.amigos WHERE nombre='"+from+"' AND nombreamigo='"+to+"'",function(err, rows){
+            connection.query("SELECT * FROM hundirlaflota.amigos WHERE nombre='"+from+"' AND nombreamigo='"+to+"'",function(err, rows){
                 if(err){    
                     throw err;
-                }else if(rows.length>0){
-                    mail.friendMail(email, function (err, data){
-                        if (err){
-                            throw err;
-                        }
-                    });
+                }else if(rows.length==0){
                     message="El emisor del mensaje quiere ser tu amigo";
                     connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
                         if(err){
                             throw err;
                         }else{
-                            mail.friendMail(email, function (err, data){
-                                callback(true);
-                            });
+                            callback(true);
                         } 
                     });
+                }else{
+                    callback(false);
                 }
             });
         }catch(e){

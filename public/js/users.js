@@ -54,6 +54,20 @@ function User(){
             callback(JSON.parse(data));
         });
     }
+    this.enviarMensajeAmistad = function(to,callback){
+        $.ajax({
+            url: "/anadir?peticion=peticion&username="+this.getName()+"&nombre="+to
+        }).done(function(data){
+            callback(data=="hecho");
+        });
+    }
+    this.enviarMensaje = function(to, subject, message, callback){
+        $.ajax({
+            url: "/enviarmensaje?from="+this.getName()+"&to="+to+"&subject="+subject+"&message="+message
+        }).done(function(data){
+            callback()
+        });
+    }
 }
 
 var user = new User();
