@@ -80,7 +80,6 @@ function Tablero(length){
                 console.log("No se puede meter ese barco");
             }
 		}catch(e){
-            console.log(e);
 			console.log("No se puede meter ese barco");
 		}
 	}
@@ -90,6 +89,7 @@ function Tablero(length){
 			throw new Exception();
 		}else{
 			tablero[y][x].pulsado = true;
+            this.impr();
 			if (tablero[y][x].barco){
 				return hundido(x, y);
 			}else{return 0;}
@@ -119,7 +119,6 @@ function Tablero(length){
             }catch(e){
                 var ab = 2;
             }
-            console.log("d: " + d + " | i: "+ i+" | ar:" + ar + " | ab: " + ab);
 			if ( d === 2 && i === 2 && ar === 2 && ab === 2){
 				return 2;
 			}else{
@@ -143,7 +142,7 @@ function Tablero(length){
                     }else if (tablero[y][x].barco &&  !tablero[y][x].pulsado){
                         z = 1;
                     }
-                }catch(e){z = 2; console.log(e); console.log(direccion + " "+x+y);}
+                }catch(e){z = 2;}
             }
             return z;
 		}
