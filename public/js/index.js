@@ -278,7 +278,7 @@ $("#bandejadeentrada").on("click",function(ev){
         if(data.length>0){
             var html = "<ol>";
             for (var ind in data){
-                html += "<li id="+data[ind].id+"> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"'>Ver</button>";
+                html += "<li> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button>";
             }
             html += "</ol>"; 
         }else{
@@ -287,14 +287,21 @@ $("#bandejadeentrada").on("click",function(ev){
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
-        $("#bandmensajesdiv li").on("click", function(ev){
+        $("#bandmensajesdiv button").on("click", function(ev){
             var id = $(this).attr("id");
             user.getUserMessage(id,function(data){
                 if(data.length>0){
                     $("#bandmensajesdiv").html("");
-                    var relleno="<p>De:"+data.[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p>";                             $("#bandmensajesdiv").html(html);   
+                    if(data[0].cabecera="peticion"){
+                        var relleno="<p>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p>";                           $("#bandmensajesdiv").html(relleno);
+                        $("#bandejadeentradadiv").modal('show');
+                    }else{
+                        
+                    }
+                }else{
+                    alert("Ha habido un error");
                 }
-            });1
+            });
         });
     });
 });

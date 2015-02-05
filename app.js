@@ -111,8 +111,8 @@ app.get('/newPass', function(){
 })
 
 app.get('/cogermensajeporid', function(req, res){
-    mysql.getMensajeid(req.query.id, function(){
-        
+    mysql.getMensajeid(req.query.id, function(data){
+         res.send(JSON.stringify(data));
     });
 });
 

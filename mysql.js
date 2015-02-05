@@ -208,8 +208,14 @@ function getMensajesEntradaJugador(nombre,callback){
     });
 }
 
-function getMensajeid(){
-    connection.query("SELECT emisor, cabecera, mensaje FROM hundirlaflota.mensajes WHERE id=",function(err,rows))
+function getMensajeid(id, callback){
+    connection.query("SELECT emisor, cabecera, mensaje FROM hundirlaflota.mensajes WHERE id='"+id+"'", function(err,rows){
+        if(err){
+            throw err;
+        }else{
+            callback(rows);
+        }
+    });
 }
 function getJuego(nombre, callback){
     connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
@@ -256,3 +262,4 @@ module.exports.getAmigos = getAmigos;
 module.exports.añadirAmigo = añadirAmigo;
 module.exports.usuarioExists = usuarioExists;
 module.exports.enviarMensaje = enviarMensaje;
+module.exports.getMensajeid = getMensajeid;
