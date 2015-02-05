@@ -171,8 +171,10 @@ function enviarMensaje(from, to, message, subject, callback){
         try{
             connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
                 if(err){
+                    console.log("err");
                     throw err;
                 }else{
+                    console.log("true");
                     callback(true);
                 }
             });
@@ -206,6 +208,9 @@ function getMensajesEntradaJugador(nombre,callback){
     });
 }
 
+function getMensajeid(){
+    connection.query("SELECT emisor, cabecera, mensaje FROM hundirlaflota.mensajes WHERE id=",function(err,rows))
+}
 function getJuego(nombre, callback){
     connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
         if(err){ 

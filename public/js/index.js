@@ -261,7 +261,7 @@ $("#bandejadesalida").on("click",function(ev){
         if(data.length>0){
             var html = "<ol>";
             for (var ind in data){
-                html += "<li id="+data[ind].id+"> Para:"+data[ind].receptor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id="+boton+data[ind].id+">Ver</button>";
+                html += "<li id="+data[ind].id+"> Para:"+data[ind].receptor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"' >Ver</button>";
             }
             html += "</ol>"; 
         }else{
@@ -278,7 +278,7 @@ $("#bandejadeentrada").on("click",function(ev){
         if(data.length>0){
             var html = "<ol>";
             for (var ind in data){
-                html += "<li id="+data[ind].id+"> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id="+boton+data[ind].id+">Ver</button>";
+                html += "<li id="+data[ind].id+"> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"'>Ver</button>";
             }
             html += "</ol>"; 
         }else{
@@ -287,6 +287,15 @@ $("#bandejadeentrada").on("click",function(ev){
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
+        $("#bandmensajesdiv li").on("click", function(ev){
+            var id = $(this).attr("id");
+            user.getUserMessage(id,function(data){
+                if(data.length>0){
+                    $("#bandmensajesdiv").html("");
+                    var relleno="<p>De:"+data.[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p>";                             $("#bandmensajesdiv").html(html);   
+                }
+            });1
+        });
     });
 });
 
@@ -295,6 +304,7 @@ $("#anadir").on("click",function(ev){
     user.enviarMensajeAmistad(quien,function(bool){
         if(bool){
             $("#añadiramigosdiv").modal('hide');
+            alert("El mensaje ha sido enviado");
         }else{
             alert("No se ha podido enviar el mensaje");
         }
@@ -312,11 +322,13 @@ $("#botonenviar").on("click",function(ev){
     user.enviarMensaje(para,asunto,mensaje,function(bool){
         if(bool){
             $("#enviarmensajediv").modal('hide');
+            alert("El mensaje ha sido enviado");
         }else{
             alert("No se ha podido enviar el mensaje");
         }
     });
 });
+
 
     
     

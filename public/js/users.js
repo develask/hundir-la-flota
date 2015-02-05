@@ -47,6 +47,13 @@ function User(){
             callback(JSON.parse(data));
         });
     }
+    this.getUserMessage = function(id,callback){
+        $.ajax({
+            url: "/cogermensajeporid?id="+id
+        }).done(function(data){
+            callback(JSON.parse(data));
+        });
+    }
     this.getUserInboxMsg = function(callback){
         $.ajax({
             url: "/bandejadeentrada?nombre="+this.getName()
@@ -65,7 +72,7 @@ function User(){
         $.ajax({
             url: "/enviarmensaje?from="+this.getName()+"&to="+to+"&subject="+subject+"&message="+message
         }).done(function(data){
-            callback()
+            callback(data);
         });
     }
 }

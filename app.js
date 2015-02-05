@@ -97,7 +97,7 @@ app.get('/signup', function(req, res){
         }) 
     }
 });
-app.get('/forgotenPass', function(res, req){
+app.get('/forgotenPass', function(req, res){
     if ((req.query.user || req.query.email) && !req.query.hash){
     }else if (req.query.email && req.query.hash){
     }else{
@@ -109,11 +109,18 @@ app.get('/newPass', function(){
 //    }
     res.send("Not implemented yet");
 })
-app.get('/top',function(req, res){
-        mysql.conseguirPrimerosX(req.query.num,function(data){
-            res.send(JSON.stringify(data));
-        });
+
+app.get('/cogermensajeporid', function(req, res){
+    mysql.getMensajeid(req.query.id, function(){
+        
     });
+});
+
+app.get('/top',function(req, res){
+    mysql.conseguirPrimerosX(req.query.num,function(data){
+        res.send(JSON.stringify(data));
+    });
+});
 
 app.get('/reglas',function(req, res){
       if(req.query.juego==""){
@@ -141,8 +148,8 @@ app.get('/amigos',function(req, res){
 });
 
 app.get('/enviarmensaje',function(req, res){
-    mysql.enviarMensaje(req.query.nombre, req.query.username, req.query.mensaje, req.query.asunto,function(err,bool){
-        res.send(err?"error":"hecho");
+    mysql.enviarMensaje(req.query.from, req.query.to, req.query.message, req.query.subject,function(bool){
+            res.send(bool); 
     });
 });
 
