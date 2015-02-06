@@ -26,13 +26,13 @@ function User(){
                 callback(data == "made");
         });
     }
-    this.getUsers = function(callback){
+    /*this.getUsers = function(callback){
         $.ajax({
             url: "/mostrarUsuarios"
         }).done(function( data ) {
             callback(JSON.parse(data));
         });
-    }
+    }*/
     this.getFriends = function(callback){
         $.ajax({
             url: "/amigos?user="+this.getName()
@@ -65,12 +65,19 @@ function User(){
         $.ajax({
             url: "/anadir?peticion=peticion&username="+this.getName()+"&nombre="+to
         }).done(function(data){
-            callback(data=="hecho");
+            callback(data);
         });
     }
     this.enviarMensaje = function(to, subject, message, callback){
         $.ajax({
             url: "/enviarmensaje?from="+this.getName()+"&to="+to+"&subject="+subject+"&message="+message
+        }).done(function(data){
+            callback(data);
+        });
+    }
+    this.añadirAmigo = function(to,callback){
+        $.ajax({
+            url: "/anadir?aceptacion=aceptacion&username="+this.getName()+"&nombre="+to
         }).done(function(data){
             callback(data);
         });

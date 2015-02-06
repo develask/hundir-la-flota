@@ -112,7 +112,7 @@ app.get('/newPass', function(){
 
 app.get('/cogermensajeporid', function(req, res){
     mysql.getMensajeid(req.query.id, function(data){
-         res.send(JSON.stringify(data));
+         res.send(JSON.stringify(data)  );
     });
 });
 
@@ -136,11 +136,11 @@ app.get('/reglas',function(req, res){
         }
     });
 
-app.get('/mostrarUsuarios',function(req, res){
+/*app.get('/mostrarUsuarios',function(req, res){
     mysql.getUsuarios(undefined, function(data){
         res.send(JSON.stringify(data));
     });
-});
+});*/
 app.get('/amigos',function(req, res){
     mysql.getAmigos(req.query.user,function(data){
         res.send(JSON.stringify(data));
@@ -179,21 +179,31 @@ app.get('/anadir',function(req,res){
     if(req.query.peticion){
        mysql.usuarioExists(req.query.nombre,function(bool){
             if(bool){
-                var mensaje="peticion";
-mysql.enviarMensaje(req.query.username,req.query.nombre, mensaje,"peticion",function(err,bool){
-                    res.send();
+                mysql.mirarSiEsAmistad(req.query.nombre,req.query.username,function(err,data){
+                    if(err){
+                        console.log("akiiiii");
+                        throw err;
+                    }else if(data.length==0){
+                        console.log("entra");
+                        var mensaje="peticion";
+                        mysql.enviarMensaje(req.query.username,req.query.nombre, mensaje,"peticion",function(bool){
+                                res.send(bool);
+                        });
+                    }else{
+                        res.send(false);
+                    } 
                 });
             }else{
-                res.send("El Usuario seleccionado no existe");
+                res.send(false);
             }
         });
     }else if(req.query.aceptacion){
         mysql.añadirAmigo(req.query.username,req.query.nombre,function(bool){
-        if(bool){
-            res.send("El jugador ha sido añadido a tu lista de amigos");
-        }else{
-            res.send("El jugador seleccionado ya esta dentro de la lista de amigos");
-        }
+            if(bool){
+                res.send("El jugador ha sido añadido a tu lista de amigos");
+            }else{
+                res.send("El jugador seleccionado ya estaba dentro de la lista de amigos");
+            }
         });
     }else{
         res.send("vaya mierda");

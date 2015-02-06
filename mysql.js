@@ -93,7 +93,7 @@ function conseguirPrimerosX(numero, callback){
     });   
 }
 
-function getUsuarios(user, callback){
+/*function getUsuarios(user, callback){
     connection.query("SELECT nombre FROM hundirlaflota.users "+(user?" WHERE nombre='"+user+"'":""),function(err, rows){
         if(err){
             throw err;
@@ -101,10 +101,10 @@ function getUsuarios(user, callback){
             callback(rows);
         }
     });
-}
+}*/
 
 function getAmigos(user, callback){
-    connection.query("SELECT nombreamigo FROM hundirlaflota.amigos WHERE nombre='"+user+"'",function(err, rows){
+    connection.query("SELECT nombreamigo FROM hundirlaflota.amigos WHERE nombre='"+user+"' UNION SELECT nombre FROM hundirlaflota.amigos WHERE nombreamigo='"+user+"' ",function(err, rows){
         if(err){
             throw err;
         }else{
@@ -127,18 +127,11 @@ function añadirAmigo(user, nombre,callback){
     try{
         connection.query("INSERT INTO hundirlaflota.amigos (nombre, nombreamigo) VAlUES ('"+user+"', '"+nombre+"') ",function(err, data){
             if(err){
-                throw err;
+                callback(false);
             }else{
                 callback(true);
             }
-         });
-        connection.query("INSERT INTO hundirlaflota.amigos (nombre, nombreamigo) VAlUES ('"+nombre+"', '"+user+"') ",function(err, data){
-            if(err){
-                throw err;
-            }else{
-                callback(true);
-            }
-         });
+         });   
     }catch(e){
         callback(false);
     }
@@ -148,22 +141,14 @@ function añadirAmigo(user, nombre,callback){
 function enviarMensaje(from, to, message, subject, callback){
     if(message=="peticion"){
         try{
-            connection.query("SELECT * FROM hundirlaflota.amigos WHERE nombre='"+from+"' AND nombreamigo='"+to+"'",function(err, rows){
-                if(err){    
-                    throw err;
-                }else if(rows.length==0){
-                    message="El emisor del mensaje quiere ser tu amigo";
-                    connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
+            message="El emisor del mensaje quiere ser tu amigo";
+            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
                         if(err){
-                            throw err;
+                            callback(false);
                         }else{
                             callback(true);
                         } 
                     });
-                }else{
-                    callback(false);
-                }
-            });
         }catch(e){
             callback(false);
         }
@@ -172,7 +157,7 @@ function enviarMensaje(from, to, message, subject, callback){
             connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
                 if(err){
                     console.log("err");
-                    throw err;
+                    callback(false);
                 }else{
                     console.log("true");
                     callback(true);
@@ -217,6 +202,18 @@ function getMensajeid(id, callback){
         }
     });
 }
+
+function mirarSiEsAmistad(nombre,usuario, callback){
+    var querier="SELECT * FROM hundirlaflota.amigos WHERE nombre='"+nombre+"' AND nombreamigo='"+usuario+"' UNION SELECT * FROM hundirlaflota.amigos WHERE nombre='"+usuario+"' AND nombreamigo='"+nombre+"'";
+    connection.query(querier,function(err, rows){
+        if(err){
+            throw err;
+        }else{
+            callback(err, rows);
+        }
+    });
+}
+
 function getJuego(nombre, callback){
     connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
         if(err){ 
@@ -254,7 +251,7 @@ module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;
 module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
-module.exports.getUsuarios = getUsuarios;
+//module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
 module.exports.getMensajesEntradaJugador = getMensajesEntradaJugador;
 module.exports.getMensajesSalidaJugador = getMensajesSalidaJugador;
@@ -263,3 +260,4 @@ module.exports.añadirAmigo = añadirAmigo;
 module.exports.usuarioExists = usuarioExists;
 module.exports.enviarMensaje = enviarMensaje;
 module.exports.getMensajeid = getMensajeid;
+module.exports.mirarSiEsAmistad = mirarSiEsAmistad;

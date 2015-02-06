@@ -191,7 +191,7 @@ $("#signInC").on("click", function(ev){
     var contraseña = $("#exampleInputPassword1").val();
     user.signIn(nombre, contraseña, function(bool){
         if (bool){
-            $("#userName").text(nombre);
+            $("#userName").html(nombre+"<span class='badge'>40</span>");
             $('#signindiv').modal('hide');
             $($("#signin").parent()).addClass("hidden");
             $($("#signup").parent()).addClass("hidden");
@@ -292,15 +292,24 @@ $("#bandejadeentrada").on("click",function(ev){
             user.getUserMessage(id,function(data){
                 if(data.length>0){
                     $("#bandmensajesdiv").html("");
+                    var relleno;
                     if(data[0].cabecera="peticion"){
-                        var relleno="<p>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p>";                           $("#bandmensajesdiv").html(relleno);
+                        relleno="<p id='paceptar' class='"+data[0].emisor+"'>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";                           
+                        $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
+                        $("#aceptar").on("click",function(ev){
+                            var nombre = $("#paceptar").attr("class");
+                            user.añadirAmigo(nombre,function(bool){
+                               alert(bool);
+                            });
+                        });
                     }else{
-                        
+                        relleno="<p>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><br><br>";                                         $("#bandmensajesdiv").html(relleno);
+                        $("#bandejadeentradadiv").modal('show');
                     }
                 }else{
                     alert("Ha habido un error");
-                }
+                } 
             });
         });
     });
@@ -337,7 +346,6 @@ $("#botonenviar").on("click",function(ev){
 });
 
 
-    
     
     
     
