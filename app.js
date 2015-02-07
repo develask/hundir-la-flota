@@ -147,9 +147,21 @@ app.get('/amigos',function(req, res){
     });
 });
 
+app.get('/cambiarestadomensaje',function(req,res){
+    mysql.cambiarEstadoMensaje(req.query.id,function(bool){
+        res.send(bool);
+    });
+});
+
 app.get('/enviarmensaje',function(req, res){
     mysql.enviarMensaje(req.query.from, req.query.to, req.query.message, req.query.subject,function(bool){
             res.send(bool); 
+    });
+});
+
+app.get('/nummensajessinleer',function(req, res){
+    mysql.numMensajesSinLeer(req.query.username,function(data){
+        res.send(JSON.stringify(data));
     });
 });
 

@@ -191,14 +191,18 @@ $("#signInC").on("click", function(ev){
     var contraseña = $("#exampleInputPassword1").val();
     user.signIn(nombre, contraseña, function(bool){
         if (bool){
-            $("#userName").html(nombre+"<span class='badge'>40</span>");
-            $('#signindiv').modal('hide');
-            $($("#signin").parent()).addClass("hidden");
-            $($("#signup").parent()).addClass("hidden");
-            $($("#userName").parent()).removeClass("hidden");
-            $("#errSignIn").addClass("hidden");
-            $("#exampleInputEmail1").val("");
-            $("#exampleInputPassword1").val("");
+            var numero;
+            user.numMensajesSinLeer(function(data){
+                numero=data[0].cuantos;
+                $("#userName").html(nombre+"<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+                $('#signindiv').modal('hide');
+                $($("#signin").parent()).addClass("hidden");
+                $($("#signup").parent()).addClass("hidden");
+                $($("#userName").parent()).removeClass("hidden");
+                $("#errSignIn").addClass("hidden");
+                $("#exampleInputEmail1").val("");
+                $("#exampleInputPassword1").val("");
+            });
         }else{
             $("#errSignIn").removeClass("hidden");
         }
@@ -291,22 +295,30 @@ $("#bandejadeentrada").on("click",function(ev){
             var id = $(this).attr("id");
             user.getUserMessage(id,function(data){
                 if(data.length>0){
-                    $("#bandmensajesdiv").html("");
-                    var relleno;
-                    if(data[0].cabecera="peticion"){
-                        relleno="<p id='paceptar' class='"+data[0].emisor+"'>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";                           
-                        $("#bandmensajesdiv").html(relleno);
-                        $("#bandejadeentradadiv").modal('show');
-                        $("#aceptar").on("click",function(ev){
-                            var nombre = $("#paceptar").attr("class");
-                            user.añadirAmigo(nombre,function(bool){
-                               alert(bool);
-                            });
-                        });
-                    }else{
-                        relleno="<p>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><br><br>";                                         $("#bandmensajesdiv").html(relleno);
-                        $("#bandejadeentradadiv").modal('show');
-                    }
+                    console.log(data[0].cabecera);
+                    console.log("dflgk");
+                    user.cambiarEstadoHaLeido(id,function(bool){
+                        if(bool){
+                            $("#bandmensajesdiv").html("");
+                            var relleno;
+                            if(data[0].cabecera=="peticion"){
+                                relleno="<p id='paceptar' class='"+data[0].emisor+"'>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";                           
+                                $("#bandmensajesdiv").html(relleno);
+                                $("#bandejadeentradadiv").modal('show');
+                                $("#aceptar").on("click",function(ev){
+                                    var nombre = $("#paceptar").attr("class");
+                                    user.añadirAmigo(nombre,function(bool){
+                                       alert(bool);
+                                    });
+                                });
+                            }else{
+                                relleno="<p>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><br><br>";                                         $("#bandmensajesdiv").html(relleno);
+                                $("#bandejadeentradadiv").modal('show');
+                            }
+                        }else{
+                            alert("ha habido un error");
+                        }
+                    });
                 }else{
                     alert("Ha habido un error");
                 } 

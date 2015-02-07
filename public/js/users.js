@@ -68,6 +68,20 @@ function User(){
             callback(data);
         });
     }
+    this.numMensajesSinLeer = function(callback){
+        $.ajax({
+            url: "/nummensajessinleer?username="+user.getName()
+        }).done(function(data){
+            callback(JSON.parse(data));
+        });
+    }   
+    this.cambiarEstadoHaLeido = function(id,callback){
+        $.ajax({
+            url: "/cambiarestadomensaje?id="+id
+        }).done(function(data){
+            callback(data);
+        });
+    }
     this.enviarMensaje = function(to, subject, message, callback){
         $.ajax({
             url: "/enviarmensaje?from="+this.getName()+"&to="+to+"&subject="+subject+"&message="+message
