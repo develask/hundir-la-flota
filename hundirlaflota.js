@@ -171,6 +171,56 @@ for(var ind = 0; ind < cuadrados.length; ind++){
     });
 }
 
+if (Modernizr.draganddrop) {
+  // Browser supports HTML5 DnD.
+//    $("#cubiertos img").on('dragstart', function(e){
+//        console.log(e);
+//        e.dataTransfer.setDragImage( -10, -10);
+//    });
+    function start(e) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+
+    var dragIcon = document.createElement('img');
+    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla.jpg';
+    dragIcon.width = 80;
+    e.dataTransfer.setDragImage(dragIcon, 10, 10);
+
+    // Target element (this) is the source node.
+    this.style.opacity = '0.4';
+  };
+    var cols_ = document.querySelectorAll('#cubiertos .column');
+    [].forEach.call(cols_, function (col) {
+        // Enable columns to be draggable.
+        col.setAttribute('draggable', 'true');
+        col.addEventListener('dragstart', start, false);
+      });
+    $("#cubiertos img").on('dragend', function(ev){
+        console.log(ev);
+        var x = ev.originalEvent.layerX;
+        var y = ev.originalEvent.layerY;
+        console.log(x,y);
+        var canvas1 = document.getElementById('micanvas1');
+        var ctx = canvas1.getContext('2d');
+        var img = new Image();
+        img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla.jpg';
+        img.onload = function(){
+          ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.offsetTop)/40)*40)+7, 80, 25);
+        }
+    });
+} else {
+  // Fallback to a library solution.
+    alert("En  su navegador no se puede jugar");
+}
+
+    
+
+
+
+
+
+
+
 
 
 
@@ -214,13 +264,14 @@ ctx1.strokeStyle = "#f00";
 ctx1.stroke();
 $("#micanvas1").on("click", function(ev){
     var canvas1 = document.getElementById("micanvas1");
-    var x1 = parseInt((ev.clientX-canvas1.offsetLeft)/40);
-    var y1 = parseInt((ev.clientY-canvas1.offsetTop)/40);
+    console.log(ev);
+    var x1 = parseInt((ev.pageX-canvas1.offsetLeft)/40);
+    var y1 = parseInt((ev.pageY-canvas1.offsetTop)/40);
     alert(x1 + "  " + y1);
 });
 $("#micanvas2").on("click", function(ev){
     var canvas2 = document.getElementById("micanvas2");
-    var x2 = parseInt((ev.clientX-canvas2.offsetLeft)/40);
-    var y2 = parseInt((ev.clientY-canvas2.offsetTop)/40);
+    var x2 = parseInt((ev.pageX-canvas2.offsetLeft)/40);
+    var y2 = parseInt((ev.pageY-canvas2.offsetTop)/40);
     alert(x2 + "  " + y2);
 });

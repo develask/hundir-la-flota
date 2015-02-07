@@ -28,6 +28,7 @@ var certificate = fs.readFileSync('cert.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 var express = require('express');
 var mysql = require("./mysql.js");
+var crypto = require('crypto');
 var app = express();
 
 // your express configuration here
@@ -48,15 +49,29 @@ httpsServer.listen(4433, function(){
     console.log('SERVER HTTPS listening at httpS://%s:%s', host, port);});
 
 app.use(express.static(__dirname + '/public'));
-
+var usersLoged = {};
+function comprobarCookie(cookie){
+    console.log(usersLoged);
+    return usersLoged[cookie];
+}
 app.get('/login', function(req, res){
     mysql.signIn(req.query.user, req.query.pass, function(bool){
         if (bool){
+            var shasum = crypto.createHash('sha1');
+            shasum.update(req.query.user+req.query.pass+Date.now());
+            var cook = shasum.digest('hex');
+            usersLoged[cook] = req.query.user;
+            res.cookie("gameupv", cook, { expires: new Date(Date.now() + 900000), httpOnly: false });
             res.send("loged");
-        }else{
+        }else{  
             res.send("not loged");
         }
     });
+});
+app.get('/logout', function(req, res){
+    delete usersLoged[req.cookies.gameupv];
+    res.clearCookie('gameupv');
+    res.send("ok")
 });
 app.get('/signup', function(req, res){
     if (req.query.hash){
@@ -142,6 +157,7 @@ app.get('/reglas',function(req, res){
     });
 });*/
 app.get('/amigos',function(req, res){
+    console.log(req.cookies.gameupv);
     mysql.getAmigos(req.query.user,function(data){
         res.send(JSON.stringify(data));
     });

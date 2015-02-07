@@ -35,6 +35,7 @@ function User(){
     }*/
     this.getFriends = function(callback){
         $.ajax({
+            headers: {'Cookie' : document.cookie },
             url: "/amigos?user="+this.getName()
         }).done(function( data ) {
             callback(JSON.parse(data));
