@@ -138,31 +138,59 @@ function añadirAmigo(user, nombre,callback){
    
 }
 
+function numMensajesSinLeer(username,callback){
+    try{
+        var querier="SELECT COUNT(*) AS cuantos FROM hundirlaflota.mensajes WHERE receptor='"+username+"' AND leido='No Leido'";
+        connection.query(querier,function(err,rows){
+            if(err){
+                throw err;
+            }else{ 
+                callback(rows);
+            }
+        });
+    }catch(e){
+        callback("error");
+    }
+    
+}
+
+function cambiarEstadoMensaje(id,callback){
+    try{
+        connection.query("UPDATE hundirlaflota.mensajes SET leido='Leido' WHERE id='"+id+"'",function(err, rows){
+            if(err){
+                callback(false);
+            }else{
+                callback(true);
+            }
+        });
+    }catch(e){
+        callback(false);
+    }
+}
+
 function enviarMensaje(from, to, message, subject, callback){
     if(message=="peticion"){
         try{
             message="El emisor del mensaje quiere ser tu amigo";
-            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
-                        if(err){
-                            callback(false);
-                        }else{
-                            callback(true);
-                        } 
-                    });
+            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), 'No Leido', '"+subject+"')",function(err, rows){
+                if(err){
+                    callback(false);
+                }else{
+                    callback(true);
+                } 
+            });
         }catch(e){
             callback(false);
         }
     }else{
         try{
-            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), '0', '"+subject+"')",function(err, rows){
+            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), 'No Leido', '"+subject+"')",function(err, rows){
                 if(err){
-                    console.log("err");
                     callback(false);
                 }else{
-                    console.log("true");
                     callback(true);
                 }
-            });
+            });   
         }catch(e){
             callback(false);
         }
@@ -261,3 +289,5 @@ module.exports.usuarioExists = usuarioExists;
 module.exports.enviarMensaje = enviarMensaje;
 module.exports.getMensajeid = getMensajeid;
 module.exports.mirarSiEsAmistad = mirarSiEsAmistad;
+module.exports.cambiarEstadoMensaje = cambiarEstadoMensaje;
+module.exports.numMensajesSinLeer = numMensajesSinLeer;
