@@ -17,7 +17,11 @@ function User(){
         });
     }
     this.logout = function (){
-        nombre="";
+        $.ajax({
+            url: "/logout"
+        }).done(function( data ) {
+            if(data =="ok") nombre="";
+        });
     }
     this.newUser = function (name, pass, email, callback){
         $.ajax({
@@ -35,8 +39,7 @@ function User(){
     }*/
     this.getFriends = function(callback){
         $.ajax({
-            headers: {'Cookie' : document.cookie },
-            url: "/amigos?user="+this.getName()
+            url: "/amigos"
         }).done(function( data ) {
             callback(JSON.parse(data));
         });

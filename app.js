@@ -51,8 +51,8 @@ httpsServer.listen(4433, function(){
 app.use(express.static(__dirname + '/public'));
 var usersLoged = {};
 function comprobarCookie(cookie){
-    console.log(usersLoged);
-    return usersLoged[cookie];
+    var c = cookie.split("=");
+    return usersLoged[c[1]];
 }
 app.get('/login', function(req, res){
     mysql.signIn(req.query.user, req.query.pass, function(bool){
@@ -69,8 +69,8 @@ app.get('/login', function(req, res){
     });
 });
 app.get('/logout', function(req, res){
-    delete usersLoged[req.cookies.gameupv];
-    res.clearCookie('gameupv');
+    delete usersLoged[comprobarCookie(req.headers.cookie)];
+    res.cookie("gameupv", "", { expires: new Date(Date.now()-1000), httpOnly: false });
     res.send("ok")
 });
 app.get('/signup', function(req, res){
@@ -157,8 +157,7 @@ app.get('/reglas',function(req, res){
     });
 });*/
 app.get('/amigos',function(req, res){
-    console.log(req.cookies.gameupv);
-    mysql.getAmigos(req.query.user,function(data){
+    mysql.getAmigos(comprobarCookie(req.headers.cookie),function(data){
         res.send(JSON.stringify(data));
     });
 });
