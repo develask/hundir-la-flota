@@ -154,9 +154,16 @@ app.get('/cambiarestadomensaje',function(req,res){
 });
 
 app.get('/enviarmensaje',function(req, res){
-    mysql.enviarMensaje(req.query.from, req.query.to, req.query.message, req.query.subject,function(bool){
-            res.send(bool); 
+    mysql.usuarioExists(req.query.to,function(bool){
+        if(bool){
+            mysql.enviarMensaje(req.query.from, req.query.to, req.query.message, req.query.subject,function(bool){
+                res.send(bool); 
+            });
+        }else{
+            res.send(bool);
+        }
     });
+    
 });
 
 app.get('/nummensajessinleer',function(req, res){
@@ -193,10 +200,8 @@ app.get('/anadir',function(req,res){
             if(bool){
                 mysql.mirarSiEsAmistad(req.query.nombre,req.query.username,function(err,data){
                     if(err){
-                        console.log("akiiiii");
                         throw err;
                     }else if(data.length==0){
-                        console.log("entra");
                         var mensaje="peticion";
                         mysql.enviarMensaje(req.query.username,req.query.nombre, mensaje,"peticion",function(bool){
                                 res.send(bool);

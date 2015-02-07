@@ -282,7 +282,7 @@ $("#bandejadeentrada").on("click",function(ev){
         if(data.length>0){
             var html = "<ol>";
             for (var ind in data){
-                html += "<li> De:"+data[ind].emisor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button>";
+                html += "<li> De:"+data[ind].emisor+"&nbsp &nbsp Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+" &nbsp &nbsp</li><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button><br>";
             }
             html += "</ol>"; 
         }else{

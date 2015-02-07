@@ -140,10 +140,11 @@ function añadirAmigo(user, nombre,callback){
 
 function numMensajesSinLeer(username,callback){
     try{
-        connection.query("SELECT COUNT(*) AS cuantos FROM hundirlaflota.mensajes WHERE receptor='"+username+"' AND leido='No Leido'",function(err,rows){
+        var querier="SELECT COUNT(*) AS cuantos FROM hundirlaflota.mensajes WHERE receptor='"+username+"' AND leido='No Leido'";
+        connection.query(querier,function(err,rows){
             if(err){
                 throw err;
-            }else{  
+            }else{ 
                 callback(rows);
             }
         });
@@ -172,12 +173,12 @@ function enviarMensaje(from, to, message, subject, callback){
         try{
             message="El emisor del mensaje quiere ser tu amigo";
             connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), 'No Leido', '"+subject+"')",function(err, rows){
-                        if(err){
-                            callback(false);
-                        }else{
-                            callback(true);
-                        } 
-                    });
+                if(err){
+                    callback(false);
+                }else{
+                    callback(true);
+                } 
+            });
         }catch(e){
             callback(false);
         }
@@ -189,7 +190,7 @@ function enviarMensaje(from, to, message, subject, callback){
                 }else{
                     callback(true);
                 }
-            });
+            });   
         }catch(e){
             callback(false);
         }
