@@ -171,7 +171,7 @@ app.get('/cambiarestadomensaje',function(req,res){
 app.get('/enviarmensaje',function(req, res){
     mysql.usuarioExists(req.query.to,function(bool){
         if(bool){
-            mysql.enviarMensaje(req.query.from, req.query.to, req.query.message, req.query.subject,function(bool){
+            mysql.enviarMensaje(comprobarCookie(req.headers.cookie), req.query.to, req.query.message, req.query.subject,function(bool){
                 res.send(bool); 
             });
         }else{
@@ -182,19 +182,19 @@ app.get('/enviarmensaje',function(req, res){
 });
 
 app.get('/nummensajessinleer',function(req, res){
-    mysql.numMensajesSinLeer(req.query.username,function(data){
+    mysql.numMensajesSinLeer(comprobarCookie(req.headers.cookie), function(data){
         res.send(JSON.stringify(data));
     });
 });
 
 app.get('/bandejadesalida',function(req, res){
-    mysql.getMensajesSalidaJugador(req.query.nombre,function(data){
+    mysql.getMensajesSalidaJugador(comprobarCookie(req.headers.cookie),function(data){
         res.send(JSON.stringify(data));
     });
 });
 
 app.get('/bandejadeentrada',function(req, res){ 
-    mysql.getMensajesEntradaJugador(req.query.nombre,function(data){
+    mysql.getMensajesEntradaJugador(comprobarCookie(req.headers.cookie),function(data){
         res.send(JSON.stringify(data));
     });
 });
@@ -210,15 +210,16 @@ app.get('/juego',function(req, res){
 });
 
 app.get('/anadir',function(req,res){
+    var nombre = comprobarCookie(req.headers.cookie);
     if(req.query.peticion){
        mysql.usuarioExists(req.query.nombre,function(bool){
             if(bool){
-                mysql.mirarSiEsAmistad(req.query.nombre,req.query.username,function(err,data){
+                mysql.mirarSiEsAmistad(req.query.nombre,nombre,function(err,data){
                     if(err){
                         throw err;
                     }else if(data.length==0){
                         var mensaje="peticion";
-                        mysql.enviarMensaje(req.query.username,req.query.nombre, mensaje,"peticion",function(bool){
+                        mysql.enviarMensaje(nombre,req.query.nombre, mensaje,"peticion",function(bool){
                                 res.send(bool);
                         });
                     }else{
@@ -230,7 +231,7 @@ app.get('/anadir',function(req,res){
             }
         });
     }else if(req.query.aceptacion){
-        mysql.añadirAmigo(req.query.username,req.query.nombre,function(bool){
+        mysql.añadirAmigo(nombre,req.query.nombre,function(bool){
             if(bool){
                 res.send("El jugador ha sido añadido a tu lista de amigos");
             }else{

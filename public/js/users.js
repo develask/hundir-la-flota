@@ -46,7 +46,7 @@ function User(){
     }
     this.getUserOutboxMsg = function(callback){
         $.ajax({
-            url: "/bandejadesalida?nombre="+this.getName()
+            url: "/bandejadesalida"
         }).done(function(data){
             callback(JSON.parse(data));
         });
@@ -60,21 +60,21 @@ function User(){
     }
     this.getUserInboxMsg = function(callback){
         $.ajax({
-            url: "/bandejadeentrada?nombre="+this.getName()
+            url: "/bandejadeentrada"
         }).done(function( data ){
             callback(JSON.parse(data));
         });
     }
     this.enviarMensajeAmistad = function(to,callback){
         $.ajax({
-            url: "/anadir?peticion=peticion&username="+this.getName()+"&nombre="+to
+            url: "/anadir?peticion=peticion&nombre="+to
         }).done(function(data){
             callback(data);
         });
     }
     this.numMensajesSinLeer = function(callback){
         $.ajax({
-            url: "/nummensajessinleer?username="+user.getName()
+            url: "/nummensajessinleer"
         }).done(function(data){
             callback(JSON.parse(data));
         });
@@ -88,14 +88,14 @@ function User(){
     }
     this.enviarMensaje = function(to, subject, message, callback){
         $.ajax({
-            url: "/enviarmensaje?from="+this.getName()+"&to="+to+"&subject="+subject+"&message="+message
+            url: "/enviarmensaje?to="+to+"&subject="+subject+"&message="+message
         }).done(function(data){
             callback(data);
         });
     }
     this.añadirAmigo = function(to,callback){
         $.ajax({
-            url: "/anadir?aceptacion=aceptacion&username="+this.getName()+"&nombre="+to
+            url: "/anadir?aceptacion=aceptacion&nombre="+to
         }).done(function(data){
             callback(data);
         });
