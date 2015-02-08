@@ -157,10 +157,16 @@ function numMensajesSinLeer(username,callback){
 function cambiarEstadoMensaje(id,callback){
     try{
         connection.query("UPDATE hundirlaflota.mensajes SET leido='Leido' WHERE id='"+id+"'",function(err, rows){
-            if(err){
+            if(err || rows.affectedRows == 0){
                 callback(false);
             }else{
-                callback(true);
+                connection.query("SELECT id, leido, receptor, emisor, cabecera FROM hundirlaflota.mensajes WHERE id='"+id+"'",function(err, rows){
+                    if(err){
+                        throw err;
+                    }else{
+                        callback(rows);
+                    }
+                });
             }
         });
     }catch(e){

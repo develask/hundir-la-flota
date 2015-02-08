@@ -194,7 +194,7 @@ $("#signInC").on("click", function(ev){
             var numero;
             user.numMensajesSinLeer(function(data){
                 numero=data[0].cuantos;
-                $("#userName").html(nombre+"<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+                $("#userName").html(nombre+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
                 $('#signindiv').modal('hide');
                 $($("#signin").parent()).addClass("hidden");
                 $($("#signup").parent()).addClass("hidden");
@@ -271,7 +271,7 @@ $("#bandejadesalida").on("click",function(ev){
 //  </div>
                 
 //                html += "<li id="+data[ind].id+"><span class='"+(data[ind].leido=="Leido"?"glyphicon glyphicon-ok":"glyphicon glyphicon-remove")+"'></span>Para:"+data[ind].receptor+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"' >Ver</button>";
-                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>Para: "+data[ind].receptor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"'>Ver</button></div>";
+                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>Para: "+data[ind].receptor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
             }
         }else{
             var html = "no hay mensajes";
@@ -288,7 +288,7 @@ $("#bandejadeentrada").on("click",function(ev){
         if(data.length>0){
             var html = "";
             for (var ind in data){
-                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>De: "+data[ind].emisor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"'>Ver</button></div>";
+                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>De: "+data[ind].emisor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
             }
         }else{
             var html = "no hay mensajes";
@@ -299,35 +299,27 @@ $("#bandejadeentrada").on("click",function(ev){
         $("#bandejadeentradadiv").modal('show');
         $("#bandmensajesdiv button").on("click", function(ev){
             var id = $(this).attr("id");
-            user.getUserMessage(id,function(data){
-                if(data.length>0){
-                    console.log(data[0].cabecera);
-                    console.log("dflgk");
-                    user.cambiarEstadoHaLeido(id,function(bool){
-                        if(bool){
-                            $("#bandmensajesdiv").html("");
-                            var relleno;
-                            if(data[0].cabecera=="peticion"){
-                                relleno="<p id='paceptar' class='"+data[0].emisor+"'>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";                           
-                                $("#bandmensajesdiv").html(relleno);
-                                $("#bandejadeentradadiv").modal('show');
-                                $("#aceptar").on("click",function(ev){
-                                    var nombre = $("#paceptar").attr("class");
-                                    user.añadirAmigo(nombre,function(bool){
-                                       alert(bool);
-                                    });
-                                });
-                            }else{
-                                relleno="<p>De:"+data[0].emisor+" Asunto:"+data[0].cabecera+"</p><br><br><p>"+data[0].mensaje+"</p><br><br>";                                         $("#bandmensajesdiv").html(relleno);
-                                $("#bandejadeentradadiv").modal('show');
-                            }
-                        }else{
-                            alert("ha habido un error");
-                        }
-                    });
+            user.cambiarEstadoHaLeido(id,function(bool){
+                if(bool){
+                    $("#bandmensajesdiv").html("");
+                    var relleno;
+                    if(bool[0].cabecera=="peticion"){
+                        relleno="<p id='paceptar' class='"+bool[0].emisor+"'>De:"+bool[0].emisor+" Asunto:"+bool[0].cabecera+"</p><br><br><p>"+bool[0].mensaje+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";                           
+                        $("#bandmensajesdiv").html(relleno);
+                        $("#bandejadeentradadiv").modal('show');
+                        $("#aceptar").on("click",function(ev){
+                            var nombre = $("#paceptar").attr("class");
+                            user.añadirAmigo(nombre,function(bool){
+                               alert(bool);
+                            });
+                        });
+                    }else{
+                        relleno="<p>De:"+bool[0].emisor+" Asunto:"+bool[0].cabecera+"</p><br><br><p>"+bool[0].mensaje+"</p><br><br>";                                         $("#bandmensajesdiv").html(relleno);
+                        $("#bandejadeentradadiv").modal('show');
+                    }
                 }else{
-                    alert("Ha habido un error");
-                } 
+                    alert("ha habido un error");
+                }
             });
         });
     });
