@@ -1,7 +1,25 @@
 body {
     background-image: url("../img/560676main_BarentsSea_2010243_full.jpg");
 }
-
+.bs-callout {
+padding: 5px;
+margin:     0px 0;
+border: 1px solid #eee;
+border-left-width: 5px;
+border-radius: 3px;
+}
+.bs-callout-info {
+border-left-color: #1b809e;
+}
+.bs-callout-warning {
+border-left-color: #aa6708;
+}
+.bs-callout-danger {
+border-left-color: #ce4844;
+}
+.bs-callout-ok {
+border-left-color: #54ce44;
+}
 #noscript{
     background-color: #fff;
 }

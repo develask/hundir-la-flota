@@ -263,14 +263,20 @@ $("#inputamigos").keyup(function(ev){
 $("#bandejadesalida").on("click",function(ev){
     user.getUserOutboxMsg(function(data){
         if(data.length>0){
-            var html = "<ol>";
+            var html = "";
             for (var ind in data){
-                html += "<li id="+data[ind].id+"> Para:"+data[ind].receptor+"Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"' >Ver</button>";
+//                <div class="bs-callout bs-callout-danger" id="callout-glyphicons-empty-only">
+//    <h4>Only for use on empty elements</h4>
+//    <p>Icon classes should only be used on elements that contain no text content and have no child elements.</p>
+//  </div>
+                
+//                html += "<li id="+data[ind].id+"><span class='"+(data[ind].leido=="Leido"?"glyphicon glyphicon-ok":"glyphicon glyphicon-remove")+"'></span>Para:"+data[ind].receptor+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"' >Ver</button>";
+                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>Para: "+data[ind].receptor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"'>Ver</button></div>";
             }
-            html += "</ol>"; 
         }else{
             var html = "no hay mensajes";
         }
+        $("#bandejatitle").html("Bandeja de salida:");
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
@@ -280,14 +286,14 @@ $("#bandejadesalida").on("click",function(ev){
 $("#bandejadeentrada").on("click",function(ev){
     user.getUserInboxMsg(function( data ){
         if(data.length>0){
-            var html = "<ol>";
+            var html = "";
             for (var ind in data){
-                html += "<li> De:"+data[ind].emisor+"&nbsp &nbsp Estado:"+data[ind].leido+"<br><br> Asunto:"+data[ind].cabecera+" &nbsp &nbsp</li><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button><br>";
+                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>De: "+data[ind].emisor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"'>Ver</button></div>";
             }
-            html += "</ol>"; 
         }else{
             var html = "no hay mensajes";
         }
+        $("#bandejatitle").html("Bandeja de entrada:");
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
