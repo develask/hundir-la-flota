@@ -66,7 +66,7 @@ app.get('/login', function(req, res){
             shasum.update(req.query.user+req.query.pass+Date.now());
             var cook = shasum.digest('hex');
             usersLoged[cook] = req.query.user;
-            res.cookie("gameupv", cook, { expires: new Date(Date.now() + 900000), httpOnly: false });
+            res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
             res.send("loged");
         }else{  
             res.send("not loged");
@@ -131,7 +131,14 @@ app.get('/newPass', function(){
 })
 
 app.get('/cogermensajeporid', function(req, res){
-    mysql.getMensajeid(req.query.id, comprobarCookie(req.headers.cookie), function(data){
+    var us = comprobarCookie(req.headers.cookie);
+    mysql.getMensajeid(req.query.id, us, function(data){
+        var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
          res.send(JSON.stringify(data)  );
     });
 });
@@ -162,21 +169,42 @@ app.get('/reglas',function(req, res){
     });
 });*/
 app.get('/amigos',function(req, res){
-    mysql.getAmigos(comprobarCookie(req.headers.cookie),function(data){
+    var us = comprobarCookie(req.headers.cookie);
+    mysql.getAmigos(us,function(data){
+        var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
         res.send(JSON.stringify(data));
     });
 });
 
 app.get('/cambiarestadomensaje',function(req,res){
-    mysql.cambiarEstadoMensaje(req.query.id, comprobarCookie(req.headers.cookie),function(bool){
+    var us = comprobarCookie(req.headers.cookie);
+    mysql.cambiarEstadoMensaje(req.query.id, us,function(bool){
+        var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
         res.send(bool);
     });
 });
 
 app.get('/enviarmensaje',function(req, res){
+    var us = comprobarCookie(req.headers.cookie);
+    var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
     mysql.usuarioExists(req.query.to,function(bool){
         if(bool){
-            mysql.enviarMensaje(comprobarCookie(req.headers.cookie), req.query.to, req.query.message, req.query.subject,function(bool){
+            mysql.enviarMensaje(us, req.query.to, req.query.message, req.query.subject,function(bool){
                 res.send(bool); 
             });
         }else{
@@ -187,23 +215,51 @@ app.get('/enviarmensaje',function(req, res){
 });
 
 app.get('/nummensajessinleer',function(req, res){
-    mysql.numMensajesSinLeer(comprobarCookie(req.headers.cookie), function(data){
+    var us = comprobarCookie(req.headers.cookie);
+    var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
+    mysql.numMensajesSinLeer(us, function(data){
         res.send(JSON.stringify(data));
     });
 });
 app.get('/borrarMail', function(req, res){
-    mysql.borrarMail(req.query.id, comprobarCookie(req.headers.cookie), function(bool){
+    var us = comprobarCookie(req.headers.cookie);
+    var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
+    mysql.borrarMail(req.query.id, us, function(bool){
         res.send(bool?"Ok":"Fail");
     });
 });
 app.get('/bandejadesalida',function(req, res){
-    mysql.getMensajesSalidaJugador(comprobarCookie(req.headers.cookie),function(data){
+    var us = comprobarCookie(req.headers.cookie);
+    var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
+    mysql.getMensajesSalidaJugador(us,function(data){
         res.send(JSON.stringify(data));
     });
 });
 
 app.get('/bandejadeentrada',function(req, res){ 
-    mysql.getMensajesEntradaJugador(comprobarCookie(req.headers.cookie),function(data){
+    var us = comprobarCookie(req.headers.cookie);
+    var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
+    mysql.getMensajesEntradaJugador(us,function(data){
         res.send(JSON.stringify(data));
     });
 });
@@ -217,9 +273,15 @@ app.get('/juego',function(req, res){
         }
       });
 });
-
 app.get('/anadir',function(req,res){
     var nombre = comprobarCookie(req.headers.cookie);
+    var us =nombre;
+    var shasum = crypto.createHash('sha1');
+        shasum.update(us+Date.now());
+        var cook = shasum.digest('hex');
+        var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
+        usersLoged[cook] = us;
+        res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
     if(req.query.peticion){
        mysql.usuarioExists(req.query.nombre,function(bool){
             if(bool){
@@ -317,24 +379,6 @@ hundirlamesa.on('connection', function(socket){
     });
 });
 
-
-//var jugadores = {};
-//io.sockets.on('connection', function (socket) {
-//    socket.on("newloged", function(data){
-//        socket.izena = data;
-//    });
-//    socket.on("cambioJuego", function(data){
-//        jugadores[data.jugador] = {juego: data.juego, socket: socket};
-//        console.log(data.jugador +" ha cabiado al juego: "+data.juego);
-//    });
-//    socket.on("msgTo", function(datos){
-//        for(var el in datos.quienes){
-//            jugadores[datos.quienes[el]].socket.emit("evJuego", datos.msg);
-//        }
-//    });
-//    socket.on("disconnect", function () {
-//        //io.sockets.emit("disconnect", socket['izena']);
-//        delete jugadores[socket['izena']];
-//    });
-//    
-//});
+//setInterval(function(){
+//    console.log(usersLoged);
+//}, 5000);
