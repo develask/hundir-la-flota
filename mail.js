@@ -10,7 +10,7 @@ function mail(datos, callback){
     });
     transporter.sendMail(datos, callback);
 }
-function verificationMail(to, hash, callbak){
+function verificationMail(to, hash, callback){
     mail({
         subject: "GAME - UPV mail verification",
         html: "<h2>GAME - UPV mail verification</h2><p>Este correo ha sido enviado para la verificación de un nuevo usuario.</p><p>Si usted no ha querido registrarse en nuestros servicios, borre el mensaje.</p><p>En caso de que usted haya solicitado crear la cuenta, entre en el siguiente enlace:</p><a href='https://localhost:4433/signup?hash="+hash+"&email="+to+"'>ENLACE</a>",

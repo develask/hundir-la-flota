@@ -15,10 +15,11 @@ connection.connect();
 connection.query("use hundirlaflota");
 
 function newUsuario(email, callback){
-    connection.query("SELECT * FROM hundirlaflota.verification WHERE email='"+email+"'", function(err, rows){
-        connection.query("DELETE FROM hundirlaflota.verification WHERE email='"+email+"'");
+    connection.query("SELECT * FROM hundirlaflota.verification WHERE email=?", [email], function(err, rows){
+        connection.query("DELETE FROM hundirlaflota.verification WHERE email=?", [email]);
         try {
-            connection.query("INSERT INTO hundirlaflota.users (`nombre`,`contraseña_hash`,`email`) values ('"+rows[0].name+"','"+rows[0].pass+"','"+rows[0].email+"')", function(err, rows){
+            var datos = {nombre: rows[0].name, contraseña_hash: rows[0].pass, email: rows[0].email};
+            connection.query("INSERT INTO hundirlaflota.users SET ?", datos, function(err, rows){
                 if(err) throw err;
                 callback(true);
             });
@@ -29,7 +30,7 @@ function newUsuario(email, callback){
 }
 
 function confirm(email, hash, callback){
-    connection.query("SELECT * FROM hundirlaflota.verification WHERE email='"+email+"'", function(err, rows){
+    connection.query("SELECT * FROM hundirlaflota.verification WHERE email=?", [email], function(err, rows){
         if(err) throw err;
         var row;
         var tt = false;
@@ -53,9 +54,10 @@ function toVerification(name, pass, email, callback){
     shasum2.update(pass+name);
     var has = shasum2.digest('hex');
     shasum.update(name+has+email);
-    connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre='"+name+"' OR email='"+email+"' UNION SELECT name FROM hundirlaflota.verification WHERE name='"+name+"' OR email='"+email+"'", function(err, rows){
+    connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre=? OR email=? UNION SELECT name FROM hundirlaflota.verification WHERE name=? OR email=?", [name, email, name, email], function(err, rows){
         if (rows && rows.length == 0){
-            connection.query("INSERT INTO hundirlaflota.verification (`name`,`pass`,`email`) values ('"+name+"','"+has+"','"+email+"')", function(err, rows){
+            var datos = {name: name, pass: has, email: email};
+            connection.query("INSERT INTO hundirlaflota.verification SET ?", datos, function(err, rows){
                 if(err) throw err;
                 mail.verificationMail(email, shasum.digest('hex'), function (err, data){
                     if (!err){
@@ -74,7 +76,7 @@ function toVerification(name, pass, email, callback){
 function signIn(user, password, callback){
     var shasum = crypto.createHash('sha1');
     shasum.update(password+user);
-    connection.query("SELECT * FROM hundirlaflota.users WHERE nombre='"+user+"' AND contraseña_hash='"+shasum.digest('hex')+"'", function(err, rows){
+    connection.query("SELECT * FROM hundirlaflota.users WHERE nombre=? AND contraseña_hash=?", [user, shasum.digest('hex')], function(err, rows){
         if(err) throw err;
         if (rows.length == 1){
             callback(true);
@@ -84,7 +86,7 @@ function signIn(user, password, callback){
     });
 }
 function conseguirPrimerosX(numero, callback){
-    connection.query("SELECT nombre, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC LIMIT "+numero,function(err,rows){
+    connection.query("SELECT nombre, puntuacion FROM hundirlaflota.users ORDER BY puntuacion DESC LIMIT ?", [numero],function(err,rows){
         if(err){ 
             throw err;
         }else{
@@ -93,18 +95,8 @@ function conseguirPrimerosX(numero, callback){
     });   
 }
 
-/*function getUsuarios(user, callback){
-    connection.query("SELECT nombre FROM hundirlaflota.users "+(user?" WHERE nombre='"+user+"'":""),function(err, rows){
-        if(err){
-            throw err;
-        }else{
-            callback(rows);
-        }
-    });
-}*/
-
 function getAmigos(user, callback){
-    connection.query("SELECT nombreamigo FROM hundirlaflota.amigos WHERE nombre='"+user+"' UNION SELECT nombre FROM hundirlaflota.amigos WHERE nombreamigo='"+user+"' ",function(err, rows){
+    connection.query("SELECT nombreamigo FROM hundirlaflota.amigos WHERE nombre=? UNION SELECT nombre FROM hundirlaflota.amigos WHERE nombreamigo=?", [user, user],function(err, rows){
         if(err){
             throw err;
         }else{
@@ -114,7 +106,7 @@ function getAmigos(user, callback){
 }
 
 function getMensajesSalidaJugador(nombre,callback){
-    connection.query("SELECT id, leido, receptor, cabecera FROM hundirlaflota.mensajes WHERE emisor='"+nombre+"'",function(err, rows){
+    connection.query("SELECT id, leido, receptor, cabecera FROM hundirlaflota.mensajes WHERE emisor=?", [nombre],function(err, rows){
         if(err){
             throw err;
         }else{
@@ -124,7 +116,8 @@ function getMensajesSalidaJugador(nombre,callback){
 }
 function añadirAmigo(user, nombre,callback){
     try{
-        connection.query("INSERT INTO hundirlaflota.amigos (nombre, nombreamigo) VAlUES ('"+user+"', '"+nombre+"') ",function(err, data){
+        var ddd = {nombre: user, nombreamigo: nombre};
+        connection.query("INSERT INTO hundirlaflota.amigos SET ?", ddd,function(err, data){
             if(err){
                 callback(false);
             }else{
@@ -139,8 +132,8 @@ function añadirAmigo(user, nombre,callback){
 
 function numMensajesSinLeer(username,callback){
     try{
-        var querier="SELECT COUNT(*) AS cuantos FROM hundirlaflota.mensajes WHERE receptor='"+username+"' AND leido='No Leido'";
-        connection.query(querier,function(err,rows){
+        var querier="SELECT COUNT(*) AS cuantos FROM hundirlaflota.mensajes WHERE receptor=? AND leido='No Leido'";
+        connection.query(querier, username,function(err,rows){
             if(err){
                 throw err;
             }else{ 
@@ -155,11 +148,11 @@ function numMensajesSinLeer(username,callback){
 
 function cambiarEstadoMensaje(id, quien,callback){
     try{
-        connection.query("UPDATE hundirlaflota.mensajes SET leido='Leido' WHERE id='"+id+"' AND receptor='"+quien+"'",function(err, rows){
+        connection.query("UPDATE hundirlaflota.mensajes SET leido='Leido' WHERE id=? AND receptor=?", [id, quien],function(err, rows){
             if(err || rows.affectedRows == 0){
                 callback(false);
             }else{
-                connection.query("SELECT id, leido, receptor, emisor, cabecera FROM hundirlaflota.mensajes WHERE id='"+id+"' AND receptor='"+quien+"'",function(err, rows){
+                connection.query("SELECT id, leido, receptor, emisor, cabecera FROM hundirlaflota.mensajes WHERE id=? AND receptor=?", [id, quien],function(err, rows){
                     if(err){
                         throw err;
                     }else{
@@ -177,7 +170,7 @@ function enviarMensaje(from, to, message, subject, callback){
     if(message=="peticion"){
         try{
             message="El emisor del mensaje quiere ser tu amigo";
-            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), 'No Leido', '"+subject+"')",function(err, rows){
+            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES (?, ?, ?, NOW(), 'No Leido', ?)", [from, to, message, subject],function(err, rows){
                 if(err){
                     callback(false);
                 }else{
@@ -189,7 +182,7 @@ function enviarMensaje(from, to, message, subject, callback){
         }
     }else{
         try{
-            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES ('"+from+"', '"+to+"', '"+message+"', NOW(), 'No Leido', '"+subject+"')",function(err, rows){
+            connection.query("INSERT INTO hundirlaflota.mensajes (emisor, receptor, mensaje, noiz, leido, cabecera) VALUES (?, ?, ?, NOW(), 'No Leido', ?)", [from, to, message, subject],function(err, rows){
                 if(err){
                     callback(false);
                 }else{
@@ -204,7 +197,7 @@ function enviarMensaje(from, to, message, subject, callback){
 
 function usuarioExists(nombre,callback){
     try{
-        connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre='"+nombre+"'",function(err, rows){
+        connection.query("SELECT nombre FROM hundirlaflota.users WHERE nombre=?", [nombre], function(err, rows){
             if(err || rows.length == 0){
                 throw err;
             }else{
@@ -217,7 +210,7 @@ function usuarioExists(nombre,callback){
 }
 
 function getMensajesEntradaJugador(nombre,callback){
-    connection.query("SELECT id, leido, emisor, cabecera FROM hundirlaflota.mensajes WHERE receptor='"+nombre+"'",function(err, rows){
+    connection.query("SELECT id, leido, emisor, cabecera FROM hundirlaflota.mensajes WHERE receptor=?", [nombre],function(err, rows){
         if(err){
             throw err;
         }else{
@@ -227,7 +220,7 @@ function getMensajesEntradaJugador(nombre,callback){
 }
 
 function getMensajeid(id, quien, callback){
-    connection.query("SELECT emisor, cabecera, mensaje, receptor FROM hundirlaflota.mensajes WHERE id='"+id+"' AND (emisor='"+quien+"' OR receptor='"+quien+"')", function(err,rows){
+    connection.query("SELECT emisor, cabecera, mensaje, receptor FROM hundirlaflota.mensajes WHERE id=? AND (emisor=? OR receptor=?)", [id, quien, quien], function(err,rows){
         if(err){
             throw err;
         }else{
@@ -237,8 +230,8 @@ function getMensajeid(id, quien, callback){
 }
 
 function mirarSiEsAmistad(nombre,usuario, callback){
-    var querier="SELECT * FROM hundirlaflota.amigos WHERE nombre='"+nombre+"' AND nombreamigo='"+usuario+"' UNION SELECT * FROM hundirlaflota.amigos WHERE nombre='"+usuario+"' AND nombreamigo='"+nombre+"'";
-    connection.query(querier,function(err, rows){
+    var querier="SELECT * FROM hundirlaflota.amigos WHERE nombre=? AND nombreamigo=? UNION SELECT * FROM hundirlaflota.amigos WHERE nombre=? AND nombreamigo=?";
+    connection.query(querier, [nombre, usuario, usuario, nombre],function(err, rows){
         if(err){
             throw err;
         }else{
@@ -248,7 +241,7 @@ function mirarSiEsAmistad(nombre,usuario, callback){
 }
 
 function getJuego(nombre, callback){
-    connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre ='"+nombre+"' ",function(err,rows){
+    connection.query("SELECT codigohtml, codigojavascript FROM hundirlaflota.juego WHERE nombre =? ", [nombre], function(err,rows){
         if(err){ 
             throw err;
         }else{
@@ -258,7 +251,7 @@ function getJuego(nombre, callback){
 }
 
 function getRules(juego,callback){
-    connection.query("SELECT reglas FROM hundirlaflota.juego WHERE nombre ='"+juego+"' ",function(err,rows){
+    connection.query("SELECT reglas FROM hundirlaflota.juego WHERE nombre =? ", [juego],function(err,rows){
         if(err){ 
             throw err;
         }else{
@@ -284,7 +277,6 @@ module.exports.signIn = signIn;
 module.exports.toVerification = toVerification;
 module.exports.confirm = confirm;
 module.exports.conseguirPrimerosX = conseguirPrimerosX;
-//module.exports.getUsuarios = getUsuarios;
 module.exports.getJuegosNames = getJuegosNames;
 module.exports.getMensajesEntradaJugador = getMensajesEntradaJugador;
 module.exports.getMensajesSalidaJugador = getMensajesSalidaJugador;
