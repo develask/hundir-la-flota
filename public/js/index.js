@@ -283,12 +283,6 @@ $("#bandejadesalida").on("click",function(ev){
         if(data.length>0){
             var html = "";
             for (var ind in data){
-//                <div class="bs-callout bs-callout-danger" id="callout-glyphicons-empty-only">
-//    <h4>Only for use on empty elements</h4>
-//    <p>Icon classes should only be used on elements that contain no text content and have no child elements.</p>
-//  </div>
-                
-//                html += "<li id="+data[ind].id+"><span class='"+(data[ind].leido=="Leido"?"glyphicon glyphicon-ok":"glyphicon glyphicon-remove")+"'></span>Para:"+data[ind].receptor+"<br><br> Asunto:"+data[ind].cabecera+"</li><button type='button' class='btn btn-default' data-dismiss='modal' id='boton"+data[ind].id+"' >Ver</button>";
                 html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>Para: "+data[ind].receptor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
             }
         }else{
@@ -298,6 +292,31 @@ $("#bandejadesalida").on("click",function(ev){
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
+        $("#bandmensajesdiv button").on("click", function(ev){
+            var id = $(this).attr("id");
+            user.getUserMessage(id,function(bool){
+                if(bool){
+                    $("#bandmensajesdiv").html("");
+                    var relleno;
+                    if(bool[0].cabecera=="peticion"){  
+                        relleno = "<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";
+                        $("#bandmensajesdiv").html(relleno);
+                        $("#bandejadeentradadiv").modal('show');
+                        $("#aceptar").on("click",function(ev){
+                            var nombre = $("#paceptar").attr("class");
+                            user.añadirAmigo(nombre,function(bool){
+                               alert(bool);
+                            });
+                        });
+                    }else{
+                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";                                         $("#bandmensajesdiv").html(relleno);
+                        $("#bandejadeentradadiv").modal('show');
+                    }
+                }else{
+                    alert("ha habido un error");
+                }
+            });
+        });
     });
 });
     
@@ -321,8 +340,7 @@ $("#bandejadeentrada").on("click",function(ev){
                 if(bool){
                     $("#bandmensajesdiv").html("");
                     var relleno;
-                    if(bool[0].cabecera=="peticion"){
-//                        relleno="<div>class='"+bool[0].emisor+"'>De:"+bool[0].emisor+" Asunto:"+bool[0].cabecera+"</p><br><br><p>"+bool[0].menssage+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";  
+                    if(bool[0].cabecera=="peticion"){  
                         relleno = "<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";
                         $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
