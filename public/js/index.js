@@ -322,7 +322,8 @@ $("#bandejadeentrada").on("click",function(ev){
                     $("#bandmensajesdiv").html("");
                     var relleno;
                     if(bool[0].cabecera=="peticion"){
-                        relleno="<p id='paceptar' class='"+bool[0].emisor+"'>De:"+bool[0].emisor+" Asunto:"+bool[0].cabecera+"</p><br><br><p>"+bool[0].mensaje+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";                           
+//                        relleno="<div>class='"+bool[0].emisor+"'>De:"+bool[0].emisor+" Asunto:"+bool[0].cabecera+"</p><br><br><p>"+bool[0].menssage+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='aceptar'>Aceptar</button>";  
+                        relleno = "<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";
                         $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
                         $("#aceptar").on("click",function(ev){
@@ -332,7 +333,7 @@ $("#bandejadeentrada").on("click",function(ev){
                             });
                         });
                     }else{
-                        relleno="<p>De:"+bool[0].emisor+" Asunto:"+bool[0].cabecera+"</p><br><br><p>"+bool[0].mensaje+"</p><br><br>";                                         $("#bandmensajesdiv").html(relleno);
+                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";                                         $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
                     }
                 }else{

@@ -152,7 +152,7 @@ function cambiarEstadoMensaje(id, quien,callback){
             if(err || rows.affectedRows == 0){
                 callback(false);
             }else{
-                connection.query("SELECT id, leido, receptor, emisor, cabecera FROM hundirlaflota.mensajes WHERE id=? AND receptor=?", [id, quien],function(err, rows){
+                connection.query("SELECT id, leido, receptor, emisor, cabecera, mensaje FROM hundirlaflota.mensajes WHERE id=? AND receptor=?", [id, quien],function(err, rows){
                     if(err){
                         throw err;
                     }else{
