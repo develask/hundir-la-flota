@@ -7,6 +7,15 @@ function User(){
     this.getName = function(){
         return nombre;
     }
+    this.signInCookie = function(cook, callback){
+        $.ajax({
+            url: "/getName"
+        }).done(function( data ) {
+        //    socket.emit("newloged", name);
+            callback(data != "");
+            if(data !="") nombre=data;
+        });
+    }
     this.signIn = function (name, pass, callback){
         $.ajax({
             url: "/login?user="+name+"&pass="+pass

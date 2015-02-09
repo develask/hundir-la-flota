@@ -1,6 +1,5 @@
 var socket;
 var web = 'https://localhost:4433';
-
 function Juego(){
     var juego = "";
     var eventos = {};
@@ -127,6 +126,26 @@ function Juego(){
     }
 }
 var juego = new Juego();
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+var c = getCookie("gameupv");
+if (c){
+    user.signInCookie(c, function(bool){
+        if (bool){
+            var numero;
+            user.numMensajesSinLeer(function(data){
+                numero=data[0].cuantos;
+                $("#userName").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+                $($("#signin").parent()).addClass("hidden");
+                $($("#signup").parent()).addClass("hidden");
+                $($("#userName").parent()).removeClass("hidden");
+            });
+        }
+    });
+}
 $("#signin").on("click", function(ev){
     $('#signindiv').modal('show');
 });

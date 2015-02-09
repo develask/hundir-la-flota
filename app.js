@@ -54,6 +54,10 @@ function comprobarCookie(cookie){
     var c = cookie.split("=");
     return usersLoged[c[1]];
 }
+app.get('/getName', function(req, res){
+    var name = comprobarCookie(req.headers.cookie);
+    res.send(name?name:"");
+});
 app.get('/login', function(req, res){
     mysql.signIn(req.query.user, req.query.pass, function(bool){
         if (bool){
