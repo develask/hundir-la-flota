@@ -182,7 +182,7 @@ if (Modernizr.draganddrop) {
     e.dataTransfer.setData('text/html', this.innerHTML);
 
     var dragIcon = document.createElement('img');
-    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla.jpg';
+    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla75X35recortada.png';
     dragIcon.width = 80;
     e.dataTransfer.setDragImage(dragIcon, 10, 10);
 
@@ -203,9 +203,9 @@ if (Modernizr.draganddrop) {
         var canvas1 = document.getElementById('micanvas1');
         var ctx = canvas1.getContext('2d');
         var img = new Image();
-        img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla.jpg';
+        img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla75X35recortada.png';
         img.onload = function(){
-          ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.offsetTop)/40)*40)+7, 80, 25);
+          ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.scrollTop)/40)*40)-33, 80, 25);
         }
     });
 } else {
