@@ -95,6 +95,13 @@ function User(){
             callback(data);
         });
     }
+    this.borrarMail = function(id, callback){
+        $.ajax({
+            url: "/borrarMail?id="+id
+        }).done(function(data){
+            callback(data=="Ok");
+        });
+    };
     this.enviarMensaje = function(to, subject, message, callback){
         $.ajax({
             url: "/enviarmensaje?to="+to+"&subject="+subject+"&message="+message

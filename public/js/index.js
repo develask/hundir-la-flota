@@ -283,7 +283,7 @@ $("#bandejadesalida").on("click",function(ev){
         if(data.length>0){
             var html = "";
             for (var ind in data){
-                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>Para: "+data[ind].receptor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
+                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><button type='button' class='close borrar' aria-label='Close' name='"+data[ind].id+"'><span aria-hidden='true'>×</span></button><h4>"+data[ind].cabecera+"</h4><p>Para: "+data[ind].receptor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
             }
         }else{
             var html = "no hay mensajes";
@@ -292,7 +292,16 @@ $("#bandejadesalida").on("click",function(ev){
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
-        $("#bandmensajesdiv button").on("click", function(ev){
+        $("#bandmensajesdiv button.borrar").on("click", function(ev){
+            var id = $(this).attr("name");
+            var element = $(this);
+            user.borrarMail(id, function(b){
+                if (b){
+                    $(element.parent()).remove();
+                }
+            });
+        });
+        $("#bandmensajesdiv button.btn").on("click", function(ev){
             var id = $(this).attr("id");
             user.getUserMessage(id,function(bool){
                 if(bool){
@@ -325,7 +334,7 @@ $("#bandejadeentrada").on("click",function(ev){
         if(data.length>0){
             var html = "";
             for (var ind in data){
-                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><h4>"+data[ind].cabecera+"</h4><p>De: "+data[ind].emisor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
+                html += "<div class='bs-callout"+(data[ind].leido!="Leido"?" bs-callout-danger":" bs-callout-ok")+"' id='"+data[ind].id+"'><button type='button' class='close borrar' aria-label='Close' name='"+data[ind].id+"'><span aria-hidden='true'>×</span></button><h4>"+data[ind].cabecera+"</h4><p>De: "+data[ind].emisor+"</p><button type='button' class='btn btn-default' data-dismiss='modal' id='"+data[ind].id+"'>Ver</button></div>";
             }
         }else{
             var html = "no hay mensajes";
@@ -334,7 +343,16 @@ $("#bandejadeentrada").on("click",function(ev){
         $("#bandmensajesdiv").html("");
         $("#bandmensajesdiv").html(html);
         $("#bandejadeentradadiv").modal('show');
-        $("#bandmensajesdiv button").on("click", function(ev){
+        $("#bandmensajesdiv button.borrar").on("click", function(ev){
+            var id = $(this).attr("name");
+            var element = $(this);
+            user.borrarMail(id, function(b){
+                if (b){
+                    $(element.parent()).remove();
+                }
+            });
+        });
+        $("#bandmensajesdiv button.btn").on("click", function(ev){
             var id = $(this).attr("id");
             user.cambiarEstadoHaLeido(id,function(bool){
                 if(bool){

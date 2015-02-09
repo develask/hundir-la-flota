@@ -191,7 +191,11 @@ app.get('/nummensajessinleer',function(req, res){
         res.send(JSON.stringify(data));
     });
 });
-
+app.get('/borrarMail', function(req, res){
+    mysql.borrarMail(req.query.id, comprobarCookie(req.headers.cookie), function(bool){
+        res.send(bool?"Ok":"Fail");
+    });
+});
 app.get('/bandejadesalida',function(req, res){
     mysql.getMensajesSalidaJugador(comprobarCookie(req.headers.cookie),function(data){
         res.send(JSON.stringify(data));
