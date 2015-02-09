@@ -131,7 +131,7 @@ app.get('/newPass', function(){
 })
 
 app.get('/cogermensajeporid', function(req, res){
-    mysql.getMensajeid(req.query.id, function(data){
+    mysql.getMensajeid(req.query.id, comprobarCookie(req.headers.cookie), function(data){
          res.send(JSON.stringify(data)  );
     });
 });
@@ -168,7 +168,7 @@ app.get('/amigos',function(req, res){
 });
 
 app.get('/cambiarestadomensaje',function(req,res){
-    mysql.cambiarEstadoMensaje(req.query.id,function(bool){
+    mysql.cambiarEstadoMensaje(req.query.id, comprobarCookie(req.headers.cookie),function(bool){
         res.send(bool);
     });
 });

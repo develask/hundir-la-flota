@@ -122,7 +122,6 @@ function getMensajesSalidaJugador(nombre,callback){
         }
     });
 }
-
 function añadirAmigo(user, nombre,callback){
     try{
         connection.query("INSERT INTO hundirlaflota.amigos (nombre, nombreamigo) VAlUES ('"+user+"', '"+nombre+"') ",function(err, data){
@@ -154,13 +153,13 @@ function numMensajesSinLeer(username,callback){
     
 }
 
-function cambiarEstadoMensaje(id,callback){
+function cambiarEstadoMensaje(id, quien,callback){
     try{
-        connection.query("UPDATE hundirlaflota.mensajes SET leido='Leido' WHERE id='"+id+"'",function(err, rows){
+        connection.query("UPDATE hundirlaflota.mensajes SET leido='Leido' WHERE id='"+id+"' AND receptor='"+quien+"'",function(err, rows){
             if(err || rows.affectedRows == 0){
                 callback(false);
             }else{
-                connection.query("SELECT id, leido, receptor, emisor, cabecera FROM hundirlaflota.mensajes WHERE id='"+id+"'",function(err, rows){
+                connection.query("SELECT id, leido, receptor, emisor, cabecera FROM hundirlaflota.mensajes WHERE id='"+id+"' AND receptor='"+quien+"'",function(err, rows){
                     if(err){
                         throw err;
                     }else{
@@ -227,8 +226,8 @@ function getMensajesEntradaJugador(nombre,callback){
     });
 }
 
-function getMensajeid(id, callback){
-    connection.query("SELECT emisor, cabecera, mensaje FROM hundirlaflota.mensajes WHERE id='"+id+"'", function(err,rows){
+function getMensajeid(id, quien, callback){
+    connection.query("SELECT emisor, cabecera, mensaje, receptor FROM hundirlaflota.mensajes WHERE id='"+id+"' AND (emisor='"+quien+"' OR receptor='"+quien+"')", function(err,rows){
         if(err){
             throw err;
         }else{
