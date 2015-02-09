@@ -1,5 +1,5 @@
 var socket;
-var web = 'https://localhost:4433';
+var web = 'https://localhost:4433/';
 function Juego(){
     var juego = "";
     var eventos = {};
@@ -84,7 +84,6 @@ function Juego(){
             }
             if (!echo) console.log(datos);
         });
-        socket.emit("name", user.getName());
     }
     this.crearRoom = function(nombreRoom, quienes){
         socket.emit("room", {clase: "new", room: nombreRoom, nombres: quienes});

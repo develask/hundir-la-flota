@@ -51,8 +51,9 @@ httpsServer.listen(4433, function(){
 app.use(express.static(__dirname + '/public'));
 var usersLoged = {};
 function comprobarCookie(cookie){
-    var c = cookie.split("=");
-    return usersLoged[c[1]];
+    var value = "; " + cookie;
+    var parts = value.split("; gameupv=");
+    if (parts.length == 2) return usersLoged[parts.pop().split(";").shift()];
 }
 app.get('/getName', function(req, res){
     var name = comprobarCookie(req.headers.cookie);
@@ -252,10 +253,10 @@ var hundirlamesa = io.of('/Hundir La Mesa');
 var jugadores_hundirlamesa = {};
 var rooms = [];
 hundirlamesa.on('connection', function(socket){
-    socket.on("name", function(name){
-        jugadores_hundirlamesa[name] = socket;
-        socket.nombre = name;
-    });
+    var name = comprobarCookie(socket.request.headers.cookie);
+    console.log("Nombre: "+name);
+    jugadores_hundirlamesa[name] = socket;
+    socket.nombre = name;
     socket.on("room", function(datos){
         switch (datos.clase){
             case "new":
