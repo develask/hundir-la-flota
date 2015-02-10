@@ -417,13 +417,24 @@ $("#botonenviar").on("click",function(ev){
     });
 });
 
-
+function conseguirUsuarioAzar(usuarios){
+    var numero = Math.floor((Math.random() * usuarios.length) + 1);
+    return usuarios[numero];
+}
 
 $("#aleatorio").on("click", function(ev){
     $.ajax({
         url: "/usuariosconectados"
-    }).done(function( data ) {
-        
+    }).done(function(data) {
+        var usuarios = [];
+        for (var i in data){
+            usuarios.push(data[i].nombre);
+        }
+        var nombreusuario = conseguirUsuarioAzar(usuarios);
+        var room= [];
+        room.push(user.getName());
+        room.push(nombreusuario);
+        juego.crearRoom(user.getName+nombreusuario, room);
     });
 });
 

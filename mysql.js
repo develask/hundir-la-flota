@@ -197,8 +197,8 @@ function cambiarEstadoMensaje(id, quien,callback){
                         callback(rows);
                     }
                 });
-            }
-        });
+                }
+            });
     }catch(e){
         callback(false);
     }
@@ -268,18 +268,32 @@ function getMensajeid(id, quien, callback){
 }
 
 function conseguirUsuarioConectados(callback){
-    
+    connection.query("SELECT nombre FROM hundirlaflota.users WHERE estado='Online'", function(err, rows){
+        if(err){
+            throw err
+        }else{
+            callback(rows);
+        }
+    });
 }
 
 function cambiarEstadoaOnline(user, callback){
-    connection.query("UPDATE hundirlaflota.users SET estado='Online' WHERE nombre='"+user+"'",function(bool){
-        callback(bool);
+    connection.query("UPDATE hundirlaflota.users SET estado='Online' WHERE nombre='"+user+"'",function(err,data){
+        if(err){
+            callback(false);
+        }else{
+            callback(true);
+        }
     });
 }
 
 function cambiarEstadoaOffline(user, callback){
-    connection.query("UPDATE hundirlaflota.users SET estado='Offline' WHERE nombre='"+user+"'",function(bool){
-        callback(bool);
+    connection.query("UPDATE hundirlaflota.users SET estado='Offline' WHERE nombre='"+user+"'",function(err, data){
+        if(err){
+            callback(false);
+        }else{
+            callback(true);
+        }
     });
 }
 
@@ -345,3 +359,4 @@ module.exports.numMensajesSinLeer = numMensajesSinLeer;
 module.exports.borrarMail = borrarMail;
 module.exports.cambiarEstadoaOnline = cambiarEstadoaOnline;
 module.exports.cambiarEstadoaOffline = cambiarEstadoaOffline;
+module.exports.conseguirUsuariosConectados = conseguirUsuarioConectados;

@@ -99,7 +99,7 @@ function User(){
             }
         });
     }
-    this.cambiarEstadoaOffline = function(){
+    this.cambiarEstadoaOffline = function(){    
         $.ajax({
             url: "/cambiarestadoaoffline?user="+this.getName()
         }).done(function(bool){

@@ -266,8 +266,8 @@ app.get('/bandejadeentrada',function(req, res){
 });
 
 app.get('/usuariosconectados',function(req,res){
-    mysql.conseguirUsuariosConectados(,function(data){
-        
+    mysql.conseguirUsuariosConectados(function(data){
+        res.send(data);
     });
 });
 
