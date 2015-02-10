@@ -1,22 +1,18 @@
 function Tablero(length){
-	var tablero = [];
-    var tt = document.getElementById("table");
-    var html = "";
-	for (var i = 0; i < length; i++) {
-		var li = [];
-        html += "<tr>";
-		for (var j = 0; j < length; j++) {
-			li.push({
-				barco: false,
-				pulsado: false
-			});
-            html += "<td id='"+i+"-"+j+"' class='cuadrado'>__</td>"; 
-		};
-        html += "</tr>";
-		tablero.push(li);
-	};
-    tt.innerHTML = html;
-    
+    var tablero = [];
+    this.reset = function(length){
+        if (!length) length = tablero.length;
+        for (var i = 0; i < length; i++) {
+            var li = [];
+            for (var j = 0; j < length; j++) {
+                li.push({
+                    barco: false,
+                    pulsado: false
+                });
+            };
+        };
+    }
+    this.reset(length);
 	this.impr = function(){
 		for (var i = 0; i < tablero.length; i++) {
 			var fila = tablero[i];
@@ -36,8 +32,8 @@ function Tablero(length){
             return false;
         }
     }
-	this.newBarco = function(arrPosicionInicio, direccion, length){ // Direccion True = abajo / False = Derecha
-		var x = arrPosicionInicio[0];
+    function introducirBarco(arrPosicionInicio, direccion, length, callback){
+        var x = arrPosicionInicio[0];
 		var y = arrPosicionInicio[1];
 		try{
 			if (direccion){ // abajo
@@ -77,12 +73,21 @@ function Tablero(length){
                     tablero[y][x].barco = true;
                     if (direccion){y++}else{x++}
                 };
+                callback(true);
             }else{
-                console.log("No se puede meter ese barco");
+                callback(false);
             }
 		}catch(e){
-			console.log("No se puede meter ese barco");
+			callback(false);
 		}
+    }
+    var barcos = [];
+	this.newBarco = function(arrPosicionInicio, direccion, length){ // Direccion True = abajo / False = Derecha
+		introducirBarco(arrPosicionInicio, direccion, length, function(bool){
+            if (bool){
+                barcos.push({arrPosicionInicio: arrPosicionInicio, direccion: direccion, length: length});
+            }
+        });
 	}
 	this.pulsar = function(x, y){ // 
 		if (tablero[y][x].pulsado){
@@ -177,12 +182,12 @@ if (Modernizr.draganddrop) {
 //        console.log(e);
 //        e.dataTransfer.setDragImage( -10, -10);
 //    });
-    function start(e) {
+    function start(e,src) {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', this.innerHTML);
 
     var dragIcon = document.createElement('img');
-    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla75X35recortada.png';
+    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/'+src;
     dragIcon.width = 80;
     e.dataTransfer.setDragImage(dragIcon, 10, 10);
 
@@ -190,12 +195,17 @@ if (Modernizr.draganddrop) {
     this.style.opacity = '0.4';
   };
     var cols_ = document.querySelectorAll('#cubiertos .column');
-    [].forEach.call(cols_, function (col) {
-        // Enable columns to be draggable.
-        col.setAttribute('draggable', 'true');
-        col.addEventListener('dragstart', start, false);
-      });
+//    [].forEach.call(cols_, function (col) {
+//        // Enable columns to be draggable.
+//        col.setAttribute('draggable', 'true');
+//        col.addEventListener('dragstart', start, false);
+//      });
+    $("#cubiertos img").on('dragstart', function(ev){
+        var src = $(this).attr('src');
+        start(ev, src);
+    });
     $("#cubiertos img").on('dragend', function(ev){
+        var src = $(this).attr('src');
         console.log(ev);
         var x = ev.originalEvent.layerX;
         var y = ev.originalEvent.layerY;
@@ -203,7 +213,7 @@ if (Modernizr.draganddrop) {
         var canvas1 = document.getElementById('micanvas1');
         var ctx = canvas1.getContext('2d');
         var img = new Image();
-        img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/public/img/cucharilla75X35recortada.png';
+        img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/'+src;
         img.onload = function(){
           ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.scrollTop)/40)*40)-33, 80, 25);
         }

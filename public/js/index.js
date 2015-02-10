@@ -369,7 +369,8 @@ $("#bandejadeentrada").on("click",function(ev){
                             });
                         });
                     }else{
-                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";                                         $("#bandmensajesdiv").html(relleno);
+                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";
+                        $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
                     }
                 }else{
