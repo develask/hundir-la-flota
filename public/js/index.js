@@ -21,6 +21,7 @@ function Juego(){
             $("#juego").html(data2.codigohtml);
             eval(data2.codigojavascript);
             juego = nombre;
+            $("#aleatorioocontraalguiendiv").modal('show');
         });
         socket.on("room", function(datos){
             switch (datos.clase){
@@ -152,6 +153,7 @@ $("#logout").on("click", function(ev){
     $($("#signin").parent()).removeClass("hidden");
     $($("#signup").parent()).removeClass("hidden");
     $($("#userName").parent()).addClass("hidden");
+    user.cambiarEstadoaOffline();
     user.logout();
 });
 
@@ -220,6 +222,7 @@ $("#signInC").on("click", function(ev){
                 $("#errSignIn").addClass("hidden");
                 $("#exampleInputEmail1").val("");
                 $("#exampleInputPassword1").val("");
+                user.cambiarEstadoaOnline();
             });
         }else{
             $("#errSignIn").removeClass("hidden");
@@ -356,6 +359,9 @@ $("#bandejadeentrada").on("click",function(ev){
             var id = $(this).attr("id");
             user.cambiarEstadoHaLeido(id,function(bool){
                 if(bool){
+                    /*user.numMensajesSinLeer(function(numero){
+                        $("#numerodemensajes").val(numero);
+                    });*/
                     $("#bandmensajesdiv").html("");
                     var relleno;
                     if(bool[0].cabecera=="peticion"){  
@@ -412,10 +418,28 @@ $("#botonenviar").on("click",function(ev){
 });
 
 
-    
-    
-    
-    
+
+$("#aleatorio").on("click", function(ev){
+    $.ajax({
+        url: "/usuariosconectados"
+    }).done(function( data ) {
+        
+    });
+});
+
+$("#elegir").on("click", function(ev){
+    $("#nombresaladiv").modal('show');
+});
+
+$("#crearsala").on("click", function(ev){
+    var nombre = $("#nombresalainput").val();
+    $("#nombresaladiv").modal('hide');
+    var nombrejugador=$("#nombrecontrario").val();
+    var arrayjugadores=[];
+    arrayjugadores.push(user.getName());
+    arrayjugadores.push(nombrejugador);
+    juego.crearRoom(nombre,arrayjugadores);
+});
     
     
     

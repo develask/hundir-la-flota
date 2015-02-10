@@ -88,6 +88,28 @@ function User(){
             callback(JSON.parse(data));
         });
     }   
+    this.cambiarEstadoaOnline = function(){
+        $.ajax({
+            url: "/cambiarestadoaonline?user="+this.getName()
+        }).done(function(bool){
+            if(bool){
+                console.log("ha salido bien");
+            }else{
+                console.log("no ha salido bien");
+            }
+        });
+    }
+    this.cambiarEstadoaOffline = function(){
+        $.ajax({
+            url: "/cambiarestadoaoffline?user="+this.getName()
+        }).done(function(bool){
+            if(bool){
+                console.log("ha salido bien");
+            }else{
+                console.log("no ha salido bien");
+            }
+        });
+    }
     this.cambiarEstadoHaLeido = function(id,callback){
         $.ajax({
             url: "/cambiarestadomensaje?id="+id

@@ -267,6 +267,22 @@ function getMensajeid(id, quien, callback){
     });
 }
 
+function conseguirUsuarioConectados(callback){
+    
+}
+
+function cambiarEstadoaOnline(user, callback){
+    connection.query("UPDATE hundirlaflota.users SET estado='Online' WHERE nombre='"+user+"'",function(bool){
+        callback(bool);
+    });
+}
+
+function cambiarEstadoaOffline(user, callback){
+    connection.query("UPDATE hundirlaflota.users SET estado='Offline' WHERE nombre='"+user+"'",function(bool){
+        callback(bool);
+    });
+}
+
 function mirarSiEsAmistad(nombre,usuario, callback){
     var querier="SELECT * FROM hundirlaflota.amigos WHERE nombre=? AND nombreamigo=? UNION SELECT * FROM hundirlaflota.amigos WHERE nombre=? AND nombreamigo=?";
     connection.query(querier, [nombre, usuario, usuario, nombre],function(err, rows){
@@ -327,3 +343,5 @@ module.exports.mirarSiEsAmistad = mirarSiEsAmistad;
 module.exports.cambiarEstadoMensaje = cambiarEstadoMensaje;
 module.exports.numMensajesSinLeer = numMensajesSinLeer;
 module.exports.borrarMail = borrarMail;
+module.exports.cambiarEstadoaOnline = cambiarEstadoaOnline;
+module.exports.cambiarEstadoaOffline = cambiarEstadoaOffline;

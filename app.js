@@ -238,6 +238,7 @@ app.get('/borrarMail', function(req, res){
         res.send(bool?"Ok":"Fail");
     });
 });
+
 app.get('/bandejadesalida',function(req, res){
     var us = comprobarCookie(req.headers.cookie);
     var shasum = crypto.createHash('sha1');
@@ -261,6 +262,32 @@ app.get('/bandejadeentrada',function(req, res){
         res.cookie("gameupv", cook, { expires: new Date(Date.now() + 3600000), httpOnly: false });
     mysql.getMensajesEntradaJugador(us,function(data){
         res.send(JSON.stringify(data));
+    });
+});
+
+app.get('/usuariosconectados',function(req,res){
+    mysql.conseguirUsuariosConectados(,function(data){
+        
+    });
+});
+
+app.get('/cambiarestadoaonline',function(req, res){
+    mysql.cambiarEstadoaOnline(req.query.user, function(bool){
+        if(bool){
+            res.send(true);
+        }else{
+            res.send(false);
+        }
+    });
+});
+
+app.get('/cambiarestadoaoffline',function(req, res){
+    mysql.cambiarEstadoaOffline(req.query.user, function(bool){
+        if(bool){
+            res.send(true);
+        }else{
+            res.send(false);
+        }
     });
 });
 
