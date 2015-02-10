@@ -155,23 +155,30 @@ function Tablero(length){
 	}
 }
 var tablero = new Tablero(10);
+tablero.reset(10);
 tablero.newBarco([5,0],false, 4);
 tablero.newBarco([1,2],false, 3);
 tablero.newBarco([4,4],true, 1);
-tablero.impr();
+//tablero.impr();
 var cuadrados = document.getElementsByClassName('cuadrado');
+console.log(cuadrados);
 for(var ind = 0; ind < cuadrados.length; ind++){
     var cuadrado = cuadrados[ind];
+    console.log("2");
     cuadrado.addEventListener("click", function(ev){
+        console.log("3");
         var id = this.getAttribute("id");
+        console.log("4");
         id = id.split("-");
+        console.log("5");
         var r = tablero.pulsar(id[1],id[0]);
+        console.log("6");
         if (r == 0){
             alert("Agua");
         }else if(r == 1){
             alert("Tocado");
         }else{
-            alert("Hundido")
+            alert("Hundido");
         }
     });
 }
@@ -274,7 +281,6 @@ ctx1.strokeStyle = "#f00";
 ctx1.stroke();
 $("#micanvas1").on("click", function(ev){
     var canvas1 = document.getElementById("micanvas1");
-    console.log(ev);
     var x1 = parseInt((ev.pageX-canvas1.offsetLeft)/40);
     var y1 = parseInt((ev.pageY-canvas1.offsetTop)/40);
     alert(x1 + "  " + y1);
