@@ -1,5 +1,6 @@
 function Tablero(length){
     var tablero = [];
+    
     this.reset = function(length){
         if (!length) length = tablero.length;
         for (var i = 0; i < length; i++) {
@@ -10,6 +11,7 @@ function Tablero(length){
                     pulsado: false
                 });
             };
+            tablero.push(li);
         };
     }
     this.reset(length);
@@ -81,21 +83,22 @@ function Tablero(length){
 			callback(false);
 		}
     }
+    
     var barcos = [];
 	this.newBarco = function(arrPosicionInicio, direccion, length){ // Direccion True = abajo / False = Derecha
 		introducirBarco(arrPosicionInicio, direccion, length, function(bool){
             if (bool){
                 barcos.push({arrPosicionInicio: arrPosicionInicio, direccion: direccion, length: length});
-            }
+            }else{console.log("error")}
         });
 	}
 	this.pulsar = function(x, y){ // 
 		if (tablero[y][x].pulsado){
 			console.log("Eso ya estaba pulsado");
-			throw new Exception();
+			//throw new Exception();
 		}else{
 			tablero[y][x].pulsado = true;
-            this.impr();
+            //this.impr();
 			if (tablero[y][x].barco){
 				return hundido(x, y);
 			}else{return 0;}
@@ -159,7 +162,8 @@ tablero.reset(10);
 tablero.newBarco([5,0],false, 4);
 tablero.newBarco([1,2],false, 3);
 tablero.newBarco([4,4],true, 1);
-//tablero.impr();
+//tablero.impr();*/
+/*
 var cuadrados = document.getElementsByClassName('cuadrado');
 console.log(cuadrados);
 for(var ind = 0; ind < cuadrados.length; ind++){
@@ -181,7 +185,7 @@ for(var ind = 0; ind < cuadrados.length; ind++){
             alert("Hundido");
         }
     });
-}
+}*/
 
 if (Modernizr.draganddrop) {
   // Browser supports HTML5 DnD.
@@ -190,11 +194,11 @@ if (Modernizr.draganddrop) {
 //        e.dataTransfer.setDragImage( -10, -10);
 //    });
     function start(e,src) {
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = '';
     e.dataTransfer.setData('text/html', this.innerHTML);
 
     var dragIcon = document.createElement('img');
-    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/'+src;
+    dragIcon.src = 'file:///Users/Jorge/git/hundir-la-flota/'+src;
     dragIcon.width = 80;
     e.dataTransfer.setDragImage(dragIcon, 10, 10);
 
@@ -220,7 +224,7 @@ if (Modernizr.draganddrop) {
         var canvas1 = document.getElementById('micanvas1');
         var ctx = canvas1.getContext('2d');
         var img = new Image();
-        img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/'+src;
+        img.src = 'file:///Users/Jorge/git/hundir-la-flota/'+src;
         img.onload = function(){
           ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.scrollTop)/40)*40)-33,img.width, 25);
         }
