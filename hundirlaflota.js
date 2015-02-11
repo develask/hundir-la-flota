@@ -222,7 +222,7 @@ if (Modernizr.draganddrop) {
         var img = new Image();
         img.src = 'file:///Users/mikel/Desktop/projectos/hundir%20la%20flota/'+src;
         img.onload = function(){
-          ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.scrollTop)/40)*40)-33, 80, 25);
+          ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.scrollTop)/40)*40)-33,img.width, 25);
         }
     });
 } else {

@@ -197,7 +197,7 @@ app.get('/cambiarestadomensaje',function(req,res){
 app.get('/enviarmensaje',function(req, res){
     var us = comprobarCookie(req.headers.cookie);
     var shasum = crypto.createHash('sha1');
-        shasum.update(us+Date.now());
+        shasum.upd  ate(us+Date.now());
         var cook = shasum.digest('hex');
         var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
         usersLoged[cook] = us;

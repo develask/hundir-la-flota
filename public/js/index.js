@@ -355,13 +355,22 @@ $("#bandejadeentrada").on("click",function(ev){
                 }
             });
         });
+        $("#botonxbandejaentrada").on("click",function(ev){
+            user.numMensajesSinLeer(function(numero){
+                $("#username").html("");
+                $("#username").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+            });
+        });
+        $("#botoncerrarbandejaentrada").on("click",function(ev){
+            user.numMensajesSinLeer(function(numero){
+                $("#username").html("");
+                $("#username").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+            });
+        });
         $("#bandmensajesdiv button.btn").on("click", function(ev){
             var id = $(this).attr("id");
             user.cambiarEstadoHaLeido(id,function(bool){
                 if(bool){
-                    /*user.numMensajesSinLeer(function(numero){
-                        $("#numerodemensajes").val(numero);
-                    });*/
                     $("#bandmensajesdiv").html("");
                     var relleno;
                     if(bool[0].cabecera=="peticion"){  
@@ -451,6 +460,18 @@ $("#crearsala").on("click", function(ev){
     arrayjugadores.push(nombrejugador);
     juego.crearRoom(nombre,arrayjugadores);
 });
-    
-    
-    
+/*    
+$("#botonxbandejaentrada").on("click",function(ev){
+    user.numMensajesSinLeer(function(numero){
+        $("#username").html("");
+        $("#username").load(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+    });
+});
+
+$("#botoncerrarbandejaentrada").on("click",function(ev){
+    user.numMensajesSinLeer(function(numero){
+        $("#username").html("");
+        $("#username").load(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+    });
+});
+   */ 
