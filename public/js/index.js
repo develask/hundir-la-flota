@@ -226,14 +226,12 @@ $("#signInC").on("click", function(ev){
                 $("#botonxbandejaentrada").on("click",function(ev){
                     user.numMensajesSinLeer(function(data){
                         $("#numerodemensajes").text("");
-                        console.log(numero);
                         $("#numerodemensajes").text(data[0].cuantos);
                     });
                 });
                 $("#botoncerrarbandejaentrada").on("click",function(ev){
                     user.numMensajesSinLeer(function(data){
                         $("#numerodemensajes").text("");
-                        console.log(numero);
                         $("#numerodemensajes").text(data[0].cuantos);
                     });
                 });

@@ -2,6 +2,7 @@ function Tablero(length){
     var tablero = [];
     
     this.reset = function(length){
+        tablero = [];
         if (!length) length = tablero.length;
         for (var i = 0; i < length; i++) {
             var li = [];
@@ -22,15 +23,16 @@ function Tablero(length){
 			for (var c = 0; c < fila.length; c++) {
 				var t = fila[c];
 				linea += " "+(t.barco?"1":"0") + " - " + (t.pulsado?"1":"0")+" |";
-                document.getElementById(i+"-"+c).innerHTML = (t.barco?"*":"_")+(t.pulsado?"X":"_")
 			};
-			//console.log(linea);
+			console.log(linea);
 		};
 	}
-    function comprobarBarco(x,y){
+    function comprobarBarco(y,x){
         try{
+            console.log("x: "+x+", y: "+y+ "  |  "+tablero[y][x].barco);
             return tablero[y][x].barco
         }catch(e){
+            console.log("x: "+x+", y: "+y+ "  |  error")
             return false;
         }
     }
@@ -60,11 +62,11 @@ function Tablero(length){
 				if (direccion){y++}else{x++}
 			};
 			if (direccion){ // abajo
-				if (comprobarBarco(y+1,x-1) || comprobarBarco(y+1,x) || comprobarBarco(y+1,x+1)){
+				if (comprobarBarco(y,x-1) || comprobarBarco(y,x) || comprobarBarco(y,x+1)){
 					throw new Exception();
 				}
 			}else{
-				if (comprobarBarco(y-1,x+1) || comprobarBarco(y,x+1) || comprobarBarco(y+1,x+1)){
+				if (comprobarBarco(y-1,x) || comprobarBarco(y,x) || comprobarBarco(y+1,x)){
 					throw new Exception();
 				}
 			}
@@ -85,11 +87,12 @@ function Tablero(length){
     }
     
     var barcos = [];
-	this.newBarco = function(arrPosicionInicio, direccion, length){ // Direccion True = abajo / False = Derecha
+	this.newBarco = function(arrPosicionInicio, direccion, length, c){ // Direccion True = abajo / False = Derecha
 		introducirBarco(arrPosicionInicio, direccion, length, function(bool){
             if (bool){
                 barcos.push({arrPosicionInicio: arrPosicionInicio, direccion: direccion, length: length});
-            }else{console.log("error")}
+                c(true);
+            }else{c(false);}
         });
 	}
 	this.pulsar = function(x, y){ // 
@@ -159,9 +162,9 @@ function Tablero(length){
 }
 var tablero = new Tablero(10);
 tablero.reset(10);
-tablero.newBarco([5,0],false, 4);
-tablero.newBarco([1,2],false, 3);
-tablero.newBarco([4,4],true, 1);
+//tablero.newBarco([5,0],false, 4);
+//tablero.newBarco([1,2],false, 3);
+//tablero.newBarco([4,4],true, 1);
 //tablero.impr();*/
 /*
 var cuadrados = document.getElementsByClassName('cuadrado');
@@ -194,7 +197,7 @@ if (Modernizr.draganddrop) {
 //        e.dataTransfer.setDragImage( -10, -10);
 //    });
     function start(e,src) {
-    e.dataTransfer.effectAllowed = '';
+    e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', this.innerHTML);
 
     var dragIcon = document.createElement('img');
@@ -235,7 +238,19 @@ if (Modernizr.draganddrop) {
 }
 
     
-
+function pintame(x,y, src, onedirection){
+    tablero.newBarco([x,y],onedirection,2, function(b){
+        if (b){
+            var canvas1 = document.getElementById('micanvas1');
+            var ctx = canvas1.getContext('2d');
+            var img = new Image();
+            img.src = 'file:///Users/Jorge/git/hundir-la-flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
+            img.onload = function(){
+                ctx.drawImage(img, x*40, y*40);
+            }
+        }
+    });
+}
 
 
 
