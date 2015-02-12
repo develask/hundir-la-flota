@@ -197,7 +197,7 @@ app.get('/cambiarestadomensaje',function(req,res){
 app.get('/enviarmensaje',function(req, res){
     var us = comprobarCookie(req.headers.cookie);
     var shasum = crypto.createHash('sha1');
-        shasum.upd  ate(us+Date.now());
+        shasum.update(us+Date.now());
         var cook = shasum.digest('hex');
         var value = "; " + req.headers.cookie; var parts = value.split("; gameupv=");     if (parts.length == 2) delete usersLoged[parts.pop().split(";").shift()];
         usersLoged[cook] = us;
@@ -265,9 +265,15 @@ app.get('/bandejadeentrada',function(req, res){
     });
 });
 
+function conseguirUsuarioAzar(usuarios){
+    var numero = Math.floor((Math.random() * usuarios.length) + 1);
+    return usuarios[numero];
+}
+
 app.get('/usuariosconectados',function(req,res){
     mysql.conseguirUsuariosConectados(function(data){
-        res.send(data);
+        var nombre = conseguirUsuarioAzar(data);
+        res.send(nombre)
     });
 });
 

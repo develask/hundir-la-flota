@@ -223,6 +223,20 @@ $("#signInC").on("click", function(ev){
                 $("#exampleInputEmail1").val("");
                 $("#exampleInputPassword1").val("");
                 user.cambiarEstadoaOnline();
+                $("#botonxbandejaentrada").on("click",function(ev){
+                    user.numMensajesSinLeer(function(data){
+                        $("#numerodemensajes").text("");
+                        console.log(numero);
+                        $("#numerodemensajes").text(data[0].cuantos);
+                    });
+                });
+                $("#botoncerrarbandejaentrada").on("click",function(ev){
+                    user.numMensajesSinLeer(function(data){
+                        $("#numerodemensajes").text("");
+                        console.log(numero);
+                        $("#numerodemensajes").text(data[0].cuantos);
+                    });
+                });
             });
         }else{
             $("#errSignIn").removeClass("hidden");
@@ -355,18 +369,6 @@ $("#bandejadeentrada").on("click",function(ev){
                 }
             });
         });
-        $("#botonxbandejaentrada").on("click",function(ev){
-            user.numMensajesSinLeer(function(numero){
-                $("#username").html("");
-                $("#username").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
-            });
-        });
-        $("#botoncerrarbandejaentrada").on("click",function(ev){
-            user.numMensajesSinLeer(function(numero){
-                $("#username").html("");
-                $("#username").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
-            });
-        });
         $("#bandmensajesdiv button.btn").on("click", function(ev){
             var id = $(this).attr("id");
             user.cambiarEstadoHaLeido(id,function(bool){
@@ -418,6 +420,9 @@ $("#botonenviar").on("click",function(ev){
     var mensaje = $("#mensajeid").val();
     user.enviarMensaje(para,asunto,mensaje,function(bool){
         if(bool){
+            $("#paraquien").val("");
+            $("#asunto").val("");
+            $("#mensajeid").val("");
             $("#enviarmensajediv").modal('hide');
             alert("El mensaje ha sido enviado");
         }else{
@@ -426,24 +431,14 @@ $("#botonenviar").on("click",function(ev){
     });
 });
 
-function conseguirUsuarioAzar(usuarios){
-    var numero = Math.floor((Math.random() * usuarios.length) + 1);
-    return usuarios[numero];
-}
-
 $("#aleatorio").on("click", function(ev){
     $.ajax({
         url: "/usuariosconectados"
-    }).done(function(data) {
-        var usuarios = [];
-        for (var i in data){
-            usuarios.push(data[i].nombre);
-        }
-        var nombreusuario = conseguirUsuarioAzar(usuarios);
+    }).done(function(nombreusuario) {
         var room= [];
         room.push(user.getName());
         room.push(nombreusuario);
-        juego.crearRoom(user.getName+nombreusuario, room);
+        juego.crearRoom(user.getName()+nombreusuario, room);
     });
 });
 
@@ -460,18 +455,3 @@ $("#crearsala").on("click", function(ev){
     arrayjugadores.push(nombrejugador);
     juego.crearRoom(nombre,arrayjugadores);
 });
-/*    
-$("#botonxbandejaentrada").on("click",function(ev){
-    user.numMensajesSinLeer(function(numero){
-        $("#username").html("");
-        $("#username").load(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
-    });
-});
-
-$("#botoncerrarbandejaentrada").on("click",function(ev){
-    user.numMensajesSinLeer(function(numero){
-        $("#username").html("");
-        $("#username").load(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
-    });
-});
-   */ 
