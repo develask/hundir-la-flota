@@ -219,18 +219,13 @@ if (Modernizr.draganddrop) {
         start(ev, src);
     });
     $("#cubiertos img").on('dragend', function(ev){
-        var src = $(this).attr('src');
-        console.log(ev);
-        var x = ev.originalEvent.layerX;
-        var y = ev.originalEvent.layerY;
-        console.log(x,y);
+        var src = $(this).attr('name');
+        var d = $(this).attr('dir');
+        var luz = $(this).attr('luz');
+        var x = ev.originalEvent.pageX;
+        var y = ev.originalEvent.pageY;
         var canvas1 = document.getElementById('micanvas1');
-        var ctx = canvas1.getContext('2d');
-        var img = new Image();
-        img.src = 'file:///Users/Jorge/git/hundir-la-flota/'+src;
-        img.onload = function(){
-          ctx.drawImage(img, parseInt((x - canvas1.offsetLeft)/40)*40, (parseInt((y - canvas1.scrollTop)/40)*40)-33,img.width, 25);
-        }
+        pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop)/40),src, d=='true', luz);
     });
 } else {
   // Fallback to a library solution.
@@ -238,13 +233,13 @@ if (Modernizr.draganddrop) {
 }
 
     
-function pintame(x,y, src, onedirection){
-    tablero.newBarco([x,y],onedirection,2, function(b){
+function pintame(x,y, src, onedirection, luz){
+    tablero.newBarco([x,y],onedirection,parseInt(luz), function(b){
         if (b){
             var canvas1 = document.getElementById('micanvas1');
             var ctx = canvas1.getContext('2d');
-            var img = new Image();
-            img.src = 'file:///Users/Jorge/git/hundir-la-flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
+            var img = new Image();///Users/mikel/Desktop/projectos/hundir la flota
+            img.src = 'file:///Users/mikel/Desktop/projectos/hundir la flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
             img.onload = function(){
                 ctx.drawImage(img, x*40, y*40);
             }
