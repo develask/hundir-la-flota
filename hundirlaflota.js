@@ -72,7 +72,8 @@ function Tablero(length){
 			}*/
             //
             if(direccion){ //abajo
-                if(x+length>=10 || y>10){///////////////duda
+                console.log("abajo"+y+""+x)
+                if(y+length>=10 || x>10){///////////////duda
                     throw new Exception();
                 }
                 else{
@@ -84,7 +85,8 @@ function Tablero(length){
                 }
             }
             else{//derecha
-                if(y+length>=10 || x>10){
+                console.log("derecha"+y+""+x)
+                if(x+length>=10 || y>10){
                     throw new Exception();
                 }
                 else{
