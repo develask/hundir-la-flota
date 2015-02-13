@@ -40,7 +40,7 @@ function Tablero(length){
         var x = arrPosicionInicio[0];
 		var y = arrPosicionInicio[1];
 		try{
-			if (direccion){ // abajo
+			/*if (direccion){ // abajo
 				if (comprobarBarco(y-1,x-1) || comprobarBarco(y-1,x) || comprobarBarco(y-1,x+1)){
 					throw new Exception();
 				}
@@ -69,7 +69,33 @@ function Tablero(length){
 				if (comprobarBarco(y-1,x) || comprobarBarco(y,x) || comprobarBarco(y+1,x)){
 					throw new Exception();
 				}
-			}
+			}*/
+            //
+            if(direccion){ //abajo
+                if(x+length>=10 || y>10){///////////////duda
+                    throw new Exception();
+                }
+                else{
+                    for(var i = 0; i<length; i++){
+                        if(comprobarBarco(y,x+i)){
+                            throw new Exception();
+                        }
+                    }
+                }
+            }
+            else{//derecha
+                if(y+length>=10 || x>10){
+                    throw new Exception();
+                }
+                else{
+                    for(var i = 0; i<length; i++){
+                        if(comprobarBarco(y+i,x)){
+                            throw new Exception();
+                        }
+                    }
+                }
+            }
+            //
 			x = arrPosicionInicio[0];
 			y = arrPosicionInicio[1];
             if ((direccion?y:x)+length<=tablero.length){
@@ -201,7 +227,8 @@ if (Modernizr.draganddrop) {
     e.dataTransfer.setData('text/html', this.innerHTML);
 
     var dragIcon = document.createElement('img');
-    dragIcon.src = 'file:///Users/Jorge/git/hundir-la-flota/'+src;
+    dragIcon.src = 'file:///home/endika/Dropbox/clase/bilbo/3%C2%BA/proiektukudeaketa/hundir-la-flota/'+src;
+    //dragIcon.src = 'file:///Users/Jorge/git/hundir-la-flota/'+src;
     dragIcon.width = 80;
     e.dataTransfer.setDragImage(dragIcon, 10, 10);
 
@@ -225,7 +252,8 @@ if (Modernizr.draganddrop) {
         var x = ev.originalEvent.pageX;
         var y = ev.originalEvent.pageY;
         var canvas1 = document.getElementById('micanvas1');
-        pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop)/40),src, d=='true', luz);
+        //pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop)/40),src, d=='true', luz);
+        pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop -20)/40),src, d=='true', luz);
     });
 } else {
   // Fallback to a library solution.
@@ -239,9 +267,11 @@ function pintame(x,y, src, onedirection, luz){
             var canvas1 = document.getElementById('micanvas1');
             var ctx = canvas1.getContext('2d');
             var img = new Image();///Users/mikel/Desktop/projectos/hundir la flota
-            img.src = 'file:///Users/mikel/Desktop/projectos/hundir la flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
+            //img.src = 'file:///Users/mikel/Desktop/projectos/hundir la flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
+            img.src = 'file:///home/endika/Dropbox/clase/bilbo/3%C2%BA/proiektukudeaketa/hundir-la-flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
             img.onload = function(){
-                ctx.drawImage(img, x*40, y*40);
+                //ctx.drawImage(img, x*40, y*40);
+                ctx.drawImage(img, x*40 +2.5, y*40+2.5);
             }
         }
     });
