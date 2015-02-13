@@ -138,7 +138,7 @@ if (c){
             var numero;
             user.numMensajesSinLeer(function(data){
                 numero=data[0].cuantos;
-                $("#userName").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+                $("#userName").html(user.getName()+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge' style='background-color:#FFFF00;' >"+numero+"</span>");
                 $($("#signin").parent()).addClass("hidden");
                 $($("#signup").parent()).addClass("hidden");
                 $($("#userName").parent()).removeClass("hidden");
@@ -214,7 +214,7 @@ $("#signInC").on("click", function(ev){
             var numero;
             user.numMensajesSinLeer(function(data){
                 numero=data[0].cuantos;
-                $("#userName").html(nombre+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge'>"+numero+"</span>");
+                $("#userName").html(nombre+"&nbsp;&nbsp;&nbsp;<span id='numerodemensajes' class='badge' style='background-color:yellow;'>"+numero+"</span>");
                 $('#signindiv').modal('hide');
                 $($("#signin").parent()).addClass("hidden");
                 $($("#signup").parent()).addClass("hidden");
@@ -333,7 +333,8 @@ $("#bandejadesalida").on("click",function(ev){
                             });
                         });
                     }else{
-                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";                                         $("#bandmensajesdiv").html(relleno);
+                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";                                         
+                        $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
                     }
                 }else{
@@ -384,9 +385,15 @@ $("#bandejadeentrada").on("click",function(ev){
                             });
                         });
                     }else{
-                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p></div>";
+                        relleno="<div><h4>Asunto: "+bool[0].cabecera+"</h4><h6>De: "+bool[0].emisor+"</h6><h6>Para: "+bool[0].receptor+"</h6><br><p>"+bool[0].mensaje+"</p><br><button type='button' class='btn btn-default' data-dismiss='modal' id='responder'>Responder</button></div>";
                         $("#bandmensajesdiv").html(relleno);
                         $("#bandejadeentradadiv").modal('show');
+                        $("#responder").on("click",function(ev){
+                            var emisor=bool[0].emisor;
+                            $("#enviarmensajediv").modal('show');
+                            $("#bandejadeentradadiv").modal('hide');
+                            $("#paraquien").val(emisor);
+                        });
                     }
                 }else{
                     alert("ha habido un error");
