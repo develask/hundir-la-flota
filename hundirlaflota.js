@@ -77,7 +77,7 @@ function Tablero(length){
                 }
                 else{
                     for(var i = 0; i<length; i++){
-                        if(comprobarBarco(y,x+i)){
+                        if(comprobarBarco(y+i,x)){
                             throw new Exception();
                         }
                     }
@@ -89,7 +89,7 @@ function Tablero(length){
                 }
                 else{
                     for(var i = 0; i<length; i++){
-                        if(comprobarBarco(y+i,x)){
+                        if(comprobarBarco(y,x+i)){
                             throw new Exception();
                         }
                     }
