@@ -1,6 +1,6 @@
-function Tablero(length){
+function Tablero(length, id){
     var tablero = [];
-    
+    var canvas = document.getElementById(id);
     this.reset = function(length){
         tablero = [];
         if (!length) length = tablero.length;
@@ -14,6 +14,20 @@ function Tablero(length){
             };
             tablero.push(li);
         };
+        if (canvas.getContext) {
+        var ctx1 = canvas.getContext("2d");
+            for(var x=0;x<length;x++){
+                for(var y=0;y<length;y++){
+                    if((x+y)%2==0){
+                        ctx1.fillStyle = "rgb(200,0,0)";
+                        ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                    }else{
+                        ctx1.fillStyle = "rgb(255, 255, 255)";
+                        ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+                    }
+                }
+            }
+        }
     }
     this.reset(length);
 	this.impr = function(){
@@ -29,10 +43,8 @@ function Tablero(length){
 	}
     function comprobarBarco(y,x){
         try{
-            console.log("x: "+x+", y: "+y+ "  |  "+tablero[y][x].barco);
             return tablero[y][x].barco
         }catch(e){
-            console.log("x: "+x+", y: "+y+ "  |  error")
             return false;
         }
     }
@@ -40,7 +52,7 @@ function Tablero(length){
         var x = arrPosicionInicio[0];
 		var y = arrPosicionInicio[1];
 		try{
-			/*if (direccion){ // abajo
+			if (direccion){ // abajo
 				if (comprobarBarco(y-1,x-1) || comprobarBarco(y-1,x) || comprobarBarco(y-1,x+1)){
 					throw new Exception();
 				}
@@ -69,34 +81,34 @@ function Tablero(length){
 				if (comprobarBarco(y-1,x) || comprobarBarco(y,x) || comprobarBarco(y+1,x)){
 					throw new Exception();
 				}
-			}*/
+			}
             //
-            if(direccion){ //abajo
-                console.log("abajo"+y+""+x)
-                if(y+length>=10 || x>10){///////////////duda
-                    throw new Exception();
-                }
-                else{
-                    for(var i = 0; i<length; i++){
-                        if(comprobarBarco(y+i,x)){
-                            throw new Exception();
-                        }
-                    }
-                }
-            }
-            else{//derecha
-                console.log("derecha"+y+""+x)
-                if(x+length>=10 || y>10){
-                    throw new Exception();
-                }
-                else{
-                    for(var i = 0; i<length; i++){
-                        if(comprobarBarco(y,x+i)){
-                            throw new Exception();
-                        }
-                    }
-                }
-            }
+//            if(direccion){ //abajo
+//                console.log("abajo"+y+""+x)
+//                if(y+length>=10 || x>10){///////////////duda
+//                    throw new Exception();
+//                }
+//                else{
+//                    for(var i = 0; i<length; i++){
+//                        if(comprobarBarco(y+i,x)){
+//                            throw new Exception();
+//                        }
+//                    }
+//                }
+//            }
+//            else{//derecha
+//                console.log("derecha"+y+""+x)
+//                if(x+length>=10 || y>10){
+//                    throw new Exception();
+//                }
+//                else{
+//                    for(var i = 0; i<length; i++){
+//                        if(comprobarBarco(y,x+i)){
+//                            throw new Exception();
+//                        }
+//                    }
+//                }
+//            }
             //
 			x = arrPosicionInicio[0];
 			y = arrPosicionInicio[1];
@@ -113,14 +125,52 @@ function Tablero(length){
 			callback(false);
 		}
     }
-    
+    this.getIndexPos = function(xs,ys){
+        var y = ys;
+        var x = xs;
+        if (tablero[y][x].barco){
+            while (y>=0 && tablero[y][x].barco){
+                y--;
+            }
+            y++;
+            while (x>=0 && tablero[y][x].barco){
+                x--;
+            }
+            x++;
+            return [x,y];
+        }else{
+            return false;
+        }
+    }
+    this.borrarBarco = function(x,y){
+        var inicio = this.getIndexPos(x,y);
+        if (inicio){
+            for (var i in barcos){
+                if (barcos[i].arrPosicionInicio[0] == inicio[0] && barcos[i].arrPosicionInicio[1] == inicio[1]){
+                    barcos.splice(i,1);
+                    break;
+                }
+            }
+            this.reset(length);
+            for (var i in barcos){
+                this.newBarco(barcos[i].arrPosicionInicio, barcos[i].direccion, barcos[i].length, barcos[i].src);
+            }
+        }
+    };
     var barcos = [];
-	this.newBarco = function(arrPosicionInicio, direccion, length, c){ // Direccion True = abajo / False = Derecha
+	this.newBarco = function(arrPosicionInicio, direccion, length, src){ // Direccion True = abajo / False = Derecha
 		introducirBarco(arrPosicionInicio, direccion, length, function(bool){
             if (bool){
-                barcos.push({arrPosicionInicio: arrPosicionInicio, direccion: direccion, length: length});
-                c(true);
-            }else{c(false);}
+                barcos.push({arrPosicionInicio: arrPosicionInicio, direccion: direccion, length: length, src: src});
+                var ctx = canvas.getContext('2d');
+                var img = new Image();///Users/mikel/Desktop/projectos/hundir la flota
+                img.src = 'file:///Users/mikel/Desktop/projectos/hundir la flota/public/img/'+src+(direccion?'_abajo':'_derecha')+'.png';
+                //img.src = 'file:///home/endika/Dropbox/clase/bilbo/3%C2%BA/proiektukudeaketa/hundir-la-flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
+                img.onload = function(){
+                    //ctx.drawImage(img, x*40, y*40);
+                    ctx.drawImage(img, arrPosicionInicio[0]*40 +2.5, arrPosicionInicio[1]*40+2.5);
+                }
+            }
         });
 	}
 	this.pulsar = function(x, y){ // 
@@ -188,7 +238,7 @@ function Tablero(length){
 		}
 	}
 }
-var tablero = new Tablero(10);
+var tablero = new Tablero(10, "micanvas1");
 tablero.reset(10);
 //tablero.newBarco([5,0],false, 4);
 //tablero.newBarco([1,2],false, 3);
@@ -229,8 +279,9 @@ if (Modernizr.draganddrop) {
     e.dataTransfer.setData('text/html', this.innerHTML);
 
     var dragIcon = document.createElement('img');
-    dragIcon.src = 'file:///home/endika/Dropbox/clase/bilbo/3%C2%BA/proiektukudeaketa/hundir-la-flota/'+src;
+    //dragIcon.src = 'file:///home/endika/Dropbox/clase/bilbo/3%C2%BA/proiektukudeaketa/hundir-la-flota/'+src;
     //dragIcon.src = 'file:///Users/Jorge/git/hundir-la-flota/'+src;
+    dragIcon.src = 'file:///Users/mikel/Desktop/projectos/hundir la flota/'+src;
     dragIcon.width = 80;
     e.dataTransfer.setDragImage(dragIcon, 10, 10);
 
@@ -254,8 +305,8 @@ if (Modernizr.draganddrop) {
         var x = ev.originalEvent.pageX;
         var y = ev.originalEvent.pageY;
         var canvas1 = document.getElementById('micanvas1');
-        //pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop)/40),src, d=='true', luz);
-        pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop -20)/40),src, d=='true', luz);
+        pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop)/40),src, d=='true', luz);
+        //pintame(parseInt((x - canvas1.offsetLeft)/40),parseInt((y - canvas1.offsetTop -20)/40),src, d=='true', luz);
     });
 } else {
   // Fallback to a library solution.
@@ -264,19 +315,7 @@ if (Modernizr.draganddrop) {
 
     
 function pintame(x,y, src, onedirection, luz){
-    tablero.newBarco([x,y],onedirection,parseInt(luz), function(b){
-        if (b){
-            var canvas1 = document.getElementById('micanvas1');
-            var ctx = canvas1.getContext('2d');
-            var img = new Image();///Users/mikel/Desktop/projectos/hundir la flota
-            //img.src = 'file:///Users/mikel/Desktop/projectos/hundir la flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
-            img.src = 'file:///home/endika/Dropbox/clase/bilbo/3%C2%BA/proiektukudeaketa/hundir-la-flota/public/img/'+src+(onedirection?'_abajo':'_derecha')+'.png';
-            img.onload = function(){
-                //ctx.drawImage(img, x*40, y*40);
-                ctx.drawImage(img, x*40 +2.5, y*40+2.5);
-            }
-        }
-    });
+    tablero.newBarco([x,y],onedirection,parseInt(luz),src);
 }
 
 
@@ -292,48 +331,48 @@ function pintame(x,y, src, onedirection, luz){
 
 
 
-var canvas1 = document.getElementById("micanvas1");
-var canvas2 = document.getElementById("micanvas2");
-if (canvas1.getContext && canvas1.getContext) {
-    var ctx1 = canvas1.getContext("2d");
-    var ctx2 = canvas2.getContext("2d");
-    for(var x=0;x<10;x++){
-        for(var y=0;y<10;y++){
-            if((x+y)%2==0){
-                ctx1.fillStyle = "rgb(200,0,0)";
-                ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
-                ctx2.fillStyle = "rgb(200,0,0)";
-                ctx2.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
-            }else{
-                ctx1.fillStyle = "rgb(255, 255, 255)";
-                ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
-                ctx2.fillStyle = "rgb(255, 255, 255)";
-                ctx2.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
-            }
-        }
-    }
-}
-var canvas1 = document.getElementById("micanvas1");
-var ctx1 = canvas1.getContext("2d");
-for (var i=40;i<400;i=i+40){
-    ctx1.moveTo(i,0);
-    ctx2.lineTo(i,400);
-}
-for (var i=40;i<400;i=i+40){
-    ctx1.moveTo(0,i);
-    ctx2.lineTo(0,i);
-}
-ctx1.strokeStyle = "#f00";
-ctx1.stroke();
-$("#micanvas1").on("click", function(ev){
-    var canvas1 = document.getElementById("micanvas1");
-    var x1 = parseInt((ev.pageX-canvas1.offsetLeft)/40);
-    var y1 = parseInt((ev.pageY-canvas1.offsetTop)/40);
-    alert(x1 + "  " + y1);
-});
-$("#micanvas2").on("click", function(ev){
-    var canvas2 = document.getElementById("micanvas2");
-    var x2 = parseInt((ev.pageX-canvas2.offsetLeft)/40);
-    var y2 = parseInt((ev.pageY-canvas2.offsetTop)/40);
-    alert(x2 + "  " + y2);
-});
+//var canvas1 = document.getElementById("micanvas1");
+//var canvas2 = document.getElementById("micanvas2");
+//if (canvas1.getContext && canvas1.getContext) {
+//    var ctx1 = canvas1.getContext("2d");
+//    var ctx2 = canvas2.getContext("2d");
+//    for(var x=0;x<10;x++){
+//        for(var y=0;y<10;y++){
+//            if((x+y)%2==0){
+//                ctx1.fillStyle = "rgb(200,0,0)";
+//                ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+//                ctx2.fillStyle = "rgb(200,0,0)";
+//                ctx2.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+//            }else{
+//                ctx1.fillStyle = "rgb(255, 255, 255)";
+//                ctx1.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+//                ctx2.fillStyle = "rgb(255, 255, 255)";
+//                ctx2.fillRect (x*40,y*40,(x+1)* 40,(y+1)*40);
+//            }
+//        }
+//    }
+//}
+//var canvas1 = document.getElementById("micanvas1");
+//var ctx1 = canvas1.getContext("2d");
+//for (var i=40;i<400;i=i+40){
+//    ctx1.moveTo(i,0);
+//    ctx2.lineTo(i,400);
+//}
+//for (var i=40;i<400;i=i+40){
+//    ctx1.moveTo(0,i);
+//    ctx2.lineTo(0,i);
+//}
+//ctx1.strokeStyle = "#f00";
+//ctx1.stroke();
+//$("#micanvas1").on("click", function(ev){
+//    var canvas1 = document.getElementById("micanvas1");
+//    var x1 = parseInt((ev.pageX-canvas1.offsetLeft)/40);
+//    var y1 = parseInt((ev.pageY-canvas1.offsetTop)/40);
+//    alert(x1 + "  " + y1);
+//});
+//$("#micanvas2").on("click", function(ev){
+//    var canvas2 = document.getElementById("micanvas2");
+//    var x2 = parseInt((ev.pageX-canvas2.offsetLeft)/40);
+//    var y2 = parseInt((ev.pageY-canvas2.offsetTop)/40);
+//    alert(x2 + "  " + y2);
+//});
