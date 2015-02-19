@@ -34,7 +34,7 @@ var app = express();
 // your express configuration here
 
 var httpServer = http.createServer(function(req,res){
-    res.writeHead(302,{Location: "https://localhost:4433"});
+    res.writeHead(302,{Location: "https://176.84.122.148:4433"});
     res.end();
 });
 var httpsServer = https.createServer(credentials, app);
@@ -89,20 +89,20 @@ app.get('/signup', function(req, res){
         <p>Tu usuario ya ha sido creado.</p>\
         <p>Ya puede volver a nuestro servicio y acceder con tus credenciales.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='http://localhost:8080/'>ENLACE</a>");
+        <a href='http://176.84.122.148:8080/'>ENLACE</a>");
                     }else{
                         res.send("<h2>GAME - UPV mail verification</h2>\
         <p>Ha ocurrido un error.</p>\
         <p>Es posible que ya estes dado de alta.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='http://localhost:8080/'>ENLACE</a>");
+        <a href='http://176.84.122.148:8080/'>ENLACE</a>");
                     }
                 });
             }else{res.send("<h2>GAME - UPV mail verification</h2>\
         <p>Lo sentimos, pero no encontramos tus datos.</p>\
         <p>Para aacceder a nuestros servicios tendrá que darse de alta de nuevo.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='https://localhost:4433/'>ENLACE</a>");}
+        <a href='https://176.84.122.148:4433/'>ENLACE</a>");}
         });
         }catch(e){
             res.send(e.message);

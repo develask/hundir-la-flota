@@ -1,5 +1,6 @@
 var socket;
-var web = 'https://localhost:4433/';
+var web = 'https://176.84.122.148:4433/';
+var tablerofuera;
 function Juego(){
     var juego = "";
     var eventos = {};
@@ -18,19 +19,22 @@ function Juego(){
             url: "/juego?nombre="+nombre
         }).done(function(data) {
             var data2=JSON.parse(data);
-            consle.log(data2);
+            console.log(data2);
             $("#juego").html(data2.codigohtml);
             eval(data2.codigojavascript);
+		tablerofuera = tablero;
             juego = nombre;
         });
         socket.on("room", function(datos){
             switch (datos.clase){
                 case "peticion":
                     if (confirm(datos.nombre + " quiere que te unas a " + datos.room + " con " + datos.cantidad+" usuarios.")){
+			console.log("pasa x aki 2");
                         socket.emit("room", {clase: "join", room: datos.room});
                         grupoCreado = true;
                     }else{
                         socket.emit("room", {clase: "rechazar", nombre: datos.nombre});
+			console.log("pasa x aki 3");
                         grupoCreado=false;
                     }
                 break;
@@ -88,6 +92,7 @@ function Juego(){
     }
     this.crearRoom = function(nombreRoom, quienes){
         socket.emit("room", {clase: "new", room: nombreRoom, nombres: quienes});
+	console.log("x aki pasa 1");
         grupoCreado = true;
     }
     this.leaveRoom = function(){
