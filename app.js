@@ -265,18 +265,6 @@ app.get('/bandejadeentrada',function(req, res){
     });
 });
 
-function conseguirUsuarioAzar(usuarios){
-    var numero = Math.floor((Math.random() * usuarios.length) + 1);
-    return usuarios[numero];
-}
-
-app.get('/usuariosconectados',function(req,res){
-    mysql.conseguirUsuariosConectados(function(data){
-        var nombre = conseguirUsuarioAzar(data);
-        res.send(nombre)
-    });
-});
-
 app.get('/cambiarestadoaonline',function(req, res){
     mysql.cambiarEstadoaOnline(req.query.user, function(bool){
         if(bool){
@@ -351,11 +339,27 @@ var io = require('socket.io').listen(httpsServer);
 var hundirlamesa = io.of('/Hundir La Mesa');
 var jugadores_hundirlamesa = {};
 var rooms = [];
+function conseguirUsuarioAzar(usuarios ,me){
+    var jug = me;
+    if (usuarios.length>1){
+        while (jug == me){
+            var numero = Math.floor((Math.random() * usuarios.length));
+            jug = usuarios[numero];
+        }
+        return jug;
+    }else{
+        return undefined;
+    }
+}
 hundirlamesa.on('connection', function(socket){
     var name = comprobarCookie(socket.request.headers.cookie);
     console.log("Nombre: "+name);
     jugadores_hundirlamesa[name] = socket;
     socket.nombre = name;
+    socket.on("getUsuario", function(data){
+        var user = conseguirUsuarioAzar(Object.keys(jugadores_hundirlamesa));
+        console.log(user);
+    });
     socket.on("room", function(datos){
         switch (datos.clase){
             case "new":

@@ -21,7 +21,6 @@ function Juego(){
             $("#juego").html(data2.codigohtml);
             eval(data2.codigojavascript);
             juego = nombre;
-            $("#aleatorioocontraalguiendiv").modal('show');
         });
         socket.on("room", function(datos){
             switch (datos.clase){
@@ -434,29 +433,4 @@ $("#botonenviar").on("click",function(ev){
             alert("No se ha podido enviar el mensaje");
         }
     });
-});
-
-$("#aleatorio").on("click", function(ev){
-    $.ajax({
-        url: "/usuariosconectados"
-    }).done(function(nombreusuario) {
-        var room= [];
-        room.push(user.getName());
-        room.push(nombreusuario);
-        juego.crearRoom(user.getName()+nombreusuario, room);
-    });
-});
-
-$("#elegir").on("click", function(ev){
-    $("#nombresaladiv").modal('show');
-});
-
-$("#crearsala").on("click", function(ev){
-    var nombre = $("#nombresalainput").val();
-    $("#nombresaladiv").modal('hide');
-    var nombrejugador=$("#nombrecontrario").val();
-    var arrayjugadores=[];
-    arrayjugadores.push(user.getName());
-    arrayjugadores.push(nombrejugador);
-    juego.crearRoom(nombre,arrayjugadores);
 });

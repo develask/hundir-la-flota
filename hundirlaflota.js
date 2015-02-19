@@ -376,3 +376,30 @@ function pintame(x,y, src, onedirection, luz){
 //    var y2 = parseInt((ev.pageY-canvas2.offsetTop)/40);
 //    alert(x2 + "  " + y2);
 //});
+
+
+
+$("#aleatorio").on("click", function(ev){
+    $.ajax({
+        url: "/usuariosconectados"
+    }).done(function(nombreusuario) {
+        var room= [];
+        room.push(user.getName());
+        room.push(nombreusuario);
+        juego.crearRoom(user.getName()+nombreusuario, room);
+    });
+});
+
+$("#elegir").on("click", function(ev){
+    $("#nombresaladiv").modal('show');
+});
+$("#crearsala").on("click", function(ev){
+    var nombre = $("#nombresalainput").val();
+    $("#nombresaladiv").modal('hide');
+    var nombrejugador=$("#nombrecontrario").val();
+    var arrayjugadores=[];
+    arrayjugadores.push(user.getName());
+    arrayjugadores.push(nombrejugador);
+    juego.crearRoom(nombre,arrayjugadores);
+});
+$("#aleatorioocontraalguiendiv").modal('show');
