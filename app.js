@@ -385,7 +385,7 @@ hundirlamesa.on('connection', function(socket){
                         socket.join(r);
                         socket.room = r;
                     }else {
-                        socket.emit("room", {clase: "error", error: "No hay abitaciones abiertas"});
+                        socket.emit("room", {clase: "error", error: "No hay habitaciones abiertas"});
                     }
                 }
                 socket.to(socket.room).emit("room", {clase: "joined", nombre: socket.nombre});

@@ -18,6 +18,7 @@ function Juego(){
             url: "/juego?nombre="+nombre
         }).done(function(data) {
             var data2=JSON.parse(data);
+            consle.log(data2);
             $("#juego").html(data2.codigohtml);
             eval(data2.codigojavascript);
             juego = nombre;
