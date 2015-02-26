@@ -18,12 +18,12 @@ function Juego(){
         $.ajax({
             url: "/juego?nombre="+nombre
         }).done(function(data) {
-            var data2=JSON.parse(data);
-            console.log(data2);
-            $("#juego").html(data2.codigohtml);
-            eval(data2.codigojavascript);
+            //var data2=JSON.parse(data);
+            //console.log(data2);
+            //$("#juego").html(data2.codigohtml);
+            $("#juego").html(data);
+            //eval(data2.codigojavascript);
 		tablerofuera = tablero;
-            juego = nombre;
         });
         socket.on("room", function(datos){
             switch (datos.clase){

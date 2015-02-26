@@ -288,7 +288,7 @@ app.get('/cambiarestadoaoffline',function(req, res){
 app.get('/juego',function(req, res){
     mysql.getJuego(req.query.nombre, function(data){
         if(data && data[0]){
-            res.send(JSON.stringify(data[0]));
+            res.send(data[0].codigohtml);
         }else{
             res.send("error");
         }
