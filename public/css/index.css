@@ -26,18 +26,3 @@ border-left-color: #54ce44;
 #juego{
 display: none;
 }
-#micanvas1{
-    background-color: #74bfff;
-    margin-left: 15%;
-    margin-top: 60px;
-    height: 400px; 
-    width: 400px;
-}
-
-#micanvas2{
-    background-color: #74bfff;
-    margin-left: 10%;
-    margin-top: 60px;
-    height: 400px; 
-    width: 400px;
-}

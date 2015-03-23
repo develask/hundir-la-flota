@@ -1,5 +1,5 @@
 var socket;
-var web = 'https://176.84.122.148:4433/';
+var web = 'https://192.168.0.28:4433/';
 var tablerofuera;
 function Juego(){
     var juego = "";
@@ -15,6 +15,7 @@ function Juego(){
         eventos = {};
         roomEv = {};
         grupoCreado = false;
+        juego = nombre;
         $.ajax({
             url: "/juego?nombre="+nombre
         }).done(function(data) {
@@ -26,12 +27,14 @@ function Juego(){
 		tablerofuera = tablero;
         });
         socket.on("room", function(datos){
+            console.log(datos);
             switch (datos.clase){
                 case "peticion":
                     if (confirm(datos.nombre + " quiere que te unas a " + datos.room + " con " + datos.cantidad+" usuarios.")){
 			console.log("pasa x aki 2");
                         socket.emit("room", {clase: "join", room: datos.room});
                         grupoCreado = true;
+                        if (roomEv['aceptado']) roomEv['aceptado']();
                     }else{
                         socket.emit("room", {clase: "rechazar", nombre: datos.nombre});
 			console.log("pasa x aki 3");
@@ -116,7 +119,8 @@ function Juego(){
         rechazar: function(funct){roomEv["rechazar"]=funct;},
         cerrada: function(funct){roomEv["cerrada"]=funct;},
         echar: function(funct){roomEv["echar"]=funct;},
-        error: function(funct){roomEv["error"]=funct;}
+        error: function(funct){roomEv["error"]=funct;},
+        aceptado: function(funct){roomEv["aceptado"]=funct;}
     }
     this.emit = function (ev, msg){
         if (grupoCreado){

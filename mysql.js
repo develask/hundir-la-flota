@@ -5,7 +5,7 @@ var crypto = require('crypto');
 var mail = require('./mail.js');
     
 var connection =  mysql.createConnection({
-    host : "176.84.122.148",
+    host : "83.46.140.171",
     user : "hundir",
     password: "laflota"
 });
