@@ -1,11 +1,12 @@
 var socket;
-var web = 'https://192.168.0.28:4433/';
+var web = 'https://10.106.30.164:4433/';
 var tablerofuera;
 function Juego(){
     var juego = "";
     var eventos = {};
     var grupoCreado = false;
     var roomEv = {}
+    this.grupoCreadoTrue = function (){grupoCreado = true;}
     this.juegoSeleccionado = function(nombre){
         try {
             socket.disconnect();
@@ -59,7 +60,7 @@ function Juego(){
                     if (roomEv["cerrada"]){
                         roomEv["cerrada"](datos);
                     }else{
-                        alert("La partida se ha cerrado.");
+                        alert("La habitacion se ha cerrado.");
                     }
                 break;
                 case "echar":

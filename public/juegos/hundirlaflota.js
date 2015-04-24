@@ -477,21 +477,22 @@ $("#jugar").on("click", function(ev){
 
 juego.roomEvent.aceptado(function(ev){
     $("#aleatorioocontraalguiendiv").modal('hide');
+    juego.cerrarRoom();
 });
 juego.roomEvent.joined(function(ev){
     $("#aleatorioocontraalguiendiv").modal('hide');
+    juego.grupoCreadoTrue();
+    $("#esperando").addClass("hidden");
 });
 $("#aleatorio").on("click", function(ev){
-    $.ajax({
-        url: "/usuariosconectados"
-    }).done(function(nombreusuario) {
-        var room= [];
-        room.push(user.getName());
-        room.push(nombreusuario);
-        juego.crearRoom(user.getName()+nombreusuario, room);
-    });
+    $("#esperando").removeClass("hidden");
+    juego.joinToRandomRoom();
 });
-
+juego.roomEvent.error(function(ev){
+    if (ev.error == "Crea tu la habitacion"){
+        juego.crearRoom("Random"+Date.now(), []);
+    }
+});
 $("#elegir").on("click", function(ev){
     var nombrejugador=$("#nombrecontrario").val();
     var nombre = user.getName()+Date.now();

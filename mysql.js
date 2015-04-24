@@ -5,7 +5,7 @@ var crypto = require('crypto');
 var mail = require('./mail.js');
     
 var connection =  mysql.createConnection({
-    host : "83.46.140.171",
+    host : "localhost",
     user : "hundir",
     password: "laflota"
 });
@@ -48,7 +48,7 @@ function confirm(email, hash, callback){
     });
 }
 
-function toVerification(name, pass, email, callback){
+function toVerification(name, pass, email, callback, externalIpAdress){
     var shasum = crypto.createHash('sha1');
     var shasum2 = crypto.createHash('sha1');
     shasum2.update(pass+name);
@@ -65,7 +65,7 @@ function toVerification(name, pass, email, callback){
                     }else{
                         callback(false);
                     }
-                });
+                }, externalIpAdress);
             });
         }else{
             callback(false);

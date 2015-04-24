@@ -1,24 +1,3 @@
-/*var https = require('https');
-var fs = require('fs');
-
-var options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
-};
-*/
-
-
-//var express = require('express');
-//var app = express();
-
-/*
-var server = app.listen(8080, function () {
-
-  
-});
-
-var a = https.createServer(options, server);*/
-
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
@@ -30,11 +9,33 @@ var express = require('express');
 var mysql = require("./mysql.js");
 var crypto = require('crypto');
 var app = express();
-
+var externalIpAdress='';
+function externaiIp(){
+    http.request({
+        hostname: 'fugal.net',
+        path: '/ip.cgi',
+        agent: false
+        }, function(res) {
+        if(res.statusCode != 200) {
+            throw new Error('non-OK status: ' + res.statusCode);
+        }
+        res.setEncoding('utf-8');
+        var ipAddress = '';
+        res.on('data', function(chunk) { ipAddress += chunk; });
+        res.on('end', function() {
+           externalIpAdress = ipAddress;
+        });
+        }).on('error', function(err) {
+        throw err;
+    }).end();
+}
+setInterval(externaiIp, 300000);
+externaiIp();
+setTimeout(5000, function(){
 // your express configuration here
 
 var httpServer = http.createServer(function(req,res){
-    res.writeHead(302,{Location: "https://192.168.0.28:4433"});
+    res.writeHead(302,{Location: "https://"+externalIpAdress+":4433"});
     res.end();
 });
 var httpsServer = https.createServer(credentials, app);
@@ -42,11 +43,11 @@ var httpsServer = https.createServer(credentials, app);
 httpServer.listen(8080, function(){
     var host = httpServer.address().address;
     var port = httpServer.address().port;
-    console.log('SERVER HTTP listening at http://%s:%s', host, port);});
+    console.log('SERVER HTTP listening at http://%s:%s', externalIpAdress, port);});
 httpsServer.listen(4433, function(){
      var host = httpsServer.address().address;
     var port = httpsServer.address().port;
-    console.log('SERVER HTTPS listening at httpS://%s:%s', host, port);});
+    console.log('SERVER HTTPS listening at httpS://%s:%s', externalIpAdress, port);});
 
 app.use(express.static(__dirname + '/public'));
 var usersLoged = {};
@@ -89,20 +90,20 @@ app.get('/signup', function(req, res){
         <p>Tu usuario ya ha sido creado.</p>\
         <p>Ya puede volver a nuestro servicio y acceder con tus credenciales.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='http://10.106.31.254:8080/'>ENLACE</a>");
+        <a href='http://"+externalIpAdress+":8080/'>ENLACE</a>");
                     }else{
                         res.send("<h2>GAME - UPV mail verification</h2>\
         <p>Ha ocurrido un error.</p>\
         <p>Es posible que ya estes dado de alta.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='http://10.106.31.254:8080/'>ENLACE</a>");
+        <a href='http://"+externalIpAdress+":8080/'>ENLACE</a>");
                     }
                 });
             }else{res.send("<h2>GAME - UPV mail verification</h2>\
         <p>Lo sentimos, pero no encontramos tus datos.</p>\
         <p>Para aacceder a nuestros servicios tendrá que darse de alta de nuevo.</p>\
         <p>Para acceder a nuestro sitio entre en el siguiente enlace:</p>\
-        <a href='https://10.106.31.254:4433/'>ENLACE</a>");}
+        <a href='https://"+externalIpAdress+"4433/'>ENLACE</a>");}
         });
         }catch(e){
             res.send(e.message);
@@ -114,7 +115,7 @@ app.get('/signup', function(req, res){
             }else{
                 res.send("not made");
             }
-        }) 
+        }, externalIpAdress);
     }
 });
 app.get('/forgotenPass', function(req, res){
@@ -380,13 +381,21 @@ hundirlamesa.on('connection', function(socket){
                     socket.room = datos.room;
                     socket.join(datos.room);
                 }else{
-                    var num = Math.random() * (rooms.length-1);
-                    if (num >= 0){
-                        var r = rooms[num];
-                        socket.join(r);
-                        socket.room = r;
-                    }else {
-                        socket.emit("room", {clase: "error", error: "No hay habitaciones abiertas"});
+                    var aleatoria = false;
+                    while (!aleatoria){
+                        var num = Math.floor(Math.random() * (rooms.length-1));
+                        if (num >= 0){
+                            var r = rooms[num];
+                            if (r.indexOf("Random")>=0){
+                                aleatoria= true;
+                                socket.join(r);
+                                socket.room = r;
+                                socket.emit("room", {clase: "joined", nombre: socket.nombre});
+                            }
+                        }else {
+                            socket.emit("room", {clase: "error", error: "Crea tu la habitacion"});
+                            aleatoria = true;
+                        }
                     }
                 }
                 socket.to(socket.room).emit("room", {clase: "joined", nombre: socket.nombre});
@@ -395,7 +404,7 @@ hundirlamesa.on('connection', function(socket){
                 jugadores_hundirlamesa[datos.nombre].emit("room", {clase: "rechazar", nombre: socket.nombre});
             break;
             case "cerrar":
-                rooms.slice(rooms.indexOf(socket.room), 1);
+                rooms.splice(rooms.indexOf(socket.room), 1);
                 socket.to(socket.room).emit("room", {clase: "cerrada"});
             break;
             case "echar":
@@ -414,9 +423,11 @@ hundirlamesa.on('connection', function(socket){
     });
     socket.on("disconnect", function () {
         delete jugadores_hundirlamesa[socket.nombre];
+        rooms.splice(rooms.indexOf(socket.room), 1);
+        console.log("Se ha ido --------------------------");
+        console.log(rooms);
+        console.log(socket.nombre + " - " + socket.room);
+        console.log("------------------------------------");
     });
 });
-
-//setInterval(function(){
-//    console.log(usersLoged);
-//}, 5000);
+});
